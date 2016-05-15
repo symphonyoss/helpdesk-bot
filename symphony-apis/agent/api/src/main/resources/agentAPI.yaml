@@ -1,0 +1,325 @@
+swagger: '2.0'
+info:
+  version: '1.4'
+  title: Agent API
+  description: |
+    This document refers to Symphony API calls to send and receive messages and content. They need the on-premise Agent installed to perform decryption/encryption of content.    
+    - sessionToken and keyManagerToken can be obtained by calling the authenticationAPI on the symphony back end and the key manager respectively. Refer to the methods described in authenticatorAPI.yaml.
+    - Actions are defined to be atomic, ie will succeed in their entirety or fail and have changed nothing.
+    - If it returns a 40X status then it will have sent no message to any stream even if a request to some subset of the requested streams would have succeeded.
+    - If this contract cannot be met for any reason then this is an error and the response code will be 50X.
+    - MessageML is a markup language for messages. See reference here: https://developers.symphony.com/documentation/message_format_reference
+
+paths:
+  '/v1/util/echo':
+    post:
+      summary: Test endpoint, returns input.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: sessionToken
+          description: Session authentication token.
+          in: header
+          required: true
+          type: string
+        - name: keyManagerToken
+          description: Key Manager authentication token.
+          in: header
+          required: true
+          type: string
+        - name: echoInput
+          description: |
+            Message in plain text
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SimpleMessage'
+      tags:
+        - Util
+      responses:
+        '200':
+          description: Message sent.
+          schema:
+            $ref: '#/definitions/SimpleMessage'
+        '400':
+          description: 'Client error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized: Session tokens invalid.'
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: 'Forbidden: Caller lacks necessary entitlement.'
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: 'Server error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+  '/v1/util/obsolete':
+    post:
+      deprecated: true
+      summary: Example of a deprecated endpoint, returns input.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: sessionToken
+          description: Session authentication token.
+          in: header
+          required: true
+          type: string
+        - name: keyManagerToken
+          description: Key Manager authentication token.
+          in: header
+          required: true
+          type: string
+        - name: echoInput
+          description: |
+            Message in plain text
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SimpleMessage'
+      tags:
+        - Util
+      responses:
+        '200':
+          description: Message sent.
+          schema:
+            $ref: '#/definitions/SimpleMessage'
+          headers:
+            X-Warning:
+              description: This method is deprecated
+              type: string
+        '400':
+          description: 'Client error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized: Session tokens invalid.'
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: 'Forbidden: Caller lacks necessary entitlement.'
+          schema:
+            $ref: '#/definitions/Error'
+        '420':
+          description: 'Gone. Returned when the option to hard fail deprecated methods is enabled'
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: 'Server error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+  '/v1/stream/{sid}/message/create':
+    post:
+      summary: Post a message to one existing stream.
+      description: |
+        Post a new message to the given stream. The stream can be a chatroom,
+        an IM or a multiparty IM.
+
+        If the message parameter type is TEXT then the message contains plain
+        text and cannot include formating, hash tags, mentions etc.
+
+        If the message parameter type is MessageML then the message contains
+        MessageML which allows for these entities.
+
+        If the message is in MessageML and fails schema validation
+        a client error results
+
+        If the message is sent then 200 is returned.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: sid
+          description: Stream ID
+          in: path
+          required: true
+          type: string
+        - name: sessionToken
+          description: Session authentication token.
+          in: header
+          required: true
+          type: string
+        - name: keyManagerToken
+          description: Key Manager authentication token.
+          in: header
+          required: true
+          type: string
+        - name: message
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/MessageSubmission'
+      tags:
+        - Messages
+      responses:
+        '200':
+          description: Message sent.
+          schema:
+            $ref: '#/definitions/Message'
+        '400':
+          description: 'Client error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized: Session tokens invalid.'
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: 'Forbidden: Caller lacks necessary entitlement.'
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: 'Server error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+  '/v1/stream/{sid}/message':
+    get:
+      summary: Get messages from an existing stream.
+      description: |
+          A caller can fetch all unseen messages by passing the timestamp of
+          the last message seen as the since parameter and the number of messages
+          with the same timestamp value already seen as the skip parameter. This
+          means that every message will be seen exactly once even in the case that
+          an additional message is processed with the same timestamp as the last
+          message returned by the previous call, and the case where there are
+          more than maxMessages with the same timestamp value.
+
+          This method is intended for historic queries and is generally reliable.
+      produces:
+        - application/json
+      parameters:
+        - name: sid
+          description: |
+            Stream ID
+          in: path
+          required: true
+          type: string
+        - name: since
+          description: |
+            Timestamp of first required message.
+
+            This is a long integer value representing milliseconds since
+            Jan 1 1970
+          in: query
+          required: true
+          type: integer
+          format: int64
+        - name: offset
+          description: |
+            No. of messages to skip.
+          in: query
+          type: integer
+        - name: maxMessages
+          description: |
+            Max No. of messages to return. If no value is provided, 50 is the default.
+          in: query
+          type: integer
+          required: false
+        - name: sessionToken
+          description: Session authentication token.
+          in: header
+          required: true
+          type: string
+        - name: keyManagerToken
+          description: Key Manager authentication token.
+          in: header
+          required: true
+          type: string
+      tags:
+        - Messages
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MessageList'
+        '204':
+          description: No Messages.
+        '400':
+          description: 'Client error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized: Session tokens invalid.'
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: 'Forbidden: Caller lacks necessary entitlement.'
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: 'Server error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+  MessageSubmission:
+    type: object
+    properties:
+      format:
+        type: string
+        enum:
+          - TEXT
+          - MESSAGEML
+      message:
+        type: string
+  BaseMessage:
+    type: object
+    discriminator: messageType
+    properties:
+      id:
+        type: string
+        description: The messageId is assigned by the ingestor service when a message is sent.
+      timestamp:
+        type: string
+      messageType:
+        type: string
+      streamId:
+        type: string
+    required:
+    - messageType
+    - timestamp
+    - streamId
+  Message:
+    type: object
+    description: A representation of a message sent by a user of Symphony.
+    allOf:
+    - $ref: '#/definitions/BaseMessage'
+    - type: object
+      properties:
+        message:
+          type: string
+          format: MessageML
+          description: Message text in MessageML
+        fromUserId:
+          type: integer
+          format: int64
+          description: the Symphony userId of the user who sent the message. This will be populated by the server (and actually ignored if included when sending a message).
+      required:
+      - message
+      - fromUserId
+  MessageList:
+    type: array
+    items:
+      $ref: '#/definitions/Message'
+  SimpleMessage:
+    description: A string wrapped in a JSON object.
+    type: object
+    properties:
+      message:
+        type: string
