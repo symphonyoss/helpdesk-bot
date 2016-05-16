@@ -31,21 +31,44 @@ import org.symphonyoss.symphony.service.model.Stream;
 import org.symphonyoss.symphony.service.model.User;
 import org.symphonyoss.symphony.service.model.UserIdList;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
 class SymphonyTest {
+static {
+    HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
+        {
+            public boolean verify(String hostname, SSLSession session)
+            {
+                // ip address of the service URL(like.23.28.244.244)
+                if (hostname.equals("10.35.224.89"))
+                    return true;
+                return false;
+            }
+        });
+}
     public static void main(String[] args) {
 
 
-        System.setProperty("javax.net.ssl.trustStore", "/dev/certs/server.truststore");
+        //System.setProperty("javax.net.ssl.trustStore", "/dev/certs/server.truststore");
+        System.setProperty("javax.net.ssl.trustStore", System.getProperty("truststore.path")); 
         System.setProperty("javax.net.ssl.trustStorePassword", System.getProperty("keystore.password"));
-        System.setProperty("javax.net.ssl.keyStore", "/dev/certs/bot.user1.p12");
+        //System.setProperty("javax.net.ssl.keyStore", "/dev/certs/bot.user1.p12");
+        System.setProperty("javax.net.ssl.keyStore", System.getProperty("keystore.path"));
         System.setProperty("javax.net.ssl.keyStorePassword", System.getProperty("keystore.password"));
-        System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
+        //System.setProperty("javax.net.ssl.keyStoreType", System.getProperty("keystore.type"));
+        //System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
+
+	String podHost = "markit.symphony.com";
+	String gatewayHost = "10.35.224.89";
+        
 
         try {
             org.symphonyoss.symphony.authenticator.invoker.ApiClient authenticatorClient = Configuration.getDefaultApiClient();
 
             // Configure the authenticator connection
-            authenticatorClient.setBasePath("https://localhost.symphony.com:8444/sessionauth");
+            authenticatorClient.setBasePath("https://"+podHost+":8444/sessionauth");
 
             // Get the authentication API
             AuthenticationApi authenticationApi = new AuthenticationApi(authenticatorClient);
@@ -56,7 +79,7 @@ class SymphonyTest {
 
 
             // Configure the keyManager path
-            authenticatorClient.setBasePath("https://localhost.symphony.com:8444/keyauth");
+            authenticatorClient.setBasePath("https://"+podHost+":8444/keyauth");
 
 
             Token keyToken = authenticationApi.v1AuthenticatePost();
@@ -66,7 +89,7 @@ class SymphonyTest {
 
             //Get Service client to query for userID.
             ApiClient serviceClient = org.symphonyoss.symphony.service.invoker.Configuration.getDefaultApiClient();
-            serviceClient.setBasePath("https://localhost:8446/pod");
+            serviceClient.setBasePath("https://"+gatewayHost+":8446/pod");
             serviceClient.addDefaultHeader(sessionToken.getName(), sessionToken.getToken());
             serviceClient.addDefaultHeader(keyToken.getName(),keyToken.getToken());
 
@@ -75,7 +98,7 @@ class SymphonyTest {
             UsersApi usersApi = new UsersApi(serviceClient);
 
 
-            User user = usersApi.v1UserGet("frank.tarsillo@markit.com", sessionToken.getToken(),true);
+            User user = usersApi.v1UserGet("amit.joshi@markit.com", sessionToken.getToken(),true);
 
 
             if(user != null){
@@ -101,7 +124,7 @@ class SymphonyTest {
 
             org.symphonyoss.symphony.agent.invoker.ApiClient agentClient = org.symphonyoss.symphony.agent.invoker.Configuration.getDefaultApiClient();
 
-            agentClient.setBasePath("https://localhost:8446/agent");
+            agentClient.setBasePath("https://"+gatewayHost+":8446/agent");
 
 
             MessagesApi messagesApi = new MessagesApi(agentClient);
