@@ -29,8 +29,8 @@
     <name>Symphony Client</name>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>symphony-client</groupId>
-    <artifactId>client</artifactId>
+    <groupId>org.symphonyoss.symphony</groupId>
+    <artifactId>symphony-client</artifactId>
     <properties>
 
 
@@ -82,7 +82,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>SymphonyClient</mainClass>
+                                    <mainClass>org.symphonyoss.symphony.SymphonyClient</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

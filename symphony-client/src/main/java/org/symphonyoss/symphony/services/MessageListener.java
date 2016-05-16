@@ -17,31 +17,15 @@
  * under the License.
  */
 
+package org.symphonyoss.symphony.services;
 
 import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.authenticator.model.Token;
-import org.symphonyoss.symphony.service.model.Stream;
-import org.symphonyoss.symphony.service.model.User;
 
 /**
- * Created by Frank Tarsillo on 5/14/2016.
+ * Created by Frank Tarsillo on 5/15/2016.
  */
+public interface MessageListener {
 
-public interface SymphonyClient {
-
-    void setKeystores(String serverTrustore, String truststorePass, String clientKeystore, String keystorePass);
-
-    Token getSessionToken();
-
-    Token getKeyToken();
-
-    Stream getStreamFromEmail(String email);
-
-    Message sendMessage(Stream stream, MessageSubmission message);
-
-    boolean login(String authUrl, String keyUrl,String serviceUrl, String agentUrl);
-
-    public Stream getStream(User user);
+    void onMessage(Message message);
 
 }
