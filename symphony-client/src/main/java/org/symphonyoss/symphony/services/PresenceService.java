@@ -21,17 +21,32 @@ package org.symphonyoss.symphony.services;
 
 import org.symphonyoss.symphony.SymphonyClient;
 import org.symphonyoss.symphony.service.model.PresenceList;
+import org.symphonyoss.symphony.service.model.UserPresence;
+
+import java.util.ArrayList;
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
-public class PresenceService {
+public class PresenceService implements PresenceListener {
+
 
     SymphonyClient symphonyClient;
+
+    PresenceList presenceList;
+    PresenceWorker presenceWorker;
+    ArrayList<PresenceListener> presenceListeners;
 
     public PresenceService(SymphonyClient symphonyClient) {
 
         this.symphonyClient = symphonyClient;
+        presenceListeners = new ArrayList<PresenceListener>();
+
+        try {
+            presenceList = getAllUserPresence();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -43,11 +58,33 @@ public class PresenceService {
 
     }
 
-    public void registerPresenceListener(PresenceListener presenceListener){
+    public void registerPresenceListener(PresenceListener presenceListener) {
 
+        if(presenceWorker == null){
+            new Thread(new PresenceWorker(symphonyClient,this, presenceList)).start();
+        }
+
+        presenceListeners.add(presenceListener);
 
     }
 
+    public void removePresenceListener(PresenceListener presenceListener) {
+
+        presenceListeners.remove(presenceListener);
+
+    }
+
+
+    public void onUserPresence(UserPresence userPresence) {
+
+        for(PresenceListener listener: presenceListeners){
+            listener.onUserPresence(userPresence);
+
+        }
+
+
+
+    }
 
 
 }

@@ -151,5 +151,8 @@ public class HelpDeskBot implements MessageListener, PresenceListener {
 
     public void onUserPresence(UserPresence userPresence) {
 
+        logger.debug("Received user presence update: {}");
+
+
     }
 }

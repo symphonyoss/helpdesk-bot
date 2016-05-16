@@ -19,21 +19,77 @@
 
 package org.symphonyoss.symphony.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
+import org.symphonyoss.symphony.service.model.PresenceList;
+import org.symphonyoss.symphony.service.model.UserPresence;
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
- class PresenceWorker implements Runnable {
+class PresenceWorker implements Runnable {
     SymphonyClient symphonyClient;
     PresenceListener presenceListener;
+    PresenceList presenceList;
+    private Logger logger = LoggerFactory.getLogger(PresenceWorker.class);
+    private boolean KILL = false;
 
 
-public PresenceWorker(SymphonyClient symphonyClient, PresenceListener presenceListener){
-
-
-}
-    public void run() {
+    public PresenceWorker(SymphonyClient symphonyClient, PresenceListener presenceListener, PresenceList presenceList) {
+        this.symphonyClient = symphonyClient;
+        this.presenceListener = presenceListener;
+        this.presenceList = presenceList;
 
     }
+
+    public void run() {
+
+        PresenceList cPresenceList;
+        while (true) {
+
+            try {
+                cPresenceList = symphonyClient.getPresenceService().getAllUserPresence();
+
+            } catch (Exception e) {
+
+                logger.error("Presence retrieval failure", e);
+                continue;
+            }
+
+            for (UserPresence cPresence : cPresenceList) {
+
+
+                if(presenceList.indexOf(cPresence) == -1) {
+                    presenceList.add(cPresence);
+                    presenceListener.onUserPresence(cPresence);
+                    continue;
+                }
+
+                UserPresence presence = presenceList.get(presenceList.indexOf(cPresence));
+
+                if(cPresence.getCategory() != presence.getCategory()){
+
+                    presence.setCategory(cPresence.getCategory());
+                    presenceListener.onUserPresence(cPresence);
+
+                }
+
+
+            }
+
+            if (KILL)
+                return;
+
+        }
+
+
+    }
+
+
+    public void kill() {
+        KILL = true;
+
+    }
+
 }
