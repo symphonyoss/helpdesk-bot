@@ -20,34 +20,20 @@
 package org.symphonyoss.symphony.services;
 
 import org.symphonyoss.symphony.SymphonyClient;
-import org.symphonyoss.symphony.service.model.PresenceList;
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
-public class PresenceService {
-
+ class PresenceWorker implements Runnable {
     SymphonyClient symphonyClient;
-
-    public PresenceService(SymphonyClient symphonyClient) {
-
-        this.symphonyClient = symphonyClient;
-
-    }
+    PresenceListener presenceListener;
 
 
-    public PresenceList getAllUserPresence() throws Exception {
+public PresenceWorker(SymphonyClient symphonyClient, PresenceListener presenceListener){
 
 
-        return symphonyClient.getServiceClient().getAllUserPresence();
+}
+    public void run() {
 
     }
-
-    public void registerPresenceListener(PresenceListener presenceListener){
-
-
-    }
-
-
-
 }
