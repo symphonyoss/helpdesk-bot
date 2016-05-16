@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
 import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.SymphonyBasicClient;
 import org.symphonyoss.symphony.model.Conversation;
@@ -32,7 +31,6 @@ import org.symphonyoss.symphony.service.model.PresenceList;
 import org.symphonyoss.symphony.service.model.UserPresence;
 import org.symphonyoss.symphony.services.MessageListener;
 import org.symphonyoss.symphony.services.PresenceListener;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -129,35 +127,7 @@ public class HelpDeskBot implements MessageListener, PresenceListener {
             e.printStackTrace();
 
         }
-//                System.out.println("User: " + presence.getUid() + ":" + presence.getCategory().toString());
-//
-//
-//                try {
-//                    MessageList messages = aClient.getMessagesFromUserId(presence.getUid(), (long) 0, 0, 5);
-//
-//                    for (Message message : messages) {
-//
-//                       if(!presence.getUid().equals(message.getFromUserId()))
-//                            continue;
-//
-//                        System.out.println("TS: " + message.getTimestamp());
-//                        System.out.println("From ID: " + message.getFromUserId());
-//                        System.out.println("Message: " + message.getMessage());
-//                        System.out.println("Message Type: " + message.getMessageType());
-//
-//
-//
-//                    }
-//                }catch(Exception e){
-//
-//                }
 
-//        MessageSubmission message = new MessageSubmission();
-//        message.setMessage("THIS IS A MESSAGE FROM YOUR TEST CLIENT");
-//        message.setFormat(MessageSubmission.FormatEnum.TEXT);
-//
-//        aClient.sendMessage(aClient.getStreamFromEmail("frank.tarsillo@markit.com"), message);
-//
 
 
     }
