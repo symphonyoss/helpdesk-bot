@@ -17,6 +17,8 @@
  * under the License.
  */
 
+package org.symphonyoss.helpdesk;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
