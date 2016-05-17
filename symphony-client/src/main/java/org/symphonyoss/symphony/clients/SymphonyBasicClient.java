@@ -26,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
 import org.symphonyoss.symphony.model.SymAuth;
+import org.symphonyoss.symphony.service.model.User;
+import org.symphonyoss.symphony.services.ConversationService;
 import org.symphonyoss.symphony.services.MessageService;
 import org.symphonyoss.symphony.services.PresenceService;
 
@@ -39,6 +41,9 @@ public class SymphonyBasicClient implements SymphonyClient {
     private PresenceService presenceService;
     private AgentClient agentClient;
     private ServiceClient serviceClient;
+    private ConversationService conversationService;
+    private User localUser;
+
 
 
     public SymphonyBasicClient() {
@@ -46,7 +51,7 @@ public class SymphonyBasicClient implements SymphonyClient {
     }
 
 
-    public boolean init(SymAuth symAuth, String agentUrl, String serviceUrl) throws Exception {
+    public boolean init(SymAuth symAuth, String email, String agentUrl, String serviceUrl) throws Exception {
 
         if (symAuth == null || symAuth.getSessionToken() == null || symAuth.getKeyToken() == null)
             throw new Exception("Symphony Authorization is not valid", new Throwable(NOT_LOGGED_IN_MESSAGE));
@@ -63,7 +68,9 @@ public class SymphonyBasicClient implements SymphonyClient {
 
         messageService = new MessageService(this);
         presenceService = new PresenceService(this);
+        conversationService = new ConversationService(this);
 
+        localUser = getServiceClient().getUserFromEmail(email);
 
         return true;
     }
@@ -103,8 +110,21 @@ public class SymphonyBasicClient implements SymphonyClient {
     }
 
 
+    public User getLocalUser() {
+        return localUser;
+    }
 
+    public void setLocalUser(User localUser) {
+        this.localUser = localUser;
+    }
 
+    public ConversationService getConversationService() {
+        return conversationService;
+    }
+
+    public void setConversationService(ConversationService conversationService) {
+        this.conversationService = conversationService;
+    }
 }
 
 

@@ -32,33 +32,33 @@ import org.symphonyoss.symphony.model.Conversation;
  * Created by Frank Tarsillo on 5/15/2016.
  */
 public class ConversationWorker implements Runnable {
-    SymphonyClient symphonyClient;
-    Conversation conv;
+    SymphonyClient symClient;
+    Conversation conversation;
     private boolean KILL = false;
     long lastTime = System.currentTimeMillis();
     MessageListener messageListener;
     private Logger logger = LoggerFactory.getLogger(ConversationWorker.class);
 
 
-    public ConversationWorker(SymphonyClient symphonyClient, Conversation conv, MessageListener messageListener) {
+    public ConversationWorker(SymphonyClient symClient, Conversation conversation, MessageListener messageListener) {
 
-        this.symphonyClient = symphonyClient;
+        this.symClient = symClient;
         this.messageListener = messageListener;
-        this.conv = conv;
+        this.conversation = conversation;
     }
 
     public void run() {
 
         while (true) {
-            logger.debug("Chat active for user: {} : {}", conv.getRemoteUser().getId(),conv.getStream().getId() );
+            logger.debug("Chat active for user: {} : {}", conversation.getRemoteUser().getId(), conversation.getStream().getId() );
             try {
-                MessageList messages = symphonyClient.getMessageService().getMessagesFromStream(conv.getStream(), lastTime, 0, 50);
+                MessageList messages = symClient.getMessageService().getMessagesFromStream(conversation.getStream(), lastTime, 0, 50);
 
 
                 if (messages != null)
                     for (Message message : messages) {
 
-                        if (!conv.getRemoteUser().getId().equals(message.getFromUserId()))
+                        if (!conversation.getRemoteUser().getId().equals(message.getFromUserId()))
                             continue;
 
 
@@ -85,7 +85,7 @@ public class ConversationWorker implements Runnable {
     }
 
     public void kill() {
-        logger.debug("Stopping conversation thread: {} {} ", conv.getRemoteUser().getId(), conv.getRemoteUser().getEmailAddress());
+        logger.debug("Stopping conversation thread: {} {} ", conversation.getRemoteUser().getId(), conversation.getRemoteUser().getEmailAddress());
         KILL = true;
 
 
@@ -94,13 +94,20 @@ public class ConversationWorker implements Runnable {
     public void send(MessageSubmission message){
 
         try {
-            symphonyClient.getMessageService().sendMessage(conv, message);
-            logger.debug("Sent message to {} {}: {}", conv.getRemoteUser().getEmailAddress(),
-                    conv.getRemoteUser().getEmailAddress(), message.getMessage());
+            symClient.getMessageService().sendMessage(conversation, message);
+            logger.debug("Sent message to {} {}: {}", conversation.getRemoteUser().getEmailAddress(),
+                    conversation.getRemoteUser().getEmailAddress(), message.getMessage());
         }catch(Exception e){
-            logger.error("Could not send message to {} {}", conv.getRemoteUser().getEmailAddress(), conv.getRemoteUser().getEmailAddress());
+            logger.error("Could not send message to {} {}", conversation.getRemoteUser().getEmailAddress(), conversation.getRemoteUser().getEmailAddress());
 
         }
     }
 
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
 }

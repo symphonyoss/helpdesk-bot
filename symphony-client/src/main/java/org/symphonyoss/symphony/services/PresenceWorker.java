@@ -60,16 +60,19 @@ class PresenceWorker implements Runnable {
             for (UserPresence cPresence : cPresenceList) {
 
 
-                if(presenceList.indexOf(cPresence) == -1) {
+                UserPresence presence = findUserPresenceById(cPresence.getUid());
+
+                if(presence == null) {
                     presenceList.add(cPresence);
                     presenceListener.onUserPresence(cPresence);
+                    logger.debug("Adding new user presence to cache for {}:{}", cPresence.getUid(), cPresence.getCategory());
                     continue;
                 }
 
-                UserPresence presence = presenceList.get(presenceList.indexOf(cPresence));
 
                 if(cPresence.getCategory() != presence.getCategory()){
 
+                    logger.debug("Presence change for {}: from: {}  to:{}", cPresence.getUid(), presence.getCategory(), cPresence.getCategory());
                     presence.setCategory(cPresence.getCategory());
                     presenceListener.onUserPresence(cPresence);
 
@@ -78,9 +81,10 @@ class PresenceWorker implements Runnable {
 
             }
 
-            if (KILL)
+            if (KILL) {
+                logger.debug("Presence worker thread killed..");
                 return;
-
+            }
         }
 
 
@@ -90,6 +94,22 @@ class PresenceWorker implements Runnable {
     public void kill() {
         KILL = true;
 
+    }
+
+    private UserPresence findUserPresenceById(Long userId){
+
+
+        if(presenceList == null)
+            return null;
+
+        for(UserPresence userPresence: presenceList){
+
+            if(userPresence.getUid().equals(userId))
+                return userPresence;
+
+        }
+
+        return null;
     }
 
 }

@@ -19,6 +19,8 @@
 
 package org.symphonyoss.symphony.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
 import org.symphonyoss.symphony.service.model.PresenceList;
 import org.symphonyoss.symphony.service.model.UserPresence;
@@ -36,6 +38,8 @@ public class PresenceService implements PresenceListener {
     PresenceList presenceList;
     PresenceWorker presenceWorker;
     ArrayList<PresenceListener> presenceListeners;
+    private Logger logger = LoggerFactory.getLogger(PresenceService.class);
+
 
     public PresenceService(SymphonyClient symphonyClient) {
 
@@ -61,7 +65,9 @@ public class PresenceService implements PresenceListener {
     public void registerPresenceListener(PresenceListener presenceListener) {
 
         if(presenceWorker == null){
-            new Thread(new PresenceWorker(symphonyClient,this, presenceList)).start();
+            logger.debug("Starting presence worker thread..");
+            presenceWorker = new PresenceWorker(symphonyClient,this, presenceList);
+            new Thread(presenceWorker).start();
         }
 
         presenceListeners.add(presenceListener);
@@ -71,6 +77,14 @@ public class PresenceService implements PresenceListener {
     public void removePresenceListener(PresenceListener presenceListener) {
 
         presenceListeners.remove(presenceListener);
+
+        if(presenceListeners.size() == 0) {
+            presenceWorker.kill();
+            presenceWorker = null;
+
+            logger.debug("Killing presence worker thread..");
+        }
+
 
     }
 

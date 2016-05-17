@@ -22,11 +22,9 @@ package org.symphonyoss.symphony.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
-import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageList;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.model.Conversation;
-import org.symphonyoss.symphony.service.invoker.ApiClient;
 import org.symphonyoss.symphony.service.model.Stream;
 import org.symphonyoss.symphony.service.model.User;
 
@@ -36,10 +34,7 @@ import org.symphonyoss.symphony.service.model.User;
 public class MessageService {
 
     private SymphonyClient symphonyClient;
-    private ApiClient serviceClient;
     private org.symphonyoss.symphony.agent.invoker.ApiClient agentClient;
-    private boolean LOGIN_STATUS = false;
-    private final String NOT_LOGGED_IN_MESSAGE = "Currently not logged into Agent, please check certificates and tokens.";
     private Logger logger = LoggerFactory.getLogger(MessageService.class);
 
 
@@ -52,6 +47,15 @@ public class MessageService {
     public void sendMessage(Conversation conv, MessageSubmission message) throws Exception {
 
         symphonyClient.getAgentClient().sendMessage(conv.getStream(),message);
+
+    }
+
+
+    public void sendMessage(String email, MessageSubmission message) throws Exception {
+
+        User remoteUser = symphonyClient.getServiceClient().getUserFromEmail(email);
+
+        symphonyClient.getAgentClient().sendMessage(symphonyClient.getServiceClient().getStream(remoteUser),message);
 
     }
 
