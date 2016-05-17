@@ -66,7 +66,7 @@ public class HelpDeskBot implements MessageListener, PresenceListener {
             aMessage.setMessage("Hello, I am the help desk BOT, here at your service..");
 
 
-            symClient.getMessageService().sendMessage("hershal.shah@markit.com", aMessage);
+           // symClient.getMessageService().sendMessage("hershal.shah@markit.com", aMessage);
             symClient.getMessageService().sendMessage("frank.tarsillo@markit.com", aMessage);
 
 

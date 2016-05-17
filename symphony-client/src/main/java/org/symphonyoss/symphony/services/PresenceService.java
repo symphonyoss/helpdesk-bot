@@ -32,12 +32,10 @@ import java.util.ArrayList;
  */
 public class PresenceService implements PresenceListener {
 
-
-    SymphonyClient symphonyClient;
-
-    PresenceList presenceList;
-    PresenceWorker presenceWorker;
-    ArrayList<PresenceListener> presenceListeners;
+    private SymphonyClient symphonyClient;
+    private PresenceList presenceList;
+    private PresenceWorker presenceWorker;
+    private ArrayList<PresenceListener> presenceListeners;
     private Logger logger = LoggerFactory.getLogger(PresenceService.class);
 
 
@@ -64,9 +62,9 @@ public class PresenceService implements PresenceListener {
 
     public void registerPresenceListener(PresenceListener presenceListener) {
 
-        if(presenceWorker == null){
+        if (presenceWorker == null) {
             logger.debug("Starting presence worker thread..");
-            presenceWorker = new PresenceWorker(symphonyClient,this, presenceList);
+            presenceWorker = new PresenceWorker(symphonyClient, this, presenceList);
             new Thread(presenceWorker).start();
         }
 
@@ -78,7 +76,7 @@ public class PresenceService implements PresenceListener {
 
         presenceListeners.remove(presenceListener);
 
-        if(presenceListeners.size() == 0) {
+        if (presenceListeners.size() == 0) {
             presenceWorker.kill();
             presenceWorker = null;
 
@@ -91,11 +89,10 @@ public class PresenceService implements PresenceListener {
 
     public void onUserPresence(UserPresence userPresence) {
 
-        for(PresenceListener listener: presenceListeners){
+        for (PresenceListener listener : presenceListeners) {
             listener.onUserPresence(userPresence);
 
         }
-
 
 
     }

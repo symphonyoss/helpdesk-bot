@@ -32,11 +32,11 @@ import org.symphonyoss.symphony.model.Conversation;
  * Created by Frank Tarsillo on 5/15/2016.
  */
 public class ConversationWorker implements Runnable {
-    SymphonyClient symClient;
-    Conversation conversation;
+    private SymphonyClient symClient;
+    private Conversation conversation;
     private boolean KILL = false;
-    long lastTime = System.currentTimeMillis();
-    MessageListener messageListener;
+    private long lastTime = System.currentTimeMillis();
+    private MessageListener messageListener;
     private Logger logger = LoggerFactory.getLogger(ConversationWorker.class);
 
 

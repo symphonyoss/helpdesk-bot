@@ -27,7 +27,6 @@ import org.symphonyoss.symphony.model.Conversation;
 import org.symphonyoss.symphony.service.model.PresenceList;
 import org.symphonyoss.symphony.service.model.User;
 import org.symphonyoss.symphony.service.model.UserPresence;
-
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,11 +36,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConversationService implements PresenceListener, MessageListener {
 
-    PresenceList presenceList;
-    ConcurrentHashMap<Long, ConversationWorker> activeConversations = new ConcurrentHashMap<Long, ConversationWorker>();
-    SymphonyClient symClient;
+    private PresenceList presenceList;
+    private ConcurrentHashMap<Long, ConversationWorker> activeConversations = new ConcurrentHashMap<Long, ConversationWorker>();
+    private SymphonyClient symClient;
     private Logger logger = LoggerFactory.getLogger(ConversationService.class);
-    ArrayList<MessageListener> messageListeners;
+    private ArrayList<MessageListener> messageListeners;
 
 
     public ConversationService(SymphonyClient symClient) throws Exception {
@@ -142,13 +141,13 @@ public class ConversationService implements PresenceListener, MessageListener {
 
     }
 
-    public Conversation getConversationByEmail(String email){
+    public Conversation getConversationByEmail(String email) {
 
         try {
             User user = symClient.getServiceClient().getUserFromEmail(email);
-            if(user != null) {
+            if (user != null) {
 
-                if(activeConversations.get(user.getId()) != null)
+                if (activeConversations.get(user.getId()) != null)
                     return activeConversations.get(user.getId()).getConversation();
 
 
