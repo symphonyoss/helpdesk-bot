@@ -29,6 +29,7 @@ public class SymAuth {
     Token keyToken;
     String serverTruststore;
     String clientTruststore;
+    String email;
 
     public Token getSessionToken() {
         return sessionToken;
@@ -60,5 +61,13 @@ public class SymAuth {
 
     public void setClientTruststore(String clientTruststore) {
         this.clientTruststore = clientTruststore;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

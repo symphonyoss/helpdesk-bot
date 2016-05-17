@@ -23,10 +23,8 @@ import org.symphonyoss.symphony.clients.AgentClient;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.ServiceClient;
 import org.symphonyoss.symphony.model.SymAuth;
-import org.symphonyoss.symphony.services.MessageListener;
-import org.symphonyoss.symphony.services.MessageService;
-import org.symphonyoss.symphony.services.PresenceListener;
-import org.symphonyoss.symphony.services.PresenceService;
+import org.symphonyoss.symphony.service.model.User;
+import org.symphonyoss.symphony.services.*;
 
 /**
  * Created by Frank Tarsillo on 5/14/2016.
@@ -42,12 +40,15 @@ public interface SymphonyClient {
 
     PresenceService getPresenceService();
 
+    ConversationService getConversationService();
+
     AgentClient getAgentClient();
 
     ServiceClient getServiceClient();
 
-    boolean init(SymAuth symAuth, String agentUrl, String serviceUrl) throws Exception;
+    boolean init(SymAuth symAuth, String email, String agentUrl, String serviceUrl) throws Exception;
 
+    User getLocalUser();
 
 
 

@@ -21,6 +21,7 @@ package org.symphonyoss.symphony.model;
 
 import org.symphonyoss.symphony.service.model.Stream;
 import org.symphonyoss.symphony.service.model.User;
+import org.symphonyoss.symphony.services.MessageListener;
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
@@ -29,6 +30,7 @@ public class Conversation {
     User remoteUser;
     User localUser;
     Stream stream;
+
 
 
     public User getRemoteUser() {
@@ -54,4 +56,6 @@ public class Conversation {
     public void setStream(Stream stream) {
         this.stream = stream;
     }
+
+
 }
