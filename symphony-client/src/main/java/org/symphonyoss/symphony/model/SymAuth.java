@@ -25,11 +25,11 @@ import org.symphonyoss.symphony.authenticator.model.Token;
  * Created by Frank Tarsillo on 5/15/2016.
  */
 public class SymAuth {
-    Token sessionToken;
-    Token keyToken;
-    String serverTruststore;
-    String clientTruststore;
-    String email;
+    private Token sessionToken;
+    private Token keyToken;
+    private String serverTruststore;
+    private String clientTruststore;
+    private String email;
 
     public Token getSessionToken() {
         return sessionToken;

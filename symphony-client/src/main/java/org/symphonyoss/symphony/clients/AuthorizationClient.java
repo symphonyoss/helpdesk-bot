@@ -31,9 +31,9 @@ import org.symphonyoss.symphony.model.SymAuth;
  */
 public class AuthorizationClient {
 
-    SymAuth symAuth;
-    String authUrl;
-    String keyUrl;
+    private SymAuth symAuth;
+    private String authUrl;
+    private String keyUrl;
     private boolean LOGIN_STATUS = false;
     private final String NOT_LOGGED_IN_MESSAGE = "Currently not logged into Agent, please check certificates and tokens.";
     private Logger logger = LoggerFactory.getLogger(AuthorizationClient.class);

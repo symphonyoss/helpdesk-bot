@@ -28,9 +28,7 @@ import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageList;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.model.SymAuth;
-import org.symphonyoss.symphony.service.api.StreamsApi;
 import org.symphonyoss.symphony.service.model.Stream;
-import org.symphonyoss.symphony.service.model.User;
 
 
 /**

@@ -25,13 +25,15 @@ import org.symphonyoss.symphony.SymphonyClient;
 import org.symphonyoss.symphony.service.model.PresenceList;
 import org.symphonyoss.symphony.service.model.UserPresence;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
 class PresenceWorker implements Runnable {
-    SymphonyClient symphonyClient;
-    PresenceListener presenceListener;
-    PresenceList presenceList;
+    private SymphonyClient symphonyClient;
+    private PresenceListener presenceListener;
+    private PresenceList presenceList;
     private Logger logger = LoggerFactory.getLogger(PresenceWorker.class);
     private boolean KILL = false;
 
@@ -85,6 +87,9 @@ class PresenceWorker implements Runnable {
                 logger.debug("Presence worker thread killed..");
                 return;
             }
+
+            try{TimeUnit.SECONDS.sleep(2);}catch(InterruptedException e){e.printStackTrace();}
+
         }
 
 

@@ -20,7 +20,6 @@
 package org.symphonyoss.symphony;
 
 import org.symphonyoss.symphony.clients.AgentClient;
-import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.ServiceClient;
 import org.symphonyoss.symphony.model.SymAuth;
 import org.symphonyoss.symphony.service.model.User;

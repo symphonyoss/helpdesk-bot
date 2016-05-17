@@ -34,9 +34,9 @@ import org.symphonyoss.symphony.service.model.*;
  * Created by Frank Tarsillo on 5/15/2016.
  */
 public class ServiceClient {
-    SymAuth symAuth;
-    String serviceUrl;
-    ApiClient apiClient;
+    private SymAuth symAuth;
+    private String serviceUrl;
+    private ApiClient apiClient;
 
     private Logger logger = LoggerFactory.getLogger(ServiceClient.class);
 
