@@ -31,9 +31,7 @@
 
 
     <modules>
-        <module>symphony-apis</module>
         <module>helpdesk-bot</module>
-        <module>symphony-client</module>
     </modules>
 
 
