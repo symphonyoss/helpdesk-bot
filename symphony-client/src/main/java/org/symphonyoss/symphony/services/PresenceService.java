@@ -22,7 +22,9 @@ package org.symphonyoss.symphony.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
+import org.symphonyoss.symphony.service.model.Presence;
 import org.symphonyoss.symphony.service.model.PresenceList;
+import org.symphonyoss.symphony.service.model.User;
 import org.symphonyoss.symphony.service.model.UserPresence;
 
 import java.util.ArrayList;
@@ -32,16 +34,16 @@ import java.util.ArrayList;
  */
 public class PresenceService implements PresenceListener {
 
-    private SymphonyClient symphonyClient;
+    private SymphonyClient symClient;
     private PresenceList presenceList;
     private PresenceWorker presenceWorker;
     private ArrayList<PresenceListener> presenceListeners;
     private Logger logger = LoggerFactory.getLogger(PresenceService.class);
 
 
-    public PresenceService(SymphonyClient symphonyClient) {
+    public PresenceService(SymphonyClient symClient) {
 
-        this.symphonyClient = symphonyClient;
+        this.symClient = symClient;
         presenceListeners = new ArrayList<PresenceListener>();
 
         try {
@@ -56,7 +58,25 @@ public class PresenceService implements PresenceListener {
     public PresenceList getAllUserPresence() throws Exception {
 
 
-        return symphonyClient.getServiceClient().getAllUserPresence();
+        return symClient.getPodClient().getAllUserPresence();
+
+    }
+
+    public Presence getUserPresence(Long userId) throws Exception{
+
+        return symClient.getPodClient().getUserPresence(userId);
+
+    }
+
+    public Presence getUserPresence(String email) throws Exception{
+
+        User user = symClient.getPodClient().getUserFromEmail(email);
+
+        if(user!= null)
+            return symClient.getPodClient().getUserPresence(user.getId());
+
+
+            return null;
 
     }
 
@@ -64,7 +84,7 @@ public class PresenceService implements PresenceListener {
 
         if (presenceWorker == null) {
             logger.debug("Starting presence worker thread..");
-            presenceWorker = new PresenceWorker(symphonyClient, this, presenceList);
+            presenceWorker = new PresenceWorker(symClient, this, presenceList);
             new Thread(presenceWorker).start();
         }
 

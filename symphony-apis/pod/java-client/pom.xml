@@ -21,14 +21,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.symphonyoss.symphony</groupId>
-	<artifactId>symphony-service-java-jersey2-client</artifactId>
+	<artifactId>symphony-pod-java-client</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Symphony Service Service Java Client</name>
+	<name>Symphony POD Service Java Client</name>
 
 	<parent>
 		<groupId>org.symphonyoss.symphony</groupId>
-		<artifactId>symphony-service</artifactId>
+		<artifactId>symphony-pod</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<properties>
@@ -42,26 +42,15 @@
 
 
 	<dependencies>
-
-<dependency>
-	<groupId>org.glassfish.jersey.media</groupId>
-	<artifactId>jersey-media-multipart</artifactId>
-	<version>2.22.2</version>
-</dependency>
-<dependency>
-	<groupId>org.glassfish.jersey.media</groupId>
-	<artifactId>jersey-media-json-jackson</artifactId>
-	<version>2.22.2</version>
-</dependency>
-<dependency>
-	<groupId>org.glassfish.jersey.core</groupId>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
 	<artifactId>jersey-client</artifactId>
-	<version>2.22.2</version>
-</dependency>
+	<version>1.19</version>
+</dependency> 
 <dependency>
-	<groupId>javax.ws.rs</groupId>
-	<artifactId>javax.ws.rs-api</artifactId>
-	<version>2.0.1</version>
+	<groupId>com.sun.jersey.contribs</groupId>
+	<artifactId>jersey-multipart</artifactId>
+	<version>1.19</version>
 </dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>
@@ -69,6 +58,37 @@
 			<version>${swagger-core-version}</version>
                         <scope>compile</scope>
 		</dependency>
+        <!-- JSON processing: jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+            <version>2.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${jodatime-version}</version>
+        </dependency>
+<dependency>
+	<groupId>com.fasterxml.jackson.jaxrs</groupId>
+	<artifactId>jackson-jaxrs-json-provider</artifactId>
+	<version>2.7.3</version>
+</dependency>
 
         <!-- Base64 encoding that works in both JVM and Android -->
         <dependency>
@@ -76,9 +96,6 @@
             <artifactId>migbase64</artifactId>
             <version>2.2</version>
         </dependency>
-
-
-
 
 	</dependencies>
 	<build>
@@ -125,12 +142,12 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.build.directory}/generated-sources/api/serviceAPI.yaml</inputSpec>
-							<apiPackage>org.symphonyoss.symphony.service.api</apiPackage>
-							<modelPackage>org.symphonyoss.symphony.service.model</modelPackage>
-							<invokerPackage>org.symphonyoss.symphony.service.invoker</invokerPackage>
+							<inputSpec>${project.build.directory}/generated-sources/api/podAPI.yaml</inputSpec>
+							<apiPackage>user.swagger.api</apiPackage>
+							<modelPackage>user.swagger.model</modelPackage>
+							<invokerPackage>user.swagger.invoker</invokerPackage>
 							<language>java</language>
-                                                        <library>jersey2</library>
+                                                        <!--library>jersey2</library-->
 						</configuration>
 					</execution>
 				</executions>

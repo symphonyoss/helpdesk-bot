@@ -29,19 +29,22 @@ import org.symphonyoss.symphony.service.api.UsersApi;
 import org.symphonyoss.symphony.service.invoker.ApiClient;
 import org.symphonyoss.symphony.service.model.*;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
-public class ServiceClient {
+public class PodClient {
     private SymAuth symAuth;
     private String serviceUrl;
     private ApiClient apiClient;
 
-    private Logger logger = LoggerFactory.getLogger(ServiceClient.class);
+    private Logger logger = LoggerFactory.getLogger(PodClient.class);
 
 
-    public ServiceClient(SymAuth symAuth, String serviceUrl) {
+    public PodClient(SymAuth symAuth, String serviceUrl) {
 
         this.symAuth = symAuth;
         this.serviceUrl = serviceUrl;
@@ -81,7 +84,7 @@ public class ServiceClient {
 
         UserApi userApi = new UserApi(apiClient);
 
-        UserDetail userDetail = userApi.v1AdminUserUidGet( symAuth.getSessionToken().getToken(), userId);
+        UserDetail userDetail = userApi.v1AdminUserUidGet(symAuth.getSessionToken().getToken(), userId);
 
         User user = new User();
         user.setId(userDetail.getUserSystemInfo().getId());
@@ -91,22 +94,45 @@ public class ServiceClient {
     }
 
 
-        public Stream getStream(User user) throws Exception {
+    public Stream getStream(User user) throws Exception {
 
-
-        StreamsApi streamsApi = new StreamsApi(apiClient);
 
         UserIdList userIdList = new UserIdList();
         userIdList.add(user.getId());
-        Stream stream = streamsApi.v1ImCreatePost(userIdList, symAuth.getSessionToken().getToken());
 
-        logger.debug("Stream ID for user: {}:{} ", user.getEmailAddress(), stream.getId());
+        Stream stream = getStream(userIdList);
+        logger.debug("Stream ID for one to one chat: {}:{} ", user.getEmailAddress(), stream.getId());
 
         return stream;
 
 
     }
 
+    public Stream getStream(Set<User> users) throws Exception {
+        UserIdList userIdList = new UserIdList();
+        String usersPrint = "";
+
+        for (User user : users) {
+            userIdList.add(user.getId());
+            usersPrint += " [" + user.getEmailAddress() + "] ";
+        }
+
+
+        Stream stream = getStream(userIdList);
+
+        logger.debug("Stream ID for multi-party chat: {}:{} ", usersPrint, stream.getId());
+
+        return stream;
+
+
+    }
+
+
+    public Stream getStream(UserIdList userIdList) throws Exception {
+        StreamsApi streamsApi = new StreamsApi(apiClient);
+        return streamsApi.v1ImCreatePost(userIdList, symAuth.getSessionToken().getToken());
+
+    }
 
     public Stream getStreamFromEmail(String email) throws Exception {
 
@@ -122,6 +148,17 @@ public class ServiceClient {
 
 
         return presenceApi.v1PresenceGet(symAuth.getSessionToken().getToken());
+
+
+    }
+
+    public Presence getUserPresence(Long userId) throws Exception {
+
+
+        PresenceApi presenceApi = new PresenceApi(apiClient);
+
+
+        return presenceApi.v1UserUidPresenceGet(userId,symAuth.getSessionToken().getToken());
 
 
     }

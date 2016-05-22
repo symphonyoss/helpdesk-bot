@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
 import org.symphonyoss.symphony.model.SymAuth;
 import org.symphonyoss.symphony.service.model.User;
-import org.symphonyoss.symphony.services.ConversationService;
+import org.symphonyoss.symphony.services.ChatService;
 import org.symphonyoss.symphony.services.MessageService;
 import org.symphonyoss.symphony.services.PresenceService;
 
@@ -40,8 +40,8 @@ public class SymphonyBasicClient implements SymphonyClient {
     private MessageService messageService;
     private PresenceService presenceService;
     private AgentClient agentClient;
-    private ServiceClient serviceClient;
-    private ConversationService conversationService;
+    private PodClient podClient;
+    private ChatService chatService;
     private User localUser;
 
 
@@ -64,13 +64,13 @@ public class SymphonyBasicClient implements SymphonyClient {
         if (serviceUrl == null)
             throw new Exception("Failed to provide service URL", new Throwable("Failed to provide service URL"));
 
-        serviceClient = new ServiceClient(symAuth, serviceUrl);
+        podClient = new PodClient(symAuth, serviceUrl);
 
         messageService = new MessageService(this);
         presenceService = new PresenceService(this);
-        conversationService = new ConversationService(this);
+        chatService = new ChatService(this);
 
-        localUser = getServiceClient().getUserFromEmail(email);
+        localUser = getPodClient().getUserFromEmail(email);
 
         return true;
     }
@@ -92,12 +92,12 @@ public class SymphonyBasicClient implements SymphonyClient {
         this.agentClient = agentClient;
     }
 
-    public ServiceClient getServiceClient() {
-        return serviceClient;
+    public PodClient getPodClient() {
+        return podClient;
     }
 
-    public void setServiceClient(ServiceClient serviceClient) {
-        this.serviceClient = serviceClient;
+    public void setPodClient(PodClient podClient) {
+        this.podClient = podClient;
     }
 
 
@@ -118,12 +118,12 @@ public class SymphonyBasicClient implements SymphonyClient {
         this.localUser = localUser;
     }
 
-    public ConversationService getConversationService() {
-        return conversationService;
+    public ChatService getChatService() {
+        return chatService;
     }
 
-    public void setConversationService(ConversationService conversationService) {
-        this.conversationService = conversationService;
+    public void setChatService(ChatService chatService) {
+        this.chatService = chatService;
     }
 }
 

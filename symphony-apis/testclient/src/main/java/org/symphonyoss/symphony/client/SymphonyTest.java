@@ -24,12 +24,12 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.authenticator.api.AuthenticationApi;
 import org.symphonyoss.symphony.authenticator.invoker.Configuration;
 import org.symphonyoss.symphony.authenticator.model.Token;
-import org.symphonyoss.symphony.service.api.StreamsApi;
-import org.symphonyoss.symphony.service.api.UsersApi;
-import org.symphonyoss.symphony.service.invoker.ApiClient;
-import org.symphonyoss.symphony.service.model.Stream;
-import org.symphonyoss.symphony.service.model.User;
-import org.symphonyoss.symphony.service.model.UserIdList;
+import org.symphonyoss.symphony.pod.api.StreamsApi;
+import org.symphonyoss.symphony.pod.api.UsersApi;
+import org.symphonyoss.symphony.pod.invoker.ApiClient;
+import org.symphonyoss.symphony.pod.model.Stream;
+import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.pod.model.UserIdList;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.HostnameVerifier;
@@ -88,7 +88,7 @@ static {
 
 
             //Get Service client to query for userID.
-            ApiClient serviceClient = org.symphonyoss.symphony.service.invoker.Configuration.getDefaultApiClient();
+            ApiClient serviceClient = org.symphonyoss.symphony.pod.invoker.Configuration.getDefaultApiClient();
             serviceClient.setBasePath("https://"+gatewayHost+":8446/pod");
             serviceClient.addDefaultHeader(sessionToken.getName(), sessionToken.getToken());
             serviceClient.addDefaultHeader(keyToken.getName(),keyToken.getToken());

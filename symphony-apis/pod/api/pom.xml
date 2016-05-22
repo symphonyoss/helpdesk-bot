@@ -21,14 +21,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.symphonyoss.symphony</groupId>
-	<artifactId>symphony-service-api</artifactId>
+	<artifactId>symphony-pod-api</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Symphony Service Service API</name>
+	<name>Symphony POD Service API</name>
 
 	<parent>
 		<groupId>org.symphonyoss.symphony</groupId>
-		<artifactId>symphony-service</artifactId>
+		<artifactId>symphony-pod</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
@@ -49,7 +49,7 @@
 							<goal>codegen</goal>
 						</goals>
 						<configuration>
-							<apiFile>${basedir}/src/main/resources/serviceAPI.yaml</apiFile>
+							<apiFile>${basedir}/src/main/resources/podAPI.yaml</apiFile>
 							<language>html</language>
 						</configuration>
 					</execution>
