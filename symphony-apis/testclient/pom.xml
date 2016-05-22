@@ -54,7 +54,7 @@
 </dependency>
 <dependency>
 	<groupId>org.symphonyoss.symphony</groupId>
-	<artifactId>symphony-service-java-jersey2-client</artifactId>
+	<artifactId>symphony-pod-java-jersey2-client</artifactId>
 	<version>1.0-SNAPSHOT</version>
 </dependency>
 

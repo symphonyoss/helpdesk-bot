@@ -21,10 +21,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.symphonyoss.symphony</groupId>
-	<artifactId>symphony-service-spring-interfaces</artifactId>
+	<artifactId>symphony-pod-spring-interfaces</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Symphony Service Service Spring Interfaces</name>
+	<name>Symphony POD Service Spring Interfaces</name>
 
 	<parent>
 		<groupId>org.symphonyoss.symphony</groupId>
@@ -51,7 +51,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.symphonyoss.symphony</groupId>
-			<artifactId>symphony-service-api</artifactId>
+			<artifactId>symphony-pod-api</artifactId>
 			<version>${project.version}</version>
                         <scope>compile</scope>
 		</dependency>
@@ -107,7 +107,7 @@
 							<goal>codegen</goal>
 						</goals>
 						<configuration>
-							<apiFile>${project.build.directory}/generated-sources/api/serviceAPI.yaml</apiFile>
+							<apiFile>${project.build.directory}/generated-sources/api/podAPI.yaml</apiFile>
 							<apiPackage>org.symphonyoss.symphony.auth.api</apiPackage>
 							<modelPackage>org.symphonyoss.symphony.auth.api.model</modelPackage>
 							<language>springinterfaces</language>

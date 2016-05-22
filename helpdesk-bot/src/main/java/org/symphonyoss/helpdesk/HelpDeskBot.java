@@ -26,15 +26,21 @@ import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.SymphonyBasicClient;
+import org.symphonyoss.symphony.model.Chat;
 import org.symphonyoss.symphony.model.SymAuth;
+import org.symphonyoss.symphony.service.model.User;
 import org.symphonyoss.symphony.service.model.UserPresence;
-import org.symphonyoss.symphony.services.MessageListener;
+import org.symphonyoss.symphony.services.ChatListener;
+import org.symphonyoss.symphony.services.ChatServiceListener;
 import org.symphonyoss.symphony.services.PresenceListener;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
-public class HelpDeskBot implements MessageListener, PresenceListener {
+public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceListener {
 
     private Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
 
@@ -60,7 +66,7 @@ public class HelpDeskBot implements MessageListener, PresenceListener {
             symClient.init(symAuth, "bot.user1@markit.com" , "https://localhost:8446/agent", "https://localhost:8446/pod");
 
             symClient.getPresenceService().registerPresenceListener(this);
-            symClient.getConversationService().registerMessageListener(this);
+            symClient.getChatService().registerListener(this);
 
 
             MessageSubmission aMessage = new MessageSubmission();
@@ -69,7 +75,24 @@ public class HelpDeskBot implements MessageListener, PresenceListener {
 
 
            // symClient.getMessageService().sendMessage("hershal.shah@markit.com", aMessage);
-            symClient.getMessageService().sendMessage("frank.tarsillo@markit.com", aMessage);
+           // symClient.getMessageService().sendMessage("frank.tarsillo@markit.com", aMessage);
+
+            Chat chat = new Chat();
+            chat.setLocalUser(symClient.getLocalUser());
+            Set<User> remoteUsers = new HashSet<User>();
+            remoteUsers.add(symClient.getPodClient().getUserFromEmail("frank.tarsillo@markit.com"));
+            chat.setRemoteUsers(remoteUsers);
+            chat.registerListener(this);
+            chat.setStream(symClient.getPodClient().getStream(remoteUsers));
+
+
+            symClient.getChatService().addChat(chat);
+
+            symClient.getMessageService().sendMessage(chat,aMessage);
+
+
+            logger.debug("Presence for user {} is: {}", remoteUsers, symClient.getPresenceService().getUserPresence("frank.tarsillo@markit.com"));
+
 
 
 
@@ -87,20 +110,34 @@ public class HelpDeskBot implements MessageListener, PresenceListener {
     }
 
 
-    public void onMessage(Message message) {
 
-
-        System.out.println("TS: " + message.getTimestamp());
-        System.out.println("From ID: " + message.getFromUserId());
-        System.out.println("Message: " + message.getMessage());
-        System.out.println("Message Type: " + message.getMessageType());
-
-    }
 
     public void onUserPresence(UserPresence userPresence) {
 
         logger.debug("Received user presence update: {}:{}", userPresence.getUid(), userPresence.getCategory());
 
+
+    }
+
+    public void onChatMessage(Message message) {
+
+
+        logger.debug("TS: {}\nFrom ID: {}\nMessage: {}\nMessage Type: {}",
+                message.getTimestamp(),
+                message.getFromUserId(),
+                message.getMessage(),
+                message.getMessageType());
+
+    }
+
+    public void onNewChat(Chat chat) {
+
+        chat.registerListener(this);
+
+        logger.debug("New chat session detected on stream {} with {}", chat.getStream().getId(), chat.getRemoteUsers());
+    }
+
+    public void onRemovedChat(Chat chat) {
 
     }
 }

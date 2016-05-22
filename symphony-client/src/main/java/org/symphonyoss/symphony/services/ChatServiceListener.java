@@ -17,38 +17,17 @@
  * under the License.
  */
 
-package org.symphonyoss.symphony;
+package org.symphonyoss.symphony.services;
 
-import org.symphonyoss.symphony.clients.AgentClient;
-import org.symphonyoss.symphony.clients.PodClient;
-import org.symphonyoss.symphony.model.SymAuth;
-import org.symphonyoss.symphony.service.model.User;
-import org.symphonyoss.symphony.services.*;
+import org.symphonyoss.symphony.model.Chat;
 
 /**
- * Created by Frank Tarsillo on 5/14/2016.
+ * Created by Frank Tarsillo on 5/21/2016.
  */
+public interface ChatServiceListener {
 
-public interface SymphonyClient {
-
-    SymAuth getSymAuth();
-
-    void setSymAuth(SymAuth symAuth);
-
-    MessageService getMessageService();
-
-    PresenceService getPresenceService();
-
-    ChatService getChatService();
-
-    AgentClient getAgentClient();
-
-    PodClient getPodClient();
-
-    boolean init(SymAuth symAuth, String email, String agentUrl, String serviceUrl) throws Exception;
-
-    User getLocalUser();
-
+    void onNewChat(Chat chat);
+    void onRemovedChat(Chat chat);
 
 
 }

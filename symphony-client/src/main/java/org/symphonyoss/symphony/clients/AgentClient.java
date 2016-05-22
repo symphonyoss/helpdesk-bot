@@ -22,8 +22,10 @@ package org.symphonyoss.symphony.clients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.symphony.SymphonyClient;
+import org.symphonyoss.symphony.agent.api.DatafeedApi;
 import org.symphonyoss.symphony.agent.api.MessagesApi;
 import org.symphonyoss.symphony.agent.invoker.ApiClient;
+import org.symphonyoss.symphony.agent.model.Datafeed;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageList;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -66,12 +68,7 @@ public class AgentClient {
     }
 
 
-
     public MessageList getMessagesFromStream(Stream stream, Long since, Integer offset, Integer maxMessages) throws Exception {
-
-
-
-        try {
 
 
             MessagesApi messagesApi = new MessagesApi(apiClient);
@@ -79,14 +76,21 @@ public class AgentClient {
             return messagesApi.v1StreamSidMessageGet(stream.getId(), since, symAuth.getSessionToken().getToken(), symAuth.getKeyToken().getToken(), offset, maxMessages);
 
 
-        } catch (org.symphonyoss.symphony.agent.invoker.ApiException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-
     }
 
+    public Datafeed createDatafeed() throws Exception {
+
+        DatafeedApi datafeedApi = new DatafeedApi(apiClient);
+
+        return datafeedApi.v1DatafeedCreatePost(symAuth.getSessionToken().getToken(), symAuth.getKeyToken().getToken());
+    }
+
+
+    public MessageList getMessagesFromDatafeed(Datafeed datafeed) throws Exception {
+
+        DatafeedApi datafeedApi = new DatafeedApi(apiClient);
+
+        return datafeedApi.v1DatafeedIdReadGet(datafeed.getId(),symAuth.getSessionToken().getToken(), symAuth.getKeyToken().getToken(),100);
+    }
 
 }

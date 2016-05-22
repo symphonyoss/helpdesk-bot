@@ -23,8 +23,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.markit</groupId>
-	<artifactId>symphony-service-server</artifactId>
-	<name>Symphony Service Service Server</name>
+	<artifactId>symphony-pod-server</artifactId>
+	<name>Symphony POD Service Server</name>
 	<version>0.1.0-SNAPSHOT</version>
 
 	<!-- <parent> <groupId>org.symphonyoss.symphony</groupId> <artifactId>ui-apps-admin</artifactId>
@@ -45,7 +45,7 @@
 		<swagger-core-version>1.5.7</swagger-core-version>
 		<springfox.version>2.3.1</springfox.version>
 		<java.version>1.8</java.version>
-		<symphony-service.version>1.0-SNAPSHOT</symphony-service.version>
+		<symphony-pod.version>1.0-SNAPSHOT</symphony-pod.version>
 		<spring-boot.version>1.3.2.RELEASE</spring-boot.version>
 		<mysql-connector-java.version>5.1.38</mysql-connector-java.version>
 		<docker-maven-plugin.version>0.13.8</docker-maven-plugin.version>
@@ -63,8 +63,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.symphonyoss.symphony</groupId>
-			<artifactId>symphony-service-spring-interfaces</artifactId>
-			<version>${symphony-service.version}</version>
+			<artifactId>symphony-pod-spring-interfaces</artifactId>
+			<version>${symphony-pod.version}</version>
 			<type>jar</type>
 		</dependency>
 

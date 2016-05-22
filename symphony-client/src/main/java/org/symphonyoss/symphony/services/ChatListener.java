@@ -17,45 +17,13 @@
  * under the License.
  */
 
-package org.symphonyoss.symphony.model;
+package org.symphonyoss.symphony.services;
 
-import org.symphonyoss.symphony.service.model.Stream;
-import org.symphonyoss.symphony.service.model.User;
-
+import org.symphonyoss.symphony.agent.model.Message;
 
 /**
- * Created by Frank Tarsillo on 5/15/2016.
+ * Created by Frank Tarsillo on 5/22/2016.
  */
-public class Conversation {
-    private User remoteUser;
-    private User localUser;
-    private Stream stream;
-
-
-
-    public User getRemoteUser() {
-        return remoteUser;
-    }
-
-    public void setRemoteUser(User remoteUser) {
-        this.remoteUser = remoteUser;
-    }
-
-    public User getLocalUser() {
-        return localUser;
-    }
-
-    public void setLocalUser(User localUser) {
-        this.localUser = localUser;
-    }
-
-    public Stream getStream() {
-        return stream;
-    }
-
-    public void setStream(Stream stream) {
-        this.stream = stream;
-    }
-
-
+public interface ChatListener {
+    void onChatMessage(Message message);
 }
