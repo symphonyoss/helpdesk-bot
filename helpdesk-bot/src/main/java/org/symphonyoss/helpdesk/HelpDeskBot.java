@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.symphonyoss.helpdesk;
 
 import org.slf4j.Logger;
@@ -33,7 +32,6 @@ import org.symphonyoss.symphony.service.model.UserPresence;
 import org.symphonyoss.symphony.services.ChatListener;
 import org.symphonyoss.symphony.services.ChatServiceListener;
 import org.symphonyoss.symphony.services.PresenceListener;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,20 +48,50 @@ public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceLi
 
     }
 
+    public static void main(String[] args) {
+
+        System.out.println("HelpDeskBot starting...");
+        new HelpDeskBot();
+
+    }
 
     public void testIt() {
 
-        try {
+//        -Dkeystore.password=SymphonyIsGreat123
+//        -Dtruststore.password=SymphonyIsGreat123
+//        -Dsessionauth.url=https://localhost.symphony.com:844/sessionauth
+//        -Dkeyauth.url=https://localhost.symphony.com:8444/keyauth
+//        -Dsymphony.agent.pod.url=https://symagent.mdevlab.com:8446/pod
+//        -Dsymphony.agent.agent.url=https://symagent.mdevlab.com:8446/agent
+//        -Dcerts.dir=/dev/certs/
+//        -Dtruststore.file=/dev/certs/server.truststore
+//        -Dbot.user=hashtag.bot
+
+        try{
+
             SymphonyClient symClient = new SymphonyBasicClient();
 
-            AuthorizationClient authClient = new AuthorizationClient("https://localhost.symphony.com:8444/sessionauth",
-                    "https://localhost.symphony.com:8444/keyauth");
-            authClient.setKeystores("/dev/certs/server.truststore", System.getProperty("keystore.password"),
-                    "/dev/certs/bot.user1.p12", System.getProperty("keystore.password"));
+            logger.debug("{} {}",  System.getProperty("sessionauth.url"),
+                    System.getProperty("keyauth.url") );
+            AuthorizationClient authClient = new AuthorizationClient(
+                    System.getProperty("sessionauth.url"),
+                    System.getProperty("keyauth.url") );
+
+
+            authClient.setKeystores(
+                    System.getProperty("truststore.file"),
+                    System.getProperty("truststore.password"),
+                    System.getProperty("certs.dir") + System.getProperty("bot.user") + ".p12",
+                    System.getProperty("keystore.password"));
 
             SymAuth symAuth = authClient.authenticate();
 
-            symClient.init(symAuth, "bot.user1@markit.com" , "https://localhost:8446/agent", "https://localhost:8446/pod");
+            symClient.init(
+                    symAuth,
+                    System.getProperty("bot.user") + "@markit.com" ,
+                    System.getProperty("symphony.agent.agent.url"),
+                    System.getProperty("symphony.agent.pod.url")
+                    );
 
             symClient.getPresenceService().registerPresenceListener(this);
             symClient.getChatService().registerListener(this);
@@ -103,11 +131,7 @@ public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceLi
 
     }
 
-    public static void main(String[] args) {
 
-        new HelpDeskBot();
-
-    }
 
 
 
