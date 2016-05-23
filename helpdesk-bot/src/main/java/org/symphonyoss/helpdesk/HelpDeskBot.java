@@ -29,9 +29,9 @@ import org.symphonyoss.symphony.model.Chat;
 import org.symphonyoss.symphony.model.SymAuth;
 import org.symphonyoss.symphony.service.model.User;
 import org.symphonyoss.symphony.service.model.UserPresence;
-import org.symphonyoss.symphony.services.ChatListener;
-import org.symphonyoss.symphony.services.ChatServiceListener;
-import org.symphonyoss.symphony.services.PresenceListener;
+import org.symphonyoss.symphony.pod.ChatListener;
+import org.symphonyoss.symphony.pod.ChatServiceListener;
+import org.symphonyoss.symphony.pod.PresenceListener;
 import java.util.HashSet;
 import java.util.Set;
 
