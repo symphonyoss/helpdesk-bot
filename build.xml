@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~ Copyright 2016 The Symphony Software Foundation
+  ~
+  ~ Licensed to The Symphony Software Foundation (SSF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<project name="VirtualDesk" basedir="." default="all">
+
+	<description>
+        VirtualDesk build script.
+    </description>
+
+	<!-- Build Property -->
+	<property name="specname"	value="virtualdesk" />
+
+	<property name="specfilename" value="${specname}.spec" />
+	<property name="build.release" value="1.0" />
+	<property name="build.no" value="SNAPSHOT" />
+	<property name="revision" value="REVISION" />
+
+	<property name="source" value="${basedir}/src" />
+	<property name="source_test" value="${basedir}/test" />
+	<property name="lib.dir" value="${basedir}/build/lib" />
+	<property name="lib_ex.dir" value="${basedir}/build/lib-ex" />
+
+	<property name="build.dir" value="${basedir}/.build" />
+		
+	<property name="buildtarget.dir" value="${build.dir}/target" />
+	<property name="jar.dest.dir" value="${buildtarget.dir}" />		
+	<property name="compile.dir" value="${buildtarget.dir}/classes" />
+	<property name="compile.test.dir" value="${buildtarget.dir}/classes-test" />
+	<property name="lib.dest.dir" value="${buildtarget.dir}/lib" />
+	<property name="conf.dest.dir" value="${buildtarget.dir}/conf" />
+	<property name="bin.dest.dir" value="${buildtarget.dir}/bin" />
+	<property name="class_src" value="${buildtarget.dir}/classes" />
+	<property name="class_inst" value="${buildtarget.dir}/classes_inst" />
+	<property name="class_test" value="${buildtarget.dir}/classes_test" />
+
+	<property name="jarfile" value="${jar.dest.dir}/${specname}.jar" />
+
+	<!-- Test and Report Property -->
+	<property name="out_junit" value="${build.dir}/report_junit" />
+	<property name="out_cover" value="${build.dir}/report_coverage" />
+	<property name="out_functional" value="${basedir}/report_functional" />
+	<property name="resources.dir" value="${basedir}/build/resources" />
+	<property name="emma.filter.exclude" value="" />
+
+	<!-- RPM Property -->
+	<property name="specfile" value="${basedir}/build/${specfilename}" />
+	<property name="rpm" value="${build.dir}/rpm" />
+	<property name="rpm_build" value="${rpm}/BUILD" />
+	<property name="rpm_rpms" value="${rpm}/RPMS" />
+	<property name="rpm_sources" value="${rpm}/SOURCES" />
+	<property name="rpm_specs" value="${rpm}/SPECS" />
+	<property name="rpm_srpms" value="${rpm}/SRPMS" />
+	<property name="rpmfile.dir" value="${rpm_rpms}/x86_64" />
+
+	<!-- path for test -->
+	<path id="classpath.compile.gen">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+		<fileset dir="${lib_ex.dir}" includes="**/*.jar" />
+	</path>
+	<path id="classpath.compile">
+		<pathelement location="${class_gen}" />
+		<path refid="classpath.compile.gen" />
+	</path>
+	<path id="classpath.test">
+		<pathelement location="${class_inst}" />
+		<pathelement location="${class_test}" />
+		<path refid="classpath.compile.test" />
+		<pathelement location="${emma_dir}/emma.jar" />
+	</path>
+	<path id="classpath.compile.test">
+		<pathelement location="${class_src}" />
+		<path refid="classpath.compile" />
+	</path>
+	<path id="emma.lib">
+		<pathelement location="${lib_ex.dir}/emma.jar" />
+		<pathelement location="${lib_ex.dir}/emma_ant.jar" />
+	</path>
+
+	<pathconvert property="manifest.classpath" pathsep=" ">
+		<path refid="classpath.compile.gen"/>
+		<mapper>
+			<chainedmapper>
+				<flattenmapper/>
+				<globmapper from="*.jar" to="lib/*.jar"/>
+			</chainedmapper>
+		</mapper>
+	</pathconvert>
+
+
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+
+	<!-- clean -->
+	<target name="clean">
+		<delete dir= "${build.dir}" />
+	</target>
+
+	<!-- compile -->
+	<!-- ======================================================================================= -->
+	<target name="compile" description="Compiles all source to ${compile.dir}.">
+		<mkdir dir="${compile.dir}" />
+		<javac destdir="${compile.dir}" includeAntRuntime="no" debug="on">
+			<src path="${source}" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib_ex.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- test compile -->
+	<target name="test-compile" depends="compile">
+		<mkdir dir="${class_test}" />
+		<mkdir dir="${class_inst}" />
+		<javac srcdir="${source_test}" destdir="${class_test}" classpathref="classpath.compile.test" debug="true" includeantruntime="false" />
+		<copy todir="${class_test}">
+			<fileset dir="${source_test}" includes="**/*.*" excludes="**/*.java" />
+		</copy>
+		<emma>
+			<instr instrpath="${class_src}" destdir="${class_inst}" metadatafile="${out_cover}/metadata.emma" mode="copy">
+				<filter excludes="org.symphonyoss.collaboration.virtualdesk.ExternalVirtualDeskComponent"
+				/>			
+			</instr>
+		</emma>
+	</target>
+
+	<!-- build test -->
+	<target name="test" depends="test-compile">
+		<mkdir dir="${out_junit}" />
+		<mkdir dir="${out_cover}" />
+
+		<junit fork="yes" haltonfailure="no" printsummary="yes">
+			<classpath refid="classpath.test" />
+			<jvmarg value="-XX:-UseSplitVerifier" />
+			<jvmarg value="-Demma.coverage.out.file=${out_cover}/coverage.emma" />
+			<jvmarg value="-Demma.coverage.out.merge=true" />
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${out_junit}">
+				<fileset dir="${source_test}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<junitreport todir="${out_junit}" tofile="test.results.xml">
+			<fileset dir="${out_junit}" includes="**/TEST-*.xml" />
+			<report todir="${out_junit}" />
+		</junitreport>
+
+		<emma>
+			<report sourcepath="${source}" depth="method">
+				<fileset dir="${out_cover}" includes="**/*.emma" />
+				<html outfile="${out_cover}/coverage.html" />
+				<xml outfile="${out_cover}/coverage.xml" />
+			</report>
+		</emma>
+	</target>
+
+	<!-- create Jar -->
+	<target name="jar" depends="clean, compile">
+		<mkdir dir="${buildtarget.dir}" />
+		<jar destfile="${jar.dest.dir}/${specname}.jar" basedir="${compile.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="org.symphonyoss.collaboration.virtualdesk.ExternalVirtualDeskComponent" />
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+			</manifest>
+			<fileset dir="${compile.dir}" />
+		</jar>
+
+		<delete dir="${lib.dest.dir}" />
+		<mkdir dir="${lib.dest.dir}" />
+
+		<mkdir dir="${buildtarget.dir}/var" />
+		<mkdir dir="${bin.dest.dir}" />
+
+		<!-- copy conf dir -->
+		<copy todir="${jar.dest.dir}">
+			<fileset dir="${basedir}" includes="conf/**/*.*">
+			</fileset>
+		</copy>
+		<!-- copy library -->
+		<copy todir="${lib.dest.dir}">
+			<fileset dir="${lib.dir}" includes="**/*.*">
+			</fileset>
+		</copy>
+
+	</target>
+
+	<!-- package-rpm -->
+	<target name="package-rpm">
+		<mkdir dir="${rpm}" />
+		<mkdir dir="${rpm_build}" />
+		<mkdir dir="${rpm_rpms}" />
+		<mkdir dir="${rpm_sources}" />
+		<mkdir dir="${rpm_specs}" />
+		<mkdir dir="${rpm_srpms}" />
+		<mkdir dir="${rpm_sources}/lib" />
+		<mkdir dir="${rpm_sources}/conf" />
+		<mkdir dir="${rpm_sources}/var" />
+		<mkdir dir="${rpm_sources}/bin" />
+
+		<copy file="${jarfile}" todir="${rpm_sources}" />
+		<copy includeemptydirs="true" todir="${rpm_sources}/lib">
+			<fileset dir="${lib.dest.dir}"></fileset>
+		</copy>
+		<copy includeemptydirs="true" todir="${rpm_sources}/conf">
+			<fileset dir="${conf.dest.dir}"></fileset>
+		</copy>
+		<copy includeemptydirs="true" todir="${rpm_sources}/bin">
+			<fileset dir="${bin.dest.dir}"></fileset>
+		</copy>
+		<copy file="${specfile}" todir="${rpm_specs}" />
+
+		<rpm specFile="${specfilename}" topDir="${rpm}" command="-bb -D 'buildversion ${build.release}.${build.no}.${revision}' -D 'buildnumber 1' -D 'jarfile ${jarfile}' -D 'lib ${rpm_sources}/lib' -D 'conf ${rpm_sources}/conf' -D 'bin ${rpm_sources}/bin'" failOnError="true" />
+		<mkdir dir="${buildtarget.dir}" />
+		
+		<copy todir="${buildtarget.dir}">
+			<fileset dir="${rpmfile.dir}" includes="*.rpm"></fileset>
+		</copy>
+	</target>
+
+	<!-- Do all target -->
+	<target name="all" depends="jar, test">
+	</target>
+
+</project>
