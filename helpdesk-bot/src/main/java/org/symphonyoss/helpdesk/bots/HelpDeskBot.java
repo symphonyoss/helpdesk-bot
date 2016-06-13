@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.symphonyoss.helpdesk;
+package org.symphonyoss.helpdesk.bots;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,6 @@ public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceLi
         testIt();
 
     }
-
     public static void main(String[] args) {
 
         System.out.println("HelpDeskBot starting...");
