@@ -1,4 +1,4 @@
-package org.symphonyoss.helpdesk.models;
+package org.symphonyoss.helpdesk.models.responses;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +12,9 @@ import org.symphonyoss.symphony.agent.model.Message;
 
 /*
  * BotResponse.java
- * A abstract class, that defines a bot response.
+ * A abstract class, that defines a bot responses.
  * Allows developers to easily create command lines, with multiple arguments and
- * prefixes,for each response, and compare user input with the command line.
+ * prefixes,for each responses, and compare user input with the command line.
  */
 public abstract class BotResponse {
     private Logger logger = LoggerFactory.getLogger(BotResponse.class);
@@ -32,30 +32,37 @@ public abstract class BotResponse {
     /**
      * An abstract method, that can be used in extended classes to create message responses
      * for the bot.
-     *
      * <p>
+     * <p>
+     *
      * @param mlMessageParser the current parser for the message
-     * @param message the message sent from a user
-     * @param listener the listener this response belongs to
-     * </p>
+     * @param message         the message sent from a user
+     * @param listener        the listener this responses belongs to
+     *                        </p>
      */
     public abstract void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener);
 
+    public abstract boolean userHasPermission(long userid);
+
     /**
-     * Checks to see if the user's input fulfills the bot response command requirements
-     *
+     * Checks to see if the user's input fulfills the bot responses command requirements
      * <p>
+     * <p>
+     *
      * @param chunks  the user's input in chunks
-     * @param message  the message from the user
-     * @return  if the user input fulfills the bot response command requirements
+     * @param message the message from the user
+     * @return if the user input fulfills the bot responses command requirements
      * </p>
      */
     public boolean isCommand(String[] chunks, Message message) {
-        if (chunks.length <= numArguments)
+        String[] checkCommand = command.split(" ");
+
+        if ((chunks.length - checkCommand.length) + 1 <= numArguments)
             return false;
 
-        if (!chunks[0].trim().equalsIgnoreCase(command))
-            return false;
+        for (int commandIndex = 0; commandIndex < checkCommand.length; commandIndex++)
+            if (!chunks[commandIndex].trim().equalsIgnoreCase(command.trim()))
+                return false;
 
         for (int chunkIndex = 1; chunkIndex <= numArguments; chunkIndex++)
             if (!chunks[chunkIndex].startsWith(prefixRequirements[chunkIndex - 1]))
@@ -66,15 +73,15 @@ public abstract class BotResponse {
 
     /**
      * Creates a usage HTML string, that can be used to instruct users how to use this
-     * bot response command.
+     * bot responses command.
      *
-     * @return  the usage string in HTML
+     * @return the usage string in HTML
      */
     public String toMLString() {
         String toML = "<b>" + command + "</b> ";
         for (int index = 0; index < numArguments; index++)
             toML += prefixRequirements[index] + placeHolders[index];
-        return toML + "<br/>";
+        return toML + "</br>";
     }
 
     //Private methods
