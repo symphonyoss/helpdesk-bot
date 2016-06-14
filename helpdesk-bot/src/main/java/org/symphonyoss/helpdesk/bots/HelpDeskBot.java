@@ -27,6 +27,9 @@ import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.services.PresenceListener;
+import org.symphonyoss.helpdesk.listeners.BotResponseListener;
+import org.symphonyoss.helpdesk.models.BotResponse;
+import org.symphonyoss.helpdesk.models.HelloResponse;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
@@ -116,12 +119,21 @@ public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceLi
 
             symClient.getChatService().addChat(chat);
 
-            symClient.getMessageService().sendMessage(chat,aMessage);
+            symClient.getMessageService().sendMessage(chat, aMessage);
 
 
             logger.debug("Presence for user {} is: {}", remoteUsers, symClient.getPresenceService().getUserPresence("frank.tarsillo@markit.com"));
 
+            BotResponseListener responseListener = new BotResponseListener(symClient);
+            chat.registerListener(responseListener);
+            symClient.getChatService().registerListener(responseListener);
 
+            HelloResponse hashtag = new HelloResponse("Add", 3);
+            hashtag.setPrefixRequirement(0, "#");
+            hashtag.setPlaceHolder(0, "hashtag");
+            hashtag.setPlaceHolder(1, "definition");
+
+            responseListener.getActiveResponses().add(hashtag);
 
 
 

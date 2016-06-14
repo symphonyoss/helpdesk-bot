@@ -2,38 +2,55 @@ package org.symphonyoss.helpdesk.models;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.client.services.ChatListener;
-import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.listeners.BotResponseListener;
 import org.symphonyoss.symphony.agent.model.Message;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Created by nicktarsillo on 6/13/16.
  */
-public abstract class BotResponse {
-    public static final HashSet<BotResponse> activeResponses = new HashSet<BotResponse>();
 
+/*
+ * BotResponse.java
+ * A abstract class, that defines a bot response.
+ * Allows developers to easily create command lines, with multiple arguments and
+ * prefixes,for each response, and compare user input with the command line.
+ */
+public abstract class BotResponse {
     private Logger logger = LoggerFactory.getLogger(BotResponse.class);
 
     private String command;
     private int numArguments;
     private String[] prefixRequirements;
+    private String[] placeHolders;
 
     public BotResponse(String command, int numArguments) {
         setCommand(command);
         setNumArguments(numArguments);
-        activeResponses.add(this);
     }
 
-    abstract void respond(MlMessageParser mlMessageParser, Message message);
+    /**
+     * An abstract method, that can be used in extended classes to create message responses
+     * for the bot.
+     *
+     * <p>
+     * @param mlMessageParser the current parser for the message
+     * @param message the message sent from a user
+     * @param listener the listener this response belongs to
+     * </p>
+     */
+    public abstract void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener);
 
-    public boolean isCommand(MlMessageParser mlMessageParser, Message message) {
-        String[] chunks = mlMessageParser.getTextChunks();
-
+    /**
+     * Checks to see if the user's input fulfills the bot response command requirements
+     *
+     * <p>
+     * @param chunks  the user's input in chunks
+     * @param message  the message from the user
+     * @return  if the user input fulfills the bot response command requirements
+     * </p>
+     */
+    public boolean isCommand(String[] chunks, Message message) {
         if (chunks.length <= numArguments)
             return false;
 
@@ -47,8 +64,21 @@ public abstract class BotResponse {
         return true;
     }
 
-    public void setNumArguments(int numArguments) {
-        this.numArguments = numArguments;
+    /**
+     * Creates a usage HTML string, that can be used to instruct users how to use this
+     * bot response command.
+     *
+     * @return  the usage string in HTML
+     */
+    public String toMLString() {
+        String toML = "<b>" + command + "</b> ";
+        for (int index = 0; index < numArguments; index++)
+            toML += prefixRequirements[index] + placeHolders[index];
+        return toML + "<br/>";
+    }
+
+    //Private methods
+    private void resizePrefixesPlaceholders() {
         String[] resize = new String[numArguments];
         for (int index = 0; index < prefixRequirements.length && index < numArguments; index++) {
             resize[index] = prefixRequirements[index];
@@ -56,10 +86,24 @@ public abstract class BotResponse {
                 resize[index] = "";
         }
         prefixRequirements = resize;
+
+        resize = new String[numArguments];
+        for (int index = 0; index < placeHolders.length && index < numArguments; index++) {
+            resize[index] = placeHolders[index];
+            if (resize[index] == null)
+                resize[index] = "";
+        }
+        placeHolders = resize;
     }
 
     public int getNumArguments() {
         return numArguments;
+    }
+
+    //Getters and Setters
+    public void setNumArguments(int numArguments) {
+        this.numArguments = numArguments;
+        resizePrefixesPlaceholders();
     }
 
     public void setPrefixRequirement(int argumentIndex, String requirement) {
@@ -70,6 +114,10 @@ public abstract class BotResponse {
         prefixRequirements[argumentIndex] = requirement;
     }
 
+    public void setAllPrefixRequirements(String[] prefixRequirements) {
+        this.prefixRequirements = prefixRequirements;
+    }
+
     public String getPrefixRequirement(int argumentIndex) {
         if (prefixRequirements.length < argumentIndex)
             return prefixRequirements[argumentIndex];
@@ -77,13 +125,31 @@ public abstract class BotResponse {
             return null;
     }
 
+    public void setPlaceHolder(int argumentIndex, String holder) {
+        if (argumentIndex < numArguments) {
+            logger.debug("Could not add place holder {} , not enough arguments.", holder);
+            return;
+        }
+        placeHolders[argumentIndex] = holder;
+    }
 
-    public void setCommand(String command) {
-        this.command = command;
+    public void setAllPlaceholders(String[] placeHolders) {
+        this.placeHolders = placeHolders;
+    }
+
+    public String getPlaceHolder(int argumentIndex) {
+        if (placeHolders.length < argumentIndex)
+            return placeHolders[argumentIndex];
+        else
+            return null;
     }
 
     public String getCommand() {
         return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
     }
 }
 
