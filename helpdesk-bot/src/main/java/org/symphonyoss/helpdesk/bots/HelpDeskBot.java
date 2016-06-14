@@ -18,6 +18,7 @@
  */
 package org.symphonyoss.helpdesk.bots;
 
+import Constants.HelpBotConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.SymphonyClient;
@@ -28,8 +29,10 @@ import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.services.PresenceListener;
 import org.symphonyoss.helpdesk.listeners.BotResponseListener;
-import org.symphonyoss.helpdesk.models.BotResponse;
-import org.symphonyoss.helpdesk.models.HelloResponse;
+import org.symphonyoss.helpdesk.listeners.HelpClientListener;
+import org.symphonyoss.helpdesk.models.MemberDatabase;
+import org.symphonyoss.helpdesk.models.responses.AcceptHelpResponse;
+import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
@@ -37,28 +40,28 @@ import org.symphonyoss.symphony.pod.model.User;
 import org.symphonyoss.symphony.pod.model.UserPresence;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
-public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceListener {
-
+public class HelpDeskBot implements ChatServiceListener{
     private Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
+    private BotResponseListener memberResponseListener;
+    private HelpClientListener helpClientListener;
+    private SymphonyClient symClient;
 
     public HelpDeskBot() {
-
-        testIt();
-
+        init();
     }
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         System.out.println("HelpDeskBot starting...");
         new HelpDeskBot();
-
     }
 
-    public void testIt() {
+    public void init() {
 
 //        -Dkeystore.password=SymphonyIsGreat123
 //        -Dtruststore.password=SymphonyIsGreat123
@@ -70,15 +73,15 @@ public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceLi
 //        -Dtruststore.file=/dev/certs/server.truststore
 //        -Dbot.user=hashtag.bot
 
-        try{
+        try {
 
-            SymphonyClient symClient = new SymphonyBasicClient();
+            symClient = new SymphonyBasicClient();
 
-            logger.debug("{} {}",  System.getProperty("sessionauth.url"),
-                    System.getProperty("keyauth.url") );
+            logger.debug("{} {}", System.getProperty("sessionauth.url"),
+                    System.getProperty("keyauth.url"));
             AuthorizationClient authClient = new AuthorizationClient(
                     System.getProperty("sessionauth.url"),
-                    System.getProperty("keyauth.url") );
+                    System.getProperty("keyauth.url"));
 
 
             authClient.setKeystores(
@@ -91,89 +94,51 @@ public class HelpDeskBot implements ChatListener,ChatServiceListener, PresenceLi
 
             symClient.init(
                     symAuth,
-                    System.getProperty("bot.user") + "@markit.com" ,
+                    System.getProperty("bot.user") + "@markit.com",
                     System.getProperty("symphony.agent.agent.url"),
                     System.getProperty("symphony.agent.pod.url")
-                    );
+            );
 
-            symClient.getPresenceService().registerPresenceListener(this);
-            symClient.getChatService().registerListener(this);
+            MemberDatabase.loadMembers();
 
+            helpClientListener = new HelpClientListener(symClient);
+            memberResponseListener = new BotResponseListener(symClient);
+            AcceptHelpResponse acceptResponse1 = new AcceptHelpResponse("Accept Next Client", 0, helpClientListener);
+            AcceptHelpResponse acceptResponse2 = new AcceptHelpResponse("Accept ", 1, helpClientListener);
+            acceptResponse2.setPlaceHolder(0, "Client");
+            acceptResponse2.setPrefixRequirement(0, "@");
 
-            MessageSubmission aMessage = new MessageSubmission();
-            aMessage.setFormat(MessageSubmission.FormatEnum.TEXT);
-            aMessage.setMessage("Hello, I am the help desk BOT, here at your service.");
+            System.out.println("Help desk bot is alive, and ready to help!");
 
-
-           // symClient.getMessageService().sendMessage("hershal.shah@markit.com", aMessage);
-           // symClient.getMessageService().sendMessage("frank.tarsillo@markit.com", aMessage);
-
-            Chat chat = new Chat();
-            chat.setLocalUser(symClient.getLocalUser());
-            Set<User> remoteUsers = new HashSet<User>();
-            remoteUsers.add(symClient.getUsersClient().getUserFromEmail("frank.tarsillo@markit.com"));
-            chat.setRemoteUsers(remoteUsers);
-            chat.registerListener(this);
-            chat.setStream(symClient.getStreamsClient().getStream(remoteUsers));
-
-
-            symClient.getChatService().addChat(chat);
-
-            symClient.getMessageService().sendMessage(chat, aMessage);
-
-
-            logger.debug("Presence for user {} is: {}", remoteUsers, symClient.getPresenceService().getUserPresence("frank.tarsillo@markit.com"));
-
-            BotResponseListener responseListener = new BotResponseListener(symClient);
-            chat.registerListener(responseListener);
-            symClient.getChatService().registerListener(responseListener);
-
-            HelloResponse hashtag = new HelloResponse("Add", 3);
-            hashtag.setPrefixRequirement(0, "#");
-            hashtag.setPlaceHolder(0, "hashtag");
-            hashtag.setPlaceHolder(1, "definition");
-
-            responseListener.getActiveResponses().add(hashtag);
-
-
-
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-
-
-
-
-
-    public void onUserPresence(UserPresence userPresence) {
-
-        logger.debug("Received user presence update: {}:{}", userPresence.getUid(), userPresence.getCategory());
-
-
-    }
-
-    public void onChatMessage(Message message) {
-
-        logger.debug("TS: {}\nFrom ID: {}\nMessage: {}\nMessage Type: {}",
-                message.getTimestamp(),
-                message.getFromUserId(),
-                message.getMessage(),
-                message.getMessageType());
-
-    }
-
     public void onNewChat(Chat chat) {
-
-        chat.registerListener(this);
-
-        logger.debug("New chat session detected on stream {} with {}", chat.getStream().getId(), chat.getRemoteUsers());
+        Set<User> users = chat.getRemoteUsers();
+        if(users.size() == 1){
+            if(MemberDatabase.members.containsKey(users.iterator().next().getEmailAddress()))
+                chat.registerListener(memberResponseListener);
+            else{
+                chat.registerListener(helpClientListener);
+                User user = users.iterator().next();
+                HelpBotConstants.ALLCLIENTS.put(user.getId().toString(),
+                        new HelpClient(user.getEmailAddress(), user.getId()));
+            }
+        }
     }
 
     public void onRemovedChat(Chat chat) {
-        chat.removeListener(this);
+        User user = chat.getRemoteUsers().iterator().next();
+        if(MemberDatabase.members.containsKey(user.getEmailAddress())
+                && !MemberDatabase.members.get(user.getEmailAddress()).isOnCall()){
+            chat.removeListener(memberResponseListener);
+        }else if(!HelpBotConstants.ALLCLIENTS.get(user.getId()).isOnCall()){
+            chat.removeListener(helpClientListener);
+            HelpBotConstants.ALLCLIENTS.remove(user.getId());
+        }
     }
 }
 
