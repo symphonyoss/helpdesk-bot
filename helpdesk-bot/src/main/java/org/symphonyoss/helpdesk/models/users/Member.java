@@ -2,7 +2,6 @@ package org.symphonyoss.helpdesk.models.users;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by nicktarsillo on 6/14/16.
@@ -15,10 +14,18 @@ public class Member {
     @JsonIgnore
     private boolean onCall = false;
 
-    public Member(String email, Long userID){this.email = email; this.userID = userID;}
+    public Member(String email, Long userID) {
+        this.email = email;
+        this.userID = userID;
+    }
 
     @JsonCreator
-    public Member(@JsonProperty("email") String email, @JsonProperty("userID") Long userID, @JsonProperty("seeCommands") boolean seeCommands, @JsonProperty("hideIdentity")boolean hideIdentity){this.email = email; this.userID = userID; this.seeCommands = seeCommands; this.hideIdentity = hideIdentity;}
+    public Member(String email, Long userID, boolean seeCommands, boolean hideIdentity) {
+        this.email = email;
+        this.userID = userID;
+        this.seeCommands = seeCommands;
+        this.hideIdentity = hideIdentity;
+    }
 
     public Long getUserID() {
         return userID;

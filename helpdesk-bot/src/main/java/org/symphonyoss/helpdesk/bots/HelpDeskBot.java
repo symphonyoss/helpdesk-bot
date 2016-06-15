@@ -18,35 +18,31 @@
  */
 package org.symphonyoss.helpdesk.bots;
 
-import Constants.HelpBotConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.impl.SymphonyBasicClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.model.SymAuth;
-import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.services.ChatServiceListener;
-import org.symphonyoss.client.services.PresenceListener;
+import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.HelpClientListener;
-import org.symphonyoss.helpdesk.models.MemberDatabase;
 import org.symphonyoss.helpdesk.models.responses.AcceptHelpResponse;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.helpdesk.utils.MemberDatabase;
+import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.pod.model.User;
-import org.symphonyoss.symphony.pod.model.UserPresence;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * Created by Frank Tarsillo on 5/15/2016.
  */
-public class HelpDeskBot implements ChatServiceListener{
+public class HelpDeskBot implements ChatServiceListener {
     private Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
     private BotResponseListener memberResponseListener;
     private HelpClientListener helpClientListener;
@@ -101,12 +97,27 @@ public class HelpDeskBot implements ChatServiceListener{
 
             MemberDatabase.loadMembers();
 
+            symClient.getChatService().registerListener(this);
             helpClientListener = new HelpClientListener(symClient);
             memberResponseListener = new BotResponseListener(symClient);
-            AcceptHelpResponse acceptResponse1 = new AcceptHelpResponse("Accept Next Client", 0, helpClientListener);
-            AcceptHelpResponse acceptResponse2 = new AcceptHelpResponse("Accept ", 1, helpClientListener);
-            acceptResponse2.setPlaceHolder(0, "Client");
-            acceptResponse2.setPrefixRequirement(0, "@");
+
+            AcceptHelpResponse acceptNextHelpClient = new AcceptHelpResponse("Accept Next Client", 0, helpClientListener);
+
+            AcceptHelpResponse acceptHelpClient = new AcceptHelpResponse("Accept ", 1, helpClientListener);
+            acceptHelpClient.setPlaceHolder(0, "Client");
+            acceptHelpClient.setPrefixRequirement(0, "@");
+
+            memberResponseListener.getActiveResponses().add(acceptNextHelpClient);
+            memberResponseListener.getActiveResponses().add(acceptHelpClient);
+
+            Chat chat = new Chat();
+            chat.setLocalUser(symClient.getLocalUser());
+            Set<User> remoteUsers = new HashSet<User>();
+            remoteUsers.add(symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL));
+            chat.setRemoteUsers(remoteUsers);
+            chat.setStream(symClient.getStreamsClient().getStream(remoteUsers));
+
+            symClient.getChatService().addChat(chat);
 
             System.out.println("Help desk bot is alive, and ready to help!");
 
@@ -117,25 +128,36 @@ public class HelpDeskBot implements ChatServiceListener{
     }
 
     public void onNewChat(Chat chat) {
-        Set<User> users = chat.getRemoteUsers();
-        if(users.size() == 1){
-            if(MemberDatabase.members.containsKey(users.iterator().next().getEmailAddress()))
-                chat.registerListener(memberResponseListener);
-            else{
-                chat.registerListener(helpClientListener);
-                User user = users.iterator().next();
-                HelpBotConstants.ALLCLIENTS.put(user.getId().toString(),
-                        new HelpClient(user.getEmailAddress(), user.getId()));
+        try {
+            logger.debug("New chat connection: " + chat.getStream());
+            Set<User> users = chat.getRemoteUsers();
+            User user = users.iterator().next();
+            if (users.size() == 1) {
+                if (user.getEmailAddress().equals(HelpBotConstants.ADMINEMAIL)
+                        || MemberDatabase.members.containsKey(users.iterator().next().getEmailAddress())) {
+                    chat.registerListener(memberResponseListener);
+                    Messenger.sendMessage("Joined help desk as member.",
+                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                } else {
+                    chat.registerListener(helpClientListener);
+                    HelpBotConstants.ALLCLIENTS.put(user.getId().toString(),
+                            new HelpClient(user.getEmailAddress(), user.getId()));
+                    Messenger.sendMessage("Joined help desk as help client.",
+                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void onRemovedChat(Chat chat) {
+        logger.debug("Removed chat connection: " + chat.getStream());
         User user = chat.getRemoteUsers().iterator().next();
-        if(MemberDatabase.members.containsKey(user.getEmailAddress())
-                && !MemberDatabase.members.get(user.getEmailAddress()).isOnCall()){
+        if (MemberDatabase.members.containsKey(user.getEmailAddress())
+                && !MemberDatabase.members.get(user.getEmailAddress()).isOnCall()) {
             chat.removeListener(memberResponseListener);
-        }else if(!HelpBotConstants.ALLCLIENTS.get(user.getId()).isOnCall()){
+        } else if (!HelpBotConstants.ALLCLIENTS.get(user.getId()).isOnCall()) {
             chat.removeListener(helpClientListener);
             HelpBotConstants.ALLCLIENTS.remove(user.getId());
         }

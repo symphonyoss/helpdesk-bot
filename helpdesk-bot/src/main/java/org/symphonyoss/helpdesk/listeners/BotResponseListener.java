@@ -3,14 +3,12 @@ package org.symphonyoss.helpdesk.listeners;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.SymphonyClient;
-import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
-import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.models.responses.BotResponse;
+import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.pod.model.Stream;
 
 import java.util.HashSet;
 
@@ -42,6 +40,7 @@ public class BotResponseListener implements ChatListener {
      * @param message the received message
      *                </p>
      */
+
     public void onChatMessage(Message message) {
         MlMessageParser mlMessageParser;
 
@@ -67,34 +66,6 @@ public class BotResponseListener implements ChatListener {
             sendUsage(message);
     }
 
-    public void sendMessage(Message message, MessageSubmission aMessage) {
-        Stream stream = new Stream();
-        stream.setId(message.getStream());
-        try {
-            symClient.getMessagesClient().sendMessage(stream, aMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendMessage(Long userID, MessageSubmission aMessage) {
-        Stream stream = new Stream();
-        stream.setId(userID.toString());
-        try {
-            symClient.getMessagesClient().sendMessage(stream, aMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendMessage(String email, MessageSubmission aMessage) {
-        try {
-            symClient.getMessageService().sendMessage(email, aMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void sendUsage(Message message) {
 
         MessageSubmission aMessage = new MessageSubmission();
@@ -105,16 +76,14 @@ public class BotResponseListener implements ChatListener {
             if (response.userHasPermission(message.getFromUserId()))
                 usage += response.toMLString();
 
-        aMessage.setMessage(usage);
+        usage += "</messageML>";
 
-        sendMessage(message, aMessage);
+        Messenger.sendMessage(usage, MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
     }
 
     private void sendNoPermission(Message message) {
-        MessageSubmission aMessage = new MessageSubmission();
-        aMessage.setFormat(MessageSubmission.FormatEnum.MESSAGEML);
-        aMessage.setMessage("Sorry, you cannot use that command.");
-        sendMessage(message, aMessage);
+        Messenger.sendMessage("Sorry, you cannot use that command.",
+                MessageSubmission.FormatEnum.TEXT, message, symClient);
     }
 
     public String getEmail(long userID) {
@@ -129,5 +98,8 @@ public class BotResponseListener implements ChatListener {
     public HashSet<BotResponse> getActiveResponses() {
         return activeResponses;
     }
-    public SymphonyClient getSymClient(){return symClient;}
+
+    public SymphonyClient getSymClient() {
+        return symClient;
+    }
 }
