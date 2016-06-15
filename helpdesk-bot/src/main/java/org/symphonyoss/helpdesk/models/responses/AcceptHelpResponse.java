@@ -1,13 +1,14 @@
 package org.symphonyoss.helpdesk.models.responses;
 
-import Constants.HelpBotConstants;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.Call;
 import org.symphonyoss.helpdesk.listeners.HelpClientListener;
-import org.symphonyoss.helpdesk.models.MemberDatabase;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
+import org.symphonyoss.helpdesk.utils.MemberDatabase;
+import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
@@ -42,22 +43,25 @@ public class AcceptHelpResponse extends BotResponse {
                 Call newCall = new Call(member, helpClient, listener, helpListener);
                 newCall.enterCall();
 
-                notifyUser("You have been connected with user" + id + ".</br> </br>" + helpClient.getHelpSummary(), message.getFromUserId(), listener);
-                if(member.isHideIdentity()) {
-                    notifyUser("You have been connected with a help member. " + ".</br> </br>" + helpClient.getHelpSummary(),
-                            helpClient.getUserID(), listener);
-                }else {
-                    notifyUser("You have been connected with member " + member.getEmail() + ".</br> </br>" + helpClient.getHelpSummary(),
-                            helpClient.getUserID(), listener);
+                Messenger.sendMessage("<messageML>You have been connected with user" + id + ".</br> </br>" + helpClient.getHelpSummary() + "</messageML>",
+                        MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), listener.getSymClient());
+                if (member.isHideIdentity()) {
+                    Messenger.sendMessage("<messageML>You have been connected with a help member. " + ".</br> </br>" + helpClient.getHelpSummary() + "</messageML>",
+                            MessageSubmission.FormatEnum.MESSAGEML, helpClient.getUserID(), listener.getSymClient());
+                } else {
+                    Messenger.sendMessage("<messageML>You have been connected with member " + member.getEmail() + ".</br> </br></messageML>" + helpClient.getHelpSummary(),
+                            MessageSubmission.FormatEnum.MESSAGEML, helpClient.getUserID(), listener.getSymClient());
                 }
             } else
-                notifyUser(id + " does not exist, or has not requested help.", message.getFromUserId(), listener);
-        }else{
+                Messenger.sendMessage(id + " does not exist, or has not requested help.",
+                        MessageSubmission.FormatEnum.TEXT, message.getFromUserId(), listener.getSymClient());
+        } else {
             Member member = MemberDatabase.members.get(listener.getEmail(message.getFromUserId()));
-            if(HelpBotConstants.ONHOLD.size() > 0) {
+            if (HelpBotConstants.ONHOLD.size() > 0) {
                 HelpClient helpClient = HelpBotConstants.ONHOLD.remove(0);
-            }else
-                notifyUser("There are no users that need help currently.", message.getFromUserId(), listener);
+            } else
+                Messenger.sendMessage("There are no users that need help currently.",
+                        MessageSubmission.FormatEnum.TEXT, message.getFromUserId(), listener.getSymClient());
 
         }
     }
@@ -68,12 +72,5 @@ public class AcceptHelpResponse extends BotResponse {
                 && !MemberDatabase.members.get("" + userid).isOnCall())
             return true;
         return false;
-    }
-
-    void notifyUser(String message, long userID, BotResponseListener listener) {
-        MessageSubmission userMessage = new MessageSubmission();
-        userMessage.setFormat(MessageSubmission.FormatEnum.TEXT);
-        userMessage.setMessage(message);
-        listener.sendMessage(userID, userMessage);
     }
 }

@@ -12,11 +12,14 @@ public class HelpClient {
     private boolean onCall;
     private Set<String> helpRequests = new HashSet<String>();
 
-    public HelpClient(String email, Long userID){this.email = email; this.userID = userID;}
+    public HelpClient(String email, Long userID) {
+        this.email = email;
+        this.userID = userID;
+    }
 
-    public String getHelpSummary(){
+    public String getHelpSummary() {
         String help = "<b>Help Request Summary:</b> <br>";
-        for(String line: helpRequests)
+        for (String line : helpRequests)
             help += line + "</br> </br>";
         return help;
     }

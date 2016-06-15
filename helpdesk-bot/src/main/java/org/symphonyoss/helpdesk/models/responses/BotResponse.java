@@ -21,8 +21,8 @@ public abstract class BotResponse {
 
     private String command;
     private int numArguments;
-    private String[] prefixRequirements;
-    private String[] placeHolders;
+    private String[] prefixRequirements = new String[0];
+    private String[] placeHolders = new String[0];
 
     public BotResponse(String command, int numArguments) {
         setCommand(command);
@@ -81,7 +81,7 @@ public abstract class BotResponse {
         String toML = "<b>" + command + "</b> ";
         for (int index = 0; index < numArguments; index++)
             toML += prefixRequirements[index] + placeHolders[index];
-        return toML + "</br>";
+        return toML + "<br/>";
     }
 
     //Private methods
@@ -114,7 +114,7 @@ public abstract class BotResponse {
     }
 
     public void setPrefixRequirement(int argumentIndex, String requirement) {
-        if (argumentIndex < numArguments) {
+        if (argumentIndex > numArguments) {
             logger.debug("Could not add prefix requirement {} , not enough arguments.", requirement);
             return;
         }
@@ -133,7 +133,7 @@ public abstract class BotResponse {
     }
 
     public void setPlaceHolder(int argumentIndex, String holder) {
-        if (argumentIndex < numArguments) {
+        if (argumentIndex > numArguments) {
             logger.debug("Could not add place holder {} , not enough arguments.", holder);
             return;
         }
