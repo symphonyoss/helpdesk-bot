@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Member {
     private String email;
     private Long userID;
-    private boolean seeCommands = true;
-    private boolean hideIdentity = true;
+    private boolean seeCommands;
+    private boolean hideIdentity;
     @JsonIgnore
     private boolean onCall = false;
 

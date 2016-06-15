@@ -17,7 +17,7 @@ import org.symphonyoss.symphony.agent.model.Message;
  * prefixes,for each responses, and compare user input with the command line.
  */
 public abstract class BotResponse {
-    private Logger logger = LoggerFactory.getLogger(BotResponse.class);
+    private final Logger logger = LoggerFactory.getLogger(BotResponse.class);
 
     private String command;
     private int numArguments;
@@ -61,7 +61,7 @@ public abstract class BotResponse {
             return false;
 
         for (int commandIndex = 0; commandIndex < checkCommand.length; commandIndex++)
-            if (!chunks[commandIndex].trim().equalsIgnoreCase(command.trim()))
+            if (!chunks[commandIndex].trim().equalsIgnoreCase(checkCommand[commandIndex].trim()))
                 return false;
 
         for (int chunkIndex = 1; chunkIndex <= numArguments; chunkIndex++)
@@ -126,7 +126,7 @@ public abstract class BotResponse {
     }
 
     public String getPrefixRequirement(int argumentIndex) {
-        if (prefixRequirements.length < argumentIndex)
+        if (prefixRequirements.length > argumentIndex)
             return prefixRequirements[argumentIndex];
         else
             return null;
