@@ -5,6 +5,7 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.Stream;
+import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 6/14/16.
@@ -15,10 +16,10 @@ public class Messenger {
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 
-        Stream stream = new Stream();
-        stream.setId(userID.toString());
+        UserIdList list = new UserIdList();
+        list.add(userID);
         try {
-            symClient.getMessagesClient().sendMessage(stream, userMessage);
+            symClient.getMessagesClient().sendMessage(symClient.getStreamsClient().getStream(list), userMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }

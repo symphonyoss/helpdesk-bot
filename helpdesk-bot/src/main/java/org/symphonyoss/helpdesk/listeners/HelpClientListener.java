@@ -46,10 +46,10 @@ public class HelpClientListener implements ChatListener {
                     Messenger.sendMessage(HelpBotConstants.START_ML + HelpBotConstants.START_BOLD
                                     + HelpDesk.retrieveClient(message).getEmail() +
                                     ": " + HelpBotConstants.END_BOLD + String.join(" ", chunks) + HelpBotConstants.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, member.getEmail(), symClient);
+                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
                 } else {
                     Messenger.sendMessage(HelpBotConstants.START_ML + HelpBotConstants.START_BOLD + message.getFromUserId() + ": " + HelpBotConstants.END_BOLD + String.join(" ", chunks) + "</messageML>",
-                            MessageSubmission.FormatEnum.MESSAGEML, member.getEmail(), symClient);
+                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
                 }
             }
     }
