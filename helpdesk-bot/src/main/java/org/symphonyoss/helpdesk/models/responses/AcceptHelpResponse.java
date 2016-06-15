@@ -1,12 +1,11 @@
 package org.symphonyoss.helpdesk.models.responses;
 
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.BotResponseListener;
-import org.symphonyoss.helpdesk.listeners.Call;
 import org.symphonyoss.helpdesk.listeners.HelpClientListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
+import org.symphonyoss.helpdesk.utils.HelpDesk;
 import org.symphonyoss.helpdesk.utils.MemberDatabase;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
@@ -28,49 +27,43 @@ public class AcceptHelpResponse extends BotResponse {
         String[] chunks = mlMessageParser.getTextChunks();
 
         if (chunks.length > getCommand().split(" ").length) {
-            String id = mlMessageParser.getHtmlStartingFromText(getPrefixRequirement(0));
+            String id = String.join(" ", chunks);
+            id = id.substring(id.indexOf(getPrefixRequirement(0)));
 
-            Member member = MemberDatabase.members.get(listener.getEmail(message.getFromUserId()));
+            Member member = MemberDatabase.getMember(message);
             HelpClient helpClient = null;
-            for (HelpClient client : HelpBotConstants.ONHOLD)
+            for (HelpClient client : HelpDesk.ONHOLD)
                 if (id.equalsIgnoreCase(client.getEmail()) || id.equalsIgnoreCase(client.getUserID().toString())) {
                     helpClient = client;
                     break;
                 }
 
             if (helpClient != null) {
-                HelpBotConstants.ONHOLD.remove(helpClient);
-                Call newCall = new Call(member, helpClient, listener, helpListener);
-                newCall.enterCall();
-
-                Messenger.sendMessage("<messageML>You have been connected with user" + id + ".</br> </br>" + helpClient.getHelpSummary() + "</messageML>",
-                        MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), listener.getSymClient());
-                if (member.isHideIdentity()) {
-                    Messenger.sendMessage("<messageML>You have been connected with a help member. " + ".</br> </br>" + helpClient.getHelpSummary() + "</messageML>",
-                            MessageSubmission.FormatEnum.MESSAGEML, helpClient.getUserID(), listener.getSymClient());
-                } else {
-                    Messenger.sendMessage("<messageML>You have been connected with member " + member.getEmail() + ".</br> </br></messageML>" + helpClient.getHelpSummary(),
-                            MessageSubmission.FormatEnum.MESSAGEML, helpClient.getUserID(), listener.getSymClient());
-                }
+                HelpDesk.ONHOLD.remove(helpClient);
+                HelpDesk.newCall(member, helpClient, listener, helpListener);
             } else
                 Messenger.sendMessage(id + " does not exist, or has not requested help.",
-                        MessageSubmission.FormatEnum.TEXT, message.getFromUserId(), listener.getSymClient());
+                        MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
         } else {
-            Member member = MemberDatabase.members.get(listener.getEmail(message.getFromUserId()));
-            if (HelpBotConstants.ONHOLD.size() > 0) {
-                HelpClient helpClient = HelpBotConstants.ONHOLD.remove(0);
+            if (HelpDesk.ONHOLD.size() > 0) {
+                HelpClient helpClient = HelpDesk.ONHOLD.remove(0);
             } else
                 Messenger.sendMessage("There are no users that need help currently.",
-                        MessageSubmission.FormatEnum.TEXT, message.getFromUserId(), listener.getSymClient());
-
+                        MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
         }
     }
 
     @Override
     public boolean userHasPermission(long userid) {
-        if (MemberDatabase.members.containsKey("" + userid)
-                && !MemberDatabase.members.get("" + userid).isOnCall())
-            return true;
-        return false;
+        return MemberDatabase.MEMBERS.containsKey("" + userid)
+                && !MemberDatabase.getMember(userid).isOnCall();
+    }
+
+    public HelpClientListener getHelpListener() {
+        return helpListener;
+    }
+
+    public void setHelpListener(HelpClientListener helpListener) {
+        this.helpListener = helpListener;
     }
 }

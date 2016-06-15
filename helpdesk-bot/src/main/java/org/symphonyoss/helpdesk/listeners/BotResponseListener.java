@@ -22,9 +22,9 @@ import java.util.HashSet;
  * appropriately based on all of the active bot responses, and the user's input.
  */
 public class BotResponseListener implements ChatListener {
-    private Logger logger = LoggerFactory.getLogger(BotResponseListener.class);
+    private final Logger logger = LoggerFactory.getLogger(BotResponseListener.class);
+    private final HashSet<BotResponse> activeResponses = new HashSet<BotResponse>();
     private SymphonyClient symClient;
-    private HashSet<BotResponse> activeResponses = new HashSet<BotResponse>();
 
     public BotResponseListener(SymphonyClient symClient) {
         this.symClient = symClient;
@@ -42,6 +42,7 @@ public class BotResponseListener implements ChatListener {
      */
 
     public void onChatMessage(Message message) {
+        logger.debug("Received message for response.");
         MlMessageParser mlMessageParser;
 
         try {
@@ -90,7 +91,7 @@ public class BotResponseListener implements ChatListener {
         try {
             return symClient.getUsersClient().getUserFromId(userID).getEmailAddress();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return null;
     }
