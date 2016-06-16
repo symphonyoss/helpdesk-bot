@@ -31,7 +31,7 @@ public class AcceptHelpResponse extends BotResponse {
         Member member = MemberDatabase.getMember(message);
         if (chunks.length > getCommand().split(" ").length) {
             String id = String.join(" ", chunks);
-            id = id.substring(id.indexOf(getPrefixRequirement(0)));
+            id = id.substring(id.indexOf(getPrefixRequirement(0)) + 1);
 
             HelpClient helpClient = HoldDesk.findClientCredentialMatch(id);
 

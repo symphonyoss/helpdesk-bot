@@ -61,28 +61,33 @@ public class BotResponseListener implements ChatListener {
 
         String[] chunks = mlMessageParser.getTextChunks();
         boolean responded = false;
+        boolean permission = true;
         for (BotResponse response : activeResponses)
             if (response.isCommand(chunks, message) && response.userHasPermission(message.getFromUserId().toString())) {
                 response.respond(mlMessageParser, message, this);
                 lastResponse.put(message.getId(), new LastBotResponse(mlMessageParser, response));
                 responded = true;
-            } else if (response.isCommand(chunks, message) && !response.userHasPermission(message.getFromUserId().toString()))
+            } else if (response.isCommand(chunks, message) && !response.userHasPermission(message.getFromUserId().toString())) {
                 sendNoPermission(message);
+                permission = false;
+            }
 
         if (!responded
                 && !(mlMessageParser.getText().trim().equalsIgnoreCase("Run Last") && lastResponse.get(message.getFromUserId().toString()) != null)
                 && !BotInterpreter.interpretable(activeResponses, chunks, HelpBotConstants.CORRECTFACTOR))
             sendUsage(message);
-        else if (!responded && !(mlMessageParser.getText().trim().equalsIgnoreCase("Run Last") && lastResponse.get(message.getFromUserId().toString()) != null)) {
+        else if (!responded && !(mlMessageParser.getText().trim().equalsIgnoreCase("Run Last")
+                && lastResponse.get(message.getFromUserId().toString()) != null)
+                && permission) {
             LastBotResponse interpret = BotInterpreter.interpret(activeResponses, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
             Messenger.sendMessage(MLTypes.START_ML + "Did you mean "
                             + MLTypes.START_BOLD + interpret.getMlMessageParser().getText()
                             + MLTypes.END_BOLD + "? (Type " + MLTypes.START_BOLD + "Run Last"
-                            + MLTypes.END_BOLD + "to run command)" + MLTypes.END_ML,
+                            + MLTypes.END_BOLD + " to run command)" + MLTypes.END_ML,
                     MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
 
             lastResponse.put(message.getFromUserId().toString(), interpret);
-        } else if (!responded) {
+        } else if (!responded && lastResponse.get(message.getFromUserId().toString()) != null && permission) {
             LastBotResponse lastBotResponse = lastResponse.get(message.getFromUserId().toString());
             lastBotResponse.getBotResponse().respond(lastBotResponse.getMlMessageParser(), message, this);
         }
