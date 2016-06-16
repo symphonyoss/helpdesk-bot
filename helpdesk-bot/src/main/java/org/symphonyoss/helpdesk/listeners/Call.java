@@ -90,8 +90,7 @@ public class Call implements ChatListener, ChatServiceListener {
         try {
             UserIdList list = new UserIdList();
             list.add(client.getUserID());
-            Chat chat = null;
-            chat = memberListener.getSymClient().getChatService().getChatByStream(
+            Chat chat = chat = memberListener.getSymClient().getChatService().getChatByStream(
                     memberListener.getSymClient().getStreamsClient().getStream(list).getId());
             chat.registerListener(helpClientListener);
             chat.removeListener(this);

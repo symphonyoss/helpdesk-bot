@@ -64,8 +64,8 @@ public abstract class BotResponse {
             if (!chunks[commandIndex].trim().equalsIgnoreCase(checkCommand[commandIndex].trim()))
                 return false;
 
-        for (int chunkIndex = 1; chunkIndex <= numArguments; chunkIndex++)
-            if (!chunks[chunkIndex].startsWith(prefixRequirements[chunkIndex - 1]))
+        for (int chunkIndex = checkCommand.length; chunkIndex < numArguments + checkCommand.length; chunkIndex++)
+            if (!chunks[chunkIndex].startsWith(prefixRequirements[chunkIndex - checkCommand.length]))
                 return false;
 
         return true;

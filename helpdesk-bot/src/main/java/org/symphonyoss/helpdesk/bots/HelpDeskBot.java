@@ -30,8 +30,10 @@ import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.listeners.presence.MemberPresenceListener;
 import org.symphonyoss.helpdesk.models.responses.AcceptHelpResponse;
+import org.symphonyoss.helpdesk.models.responses.AddMemberResponse;
 import org.symphonyoss.helpdesk.models.responses.ToggleIdentityResponse;
 import org.symphonyoss.helpdesk.models.responses.ToggleSeeHelpResponse;
+import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.threads.InactivityThread;
 import org.symphonyoss.helpdesk.utils.ClientDatabase;
 import org.symphonyoss.helpdesk.utils.HoldDesk;
@@ -116,10 +118,15 @@ public class HelpDeskBot implements ChatServiceListener {
 
             ToggleIdentityResponse toggleIdentity = new ToggleIdentityResponse("Toggle Show Identity", 0);
 
+            AddMemberResponse addMember = new AddMemberResponse("Add Member", 1, helpClientListener);
+            addMember.setPlaceHolder(0, "Client");
+            addMember.setPrefixRequirement(0, "@");
+
             memberResponseListener.getActiveResponses().add(acceptNextHelpClient);
             memberResponseListener.getActiveResponses().add(acceptHelpClient);
             memberResponseListener.getActiveResponses().add(toggleHelp);
             memberResponseListener.getActiveResponses().add(toggleIdentity);
+            memberResponseListener.getActiveResponses().add(addMember);
 
             Chat chat = new Chat();
             chat.setLocalUser(symClient.getLocalUser());
