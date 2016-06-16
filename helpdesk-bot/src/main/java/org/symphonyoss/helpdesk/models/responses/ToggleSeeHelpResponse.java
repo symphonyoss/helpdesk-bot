@@ -27,6 +27,7 @@ public class ToggleSeeHelpResponse extends BotResponse {
         else
             Messenger.sendMessage("You will no longer see help requests.",
                     MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
+
         MemberDatabase.writeMember(member);
     }
 

@@ -41,7 +41,7 @@ public class CallDesk {
 
         for (Call call : endCalls) {
             endCall(call);
-            logger.debug("Removed call with client id {} due to inactivity.", call.getClient().getUserID());
+            logger.debug("Removed call due to inactivity.");
         }
     }
 }

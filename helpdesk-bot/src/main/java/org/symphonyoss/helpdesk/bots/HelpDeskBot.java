@@ -114,7 +114,7 @@ public class HelpDeskBot implements ChatServiceListener {
             acceptHelpClient.setPlaceHolder(0, "Client");
             acceptHelpClient.setPrefixRequirement(0, "@");
 
-            ToggleSeeHelpResponse toggleHelp = new ToggleSeeHelpResponse("Toggle See Help", 0);
+            ToggleSeeHelpResponse toggleHelp = new ToggleSeeHelpResponse("Toggle Online", 0);
 
             ToggleIdentityResponse toggleIdentity = new ToggleIdentityResponse("Toggle Show Identity", 0);
 
@@ -155,8 +155,7 @@ public class HelpDeskBot implements ChatServiceListener {
             Set<User> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
                 User user = users.iterator().next();
-                if (user.getEmailAddress().equals(HelpBotConstants.ADMINEMAIL)
-                        || MemberDatabase.MEMBERS.containsKey(user.getId())) {
+                if (MemberDatabase.hasMember(user.getId().toString())) {
                     chat.registerListener(memberResponseListener);
                     Messenger.sendMessage("Joined help desk as member.",
                             MessageSubmission.FormatEnum.TEXT, chat, symClient);

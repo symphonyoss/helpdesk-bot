@@ -2,14 +2,15 @@ package org.symphonyoss.botresponse.listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.SymphonyClient;
-import org.symphonyoss.client.services.ChatListener;
-import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
+import org.symphonyoss.botresponse.constants.BotConstants;
 import org.symphonyoss.botresponse.enums.MLTypes;
 import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.botresponse.models.LastBotResponse;
 import org.symphonyoss.botresponse.utils.BotInterpreter;
+import org.symphonyoss.client.SymphonyClient;
+import org.symphonyoss.client.services.ChatListener;
+import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -54,12 +55,21 @@ public class BotResponseListener implements ChatListener {
         try {
             mlMessageParser = new MlMessageParser(symClient);
             mlMessageParser.parseMessage(message.getMessage());
+
+            String[] chunks = mlMessageParser.getTextChunks();
+
+            if (chunks[0].charAt(0) == BotConstants.COMMAND) {
+                mlMessageParser.parseMessage(message.getMessage().replaceFirst(">" + BotConstants.COMMAND, ">"));
+                chunks = mlMessageParser.getTextChunks();
+                processMessage(mlMessageParser, chunks, message);
+            }
         } catch (Exception e) {
             logger.error("Could not parse message {}", message.getMessage(), e);
             return;
         }
+    }
 
-        String[] chunks = mlMessageParser.getTextChunks();
+    private void processMessage(MlMessageParser mlMessageParser, String[] chunks, Message message) {
         boolean responded = false;
         boolean permission = true;
         for (BotResponse response : activeResponses)
