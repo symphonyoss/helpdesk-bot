@@ -20,10 +20,16 @@ public class HelpClient {
     }
 
     public String getHelpSummary() {
-        String help = MLTypes.START_BOLD + "Help Request Summary:"
-                + MLTypes.END_ML + MLTypes.BREAK;
+        String help;
+        if(email != null && !email.equalsIgnoreCase(""))
+            help = MLTypes.START_BOLD + "    For " + email + ": "
+                + MLTypes.END_BOLD + MLTypes.BREAK;
+        else
+            help = MLTypes.START_BOLD + "    For " + userID + ": "
+                    + MLTypes.END_BOLD + MLTypes.BREAK;
+
         for (String line : helpRequests)
-            help += line + MLTypes.BREAK + MLTypes.BREAK;
+            help += "       " + line + MLTypes.BREAK + MLTypes.BREAK;
         return help;
     }
 

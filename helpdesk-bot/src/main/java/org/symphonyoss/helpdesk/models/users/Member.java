@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Member {
     private String email;
     private Long userID;
-    private boolean seeCommands;
+    private boolean seeCommands = true;
     private boolean busy;
     private boolean hideIdentity;
     @JsonIgnore

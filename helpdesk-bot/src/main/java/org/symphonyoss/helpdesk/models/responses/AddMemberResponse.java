@@ -41,19 +41,19 @@ public class AddMemberResponse extends BotResponse {
 
                 HelpClient client = ClientDatabase.removeClient(user);
                 Messenger.sendMessage("You have been promoted to member!", MessageSubmission.FormatEnum.TEXT,
-                        client.getUserID(), listener.getSymClient());
+                        user.getId(), listener.getSymClient());
                 Messenger.sendMessage("You have promoted " + id + " to member!", MessageSubmission.FormatEnum.TEXT,
                         message, listener.getSymClient());
 
                 UserIdList list = new UserIdList();
-                list.add(client.getUserID());
-                Chat chat = chat = listener.getSymClient().getChatService().getChatByStream(
+                list.add(user.getId());
+                Chat chat = listener.getSymClient().getChatService().getChatByStream(
                         listener.getSymClient().getStreamsClient().getStream(list).getId());
                 chat.removeListener(helpClientListener);
                 chat.registerListener(listener);
             }else{
                 Messenger.sendMessage("Failed to promote client to member. Either client does not exist " +
-                                "or client is already a member", MessageSubmission.FormatEnum.TEXT,
+                                "or client is already a member.", MessageSubmission.FormatEnum.TEXT,
                        message, listener.getSymClient());
             }
         } catch (Exception e) {
