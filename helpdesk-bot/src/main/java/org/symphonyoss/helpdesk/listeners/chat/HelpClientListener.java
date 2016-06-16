@@ -2,10 +2,11 @@ package org.symphonyoss.helpdesk.listeners.chat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.enums.MLTypes;
+import org.symphonyoss.botresponse.enums.MLTypes;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientDatabase;
 import org.symphonyoss.helpdesk.utils.MemberDatabase;

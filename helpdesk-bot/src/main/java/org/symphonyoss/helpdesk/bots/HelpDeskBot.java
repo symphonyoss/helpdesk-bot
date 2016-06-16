@@ -26,7 +26,7 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.listeners.presence.MemberPresenceListener;
 import org.symphonyoss.helpdesk.models.responses.AcceptHelpResponse;

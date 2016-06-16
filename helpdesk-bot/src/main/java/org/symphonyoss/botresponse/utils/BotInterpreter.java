@@ -1,10 +1,10 @@
-package org.symphonyoss.helpdesk.utils;
+package org.symphonyoss.botresponse.utils;
 
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.enums.MLTypes;
-import org.symphonyoss.helpdesk.models.BotResponse;
-import org.symphonyoss.helpdesk.models.responses.LastBotResponse;
+import org.symphonyoss.botresponse.enums.MLTypes;
+import org.symphonyoss.botresponse.models.BotResponse;
+import org.symphonyoss.botresponse.models.LastBotResponse;
 
 import java.util.HashSet;
 

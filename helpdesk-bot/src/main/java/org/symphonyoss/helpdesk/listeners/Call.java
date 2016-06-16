@@ -6,12 +6,12 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
+import org.symphonyoss.botresponse.enums.MLTypes;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.HoldDesk;
+import org.symphonyoss.helpdesk.utils.CallDesk;
 import org.symphonyoss.helpdesk.utils.MemberDatabase;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
@@ -56,14 +56,16 @@ public class Call implements ChatListener, ChatServiceListener {
                 list.add(member.getUserID());
                 chat = memberListener.getSymClient().getChatService().getChatByStream(
                         memberListener.getSymClient().getStreamsClient().getStream(list).getId());
-                chat.registerListener(this);
+
                 chat.removeListener(memberListener);
+                chat.registerListener(this);
 
                 if (member.isHideIdentity()) {
-                    Messenger.sendMessage(HelpBotConstants.START_ML + "You have been connected with a help member. " + ".<br/> <br/>" + HelpBotConstants.END_ML,
+                    Messenger.sendMessage(MLTypes.START_ML + "You have been connected with a help member. " + "."
+                                    + MLTypes.BREAK + MLTypes.BREAK + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
                 } else {
-                    Messenger.sendMessage(HelpBotConstants.START_ML + "You have been connected with member " + member.getEmail() + ".<br/> <br/>" + HelpBotConstants.END_ML,
+                    Messenger.sendMessage(MLTypes.START_ML + "You have been connected with member " + member.getEmail() + ".<br/> <br/>" + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
                 }
             }
@@ -75,7 +77,8 @@ public class Call implements ChatListener, ChatServiceListener {
             id = client.getUserID().toString();
 
         for (Member member : members)
-            Messenger.sendMessage(HelpBotConstants.START_ML + "You have been connected with user" + id + ".<br/> <br/>" + client.getHelpSummary() + HelpBotConstants.END_ML,
+            Messenger.sendMessage(MLTypes.START_ML + "You have been connected with user" + id + "."
+                            + MLTypes.BREAK + MLTypes.BREAK + client.getHelpSummary() + MLTypes.END_ML,
                     MessageSubmission.FormatEnum.MESSAGEML, member.getEmail(), memberListener.getSymClient());
     }
 
@@ -125,31 +128,39 @@ public class Call implements ChatListener, ChatServiceListener {
         if (client.getUserID().equals(message.getFromUserId())) {
             for (Member member : members)
                 if (client.getEmail() != null && client.getEmail() != "")
-                    Messenger.sendMessage("<messageML><b>" + client.getEmail() + ":</b> " + text + "</messageML>",
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                    + client.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, member.getEmail(), memberListener.getSymClient());
                 else
-                    Messenger.sendMessage("<messageML><b>" + client.getUserID() + ":</b> " + text + "</messageML>",
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                    + client.getUserID() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, member.getEmail(), memberListener.getSymClient());
         } else {
             for (Member m : members) {
                 if (!m.getUserID().equals(message.getFromUserId())) {
                     if (MemberDatabase.getMember(message).isHideIdentity()) {
-                        Messenger.sendMessage("<messageML><b>Member " + (members.indexOf(MemberDatabase.getMember(message)) + 1)
-                                        + ":</b> " + text + "</messageML>",
+                        Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD +
+                                        "Member " + (members.indexOf(MemberDatabase.getMember(message)) + 1)
+                                        + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                                 MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), memberListener.getSymClient());
                     } else {
-                        Messenger.sendMessage("<messageML><b>" + MemberDatabase.getMember(message).getEmail() + ":</b> " + text
-                                + "</messageML>", MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), memberListener.getSymClient());
+                        Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                + MemberDatabase.getMember(message).getEmail() + ": " + MLTypes.END_BOLD + text
+                                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(),
+                                memberListener.getSymClient());
                     }
                 }
             }
             if (MemberDatabase.getMember(message).isHideIdentity()) {
-                Messenger.sendMessage("<messageML><b>Member " + (members.indexOf(MemberDatabase.getMember(message)) + 1)
-                                + ":</b> " + text + "</messageML>",
+                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                + "Member " + (members.indexOf(MemberDatabase.getMember(message)) + 1)
+                                + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                         MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
             } else {
-                Messenger.sendMessage("<messageML><b>" + MemberDatabase.getMember(message).getEmail() + ":</b> " + text
-                        + "</messageML>", MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                        + MemberDatabase.getMember(message).getEmail() + ": " + MLTypes.END_BOLD + text
+                        + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(),
+                        memberListener.getSymClient());
             }
             setInactivityTime(0);
         }
@@ -168,9 +179,9 @@ public class Call implements ChatListener, ChatServiceListener {
             member.setOnCall(false);
             members.remove(member);
             if (members.size() == 0)
-                HoldDesk.endCall(this);
+                CallDesk.endCall(this);
         } else
-            HoldDesk.endCall(this);
+            CallDesk.endCall(this);
     }
 
     public HelpClient getClient() {

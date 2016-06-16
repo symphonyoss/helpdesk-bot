@@ -1,7 +1,7 @@
-package org.symphonyoss.helpdesk.models.responses;
+package org.symphonyoss.botresponse.models;
 
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.models.BotResponse;
+import org.symphonyoss.botresponse.models.BotResponse;
 
 /**
  * Created by nicktarsillo on 6/15/16.

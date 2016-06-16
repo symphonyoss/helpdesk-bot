@@ -1,5 +1,7 @@
 package org.symphonyoss.helpdesk.models.users;
 
+import org.symphonyoss.botresponse.enums.MLTypes;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,9 +20,10 @@ public class HelpClient {
     }
 
     public String getHelpSummary() {
-        String help = "<b>Help Request Summary:</b> <br/>";
+        String help = MLTypes.START_BOLD + "Help Request Summary:"
+                + MLTypes.END_ML + MLTypes.BREAK;
         for (String line : helpRequests)
-            help += line + "<br/> <br/>";
+            help += line + MLTypes.BREAK + MLTypes.BREAK;
         return help;
     }
 

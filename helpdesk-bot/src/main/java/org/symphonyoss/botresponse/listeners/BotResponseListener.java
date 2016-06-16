@@ -1,4 +1,4 @@
-package org.symphonyoss.helpdesk.listeners.chat;
+package org.symphonyoss.botresponse.listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,10 +6,10 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.enums.MLTypes;
-import org.symphonyoss.helpdesk.models.BotResponse;
-import org.symphonyoss.helpdesk.models.responses.LastBotResponse;
-import org.symphonyoss.helpdesk.utils.BotInterpreter;
+import org.symphonyoss.botresponse.enums.MLTypes;
+import org.symphonyoss.botresponse.models.BotResponse;
+import org.symphonyoss.botresponse.models.LastBotResponse;
+import org.symphonyoss.botresponse.utils.BotInterpreter;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -77,7 +77,8 @@ public class BotResponseListener implements ChatListener {
             LastBotResponse interpret = BotInterpreter.interpret(activeResponses, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
             Messenger.sendMessage(MLTypes.START_ML + "Did you mean "
                             + MLTypes.START_BOLD + interpret.getMlMessageParser().getText()
-                            + MLTypes.END_BOLD + "? (Type <b>Run Last</b> to run command)" + MLTypes.END_ML,
+                            + MLTypes.END_BOLD + "? (Type " + MLTypes.START_BOLD + "Run Last"
+                            + MLTypes.END_BOLD + "to run command)" + MLTypes.END_ML,
                     MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
 
             lastResponse.put(message.getFromUserId().toString(), interpret);
@@ -92,12 +93,13 @@ public class BotResponseListener implements ChatListener {
         MessageSubmission aMessage = new MessageSubmission();
         aMessage.setFormat(MessageSubmission.FormatEnum.MESSAGEML);
 
-        String usage = "<messageML>Sorry...  <br/><b>Check the usage:</b><br/>";
+        String usage = MLTypes.START_ML + "Sorry...  " + MLTypes.BREAK + MLTypes.START_BOLD
+                + "Check the usage:" + MLTypes.END_BOLD + MLTypes.BREAK;
         for (BotResponse response : activeResponses)
             if (response.userHasPermission(message.getFromUserId().toString()))
                 usage += response.toMLString();
 
-        usage += "</messageML>";
+        usage += MLTypes.END_ML;
 
         Messenger.sendMessage(usage, MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
     }
