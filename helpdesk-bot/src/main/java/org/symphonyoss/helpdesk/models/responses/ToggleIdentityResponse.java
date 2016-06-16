@@ -1,8 +1,8 @@
 package org.symphonyoss.helpdesk.models.responses;
 
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
-import org.symphonyoss.helpdesk.models.BotResponse;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
+import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.MemberDatabase;
 import org.symphonyoss.helpdesk.utils.Messenger;
@@ -27,6 +27,8 @@ public class ToggleIdentityResponse extends BotResponse {
         else
             Messenger.sendMessage("Your identity will now be shown.",
                     MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
+
+        MemberDatabase.writeMember(member);
     }
 
     @Override

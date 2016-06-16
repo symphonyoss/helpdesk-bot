@@ -1,9 +1,9 @@
-package org.symphonyoss.helpdesk.models;
+package org.symphonyoss.botresponse.models;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.symphony.agent.model.Message;
 
 /**
@@ -37,7 +37,7 @@ public abstract class BotResponse {
      *
      * @param mlMessageParser the current parser for the message
      * @param message         the message sent from a user
-     * @param listener        the listener this responses belongs to
+     * @param listener        the listeners this responses belongs to
      *                        </p>
      */
     public abstract void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener);

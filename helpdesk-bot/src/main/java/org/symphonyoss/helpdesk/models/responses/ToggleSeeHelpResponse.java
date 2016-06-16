@@ -1,8 +1,8 @@
 package org.symphonyoss.helpdesk.models.responses;
 
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
-import org.symphonyoss.helpdesk.models.BotResponse;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
+import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.MemberDatabase;
 import org.symphonyoss.helpdesk.utils.Messenger;
@@ -27,6 +27,7 @@ public class ToggleSeeHelpResponse extends BotResponse {
         else
             Messenger.sendMessage("You will no longer see help requests.",
                     MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
+        MemberDatabase.writeMember(member);
     }
 
     @Override

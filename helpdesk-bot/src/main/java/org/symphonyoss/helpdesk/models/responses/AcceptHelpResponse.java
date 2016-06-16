@@ -1,9 +1,9 @@
 package org.symphonyoss.helpdesk.models.responses;
 
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.models.BotResponse;
+import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.CallDesk;
