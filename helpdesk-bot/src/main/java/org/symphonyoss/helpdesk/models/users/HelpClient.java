@@ -18,9 +18,9 @@ public class HelpClient {
     }
 
     public String getHelpSummary() {
-        String help = "<b>Help Request Summary:</b> <br>";
+        String help = "<b>Help Request Summary:</b> <br/>";
         for (String line : helpRequests)
-            help += line + "</br> </br>";
+            help += line + "<br/> <br/>";
         return help;
     }
 

@@ -6,13 +6,17 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.constants.HelpBotConstants;
+import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
+import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.HelpDesk;
+import org.symphonyoss.helpdesk.utils.HoldDesk;
 import org.symphonyoss.helpdesk.utils.MemberDatabase;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.pod.model.UserIdList;
 
 import java.util.ArrayList;
 
@@ -39,31 +43,39 @@ public class Call implements ChatListener, ChatServiceListener {
             member.setOnCall(true);
         client.setOnCall(true);
 
-        Chat chat = null;
-        chat = helpClientListener.getSymClient().getChatService().getChatByStream(client.getUserID().toString());
-        chat.registerListener(this);
-        chat.registerListener(helpClientListener);
-
-        for (Member member : members) {
-            chat = memberListener.getSymClient().getChatService().getChatByStream(member.getUserID().toString());
+        try {
+            UserIdList list = new UserIdList();
+            list.add(client.getUserID());
+            Chat chat = memberListener.getSymClient().getChatService().getChatByStream(
+                    memberListener.getSymClient().getStreamsClient().getStream(list).getId());
             chat.registerListener(this);
-            chat.removeListener(memberListener);
+            chat.registerListener(helpClientListener);
 
-            if (member.isHideIdentity()) {
-                Messenger.sendMessage("<messageML>You have been connected with a help member. " + ".</br> </br>" + client.getHelpSummary() + "</messageML>",
-                        MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
-            } else {
-                Messenger.sendMessage("<messageML>You have been connected with member " + member.getEmail() + ".</br> </br></messageML>" + client.getHelpSummary(),
-                        MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+            for (Member member : members) {
+                list = new UserIdList();
+                list.add(member.getUserID());
+                chat = memberListener.getSymClient().getChatService().getChatByStream(
+                        memberListener.getSymClient().getStreamsClient().getStream(list).getId());
+                chat.registerListener(this);
+                chat.removeListener(memberListener);
+
+                if (member.isHideIdentity()) {
+                    Messenger.sendMessage(HelpBotConstants.START_ML + "You have been connected with a help member. " + ".<br/> <br/>" + HelpBotConstants.END_ML,
+                            MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+                } else {
+                    Messenger.sendMessage(HelpBotConstants.START_ML + "You have been connected with member " + member.getEmail() + ".<br/> <br/>" + HelpBotConstants.END_ML,
+                            MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         String id = client.getEmail();
         if (id == null || id == "")
             id = client.getUserID().toString();
 
         for (Member member : members)
-            Messenger.sendMessage("<messageML>You have been connected with user" + id + ".</br> </br>" + client.getHelpSummary() + "</messageML>",
+            Messenger.sendMessage(HelpBotConstants.START_ML + "You have been connected with user" + id + ".<br/> <br/>" + client.getHelpSummary() + HelpBotConstants.END_ML,
                     MessageSubmission.FormatEnum.MESSAGEML, member.getEmail(), memberListener.getSymClient());
     }
 
@@ -71,16 +83,30 @@ public class Call implements ChatListener, ChatServiceListener {
         for (Member member : members)
             member.setOnCall(false);
         client.setOnCall(false);
-        Chat chat = null;
 
-        for (Member member : members) {
-            memberListener.getSymClient().getChatService().getChatByStream(member.getUserID().toString());
+        try {
+            UserIdList list = new UserIdList();
+            list.add(client.getUserID());
+            Chat chat = null;
+            chat = memberListener.getSymClient().getChatService().getChatByStream(
+                    memberListener.getSymClient().getStreamsClient().getStream(list).getId());
+            chat.registerListener(helpClientListener);
             chat.removeListener(this);
-            chat.registerListener(memberListener);
-            Messenger.sendMessage("You have exited the call.", MessageSubmission.FormatEnum.TEXT, member.getEmail(), memberListener.getSymClient());
-        }
 
-        Messenger.sendMessage("You have exited the call.", MessageSubmission.FormatEnum.TEXT, client.getUserID(), memberListener.getSymClient());
+            for (Member member : members) {
+                list = new UserIdList();
+                list.add(member.getUserID());
+                chat = memberListener.getSymClient().getChatService().getChatByStream(
+                        memberListener.getSymClient().getStreamsClient().getStream(list).getId());
+                chat.registerListener(this);
+                chat.removeListener(memberListener);
+                Messenger.sendMessage("You have exited the call.", MessageSubmission.FormatEnum.TEXT, member.getEmail(), memberListener.getSymClient());
+            }
+
+            Messenger.sendMessage("You have exited the call.", MessageSubmission.FormatEnum.TEXT, client.getUserID(), memberListener.getSymClient());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onChatMessage(Message message) {
@@ -117,7 +143,14 @@ public class Call implements ChatListener, ChatServiceListener {
                     }
                 }
             }
-
+            if (MemberDatabase.getMember(message).isHideIdentity()) {
+                Messenger.sendMessage("<messageML><b>Member " + (members.indexOf(MemberDatabase.getMember(message)) + 1)
+                                + ":</b> " + text + "</messageML>",
+                        MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+            } else {
+                Messenger.sendMessage("<messageML><b>" + MemberDatabase.getMember(message).getEmail() + ":</b> " + text
+                        + "</messageML>", MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+            }
             setInactivityTime(0);
         }
     }
@@ -135,9 +168,9 @@ public class Call implements ChatListener, ChatServiceListener {
             member.setOnCall(false);
             members.remove(member);
             if (members.size() == 0)
-                HelpDesk.endCall(this);
+                HoldDesk.endCall(this);
         } else
-            HelpDesk.endCall(this);
+            HoldDesk.endCall(this);
     }
 
     public HelpClient getClient() {
