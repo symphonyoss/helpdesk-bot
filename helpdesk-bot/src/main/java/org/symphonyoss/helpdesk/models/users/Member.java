@@ -10,6 +10,7 @@ public class Member {
     private String email;
     private Long userID;
     private boolean seeCommands;
+    private boolean busy;
     private boolean hideIdentity;
     @JsonIgnore
     private boolean onCall = false;
@@ -65,5 +66,13 @@ public class Member {
 
     public void setHideIdentity(boolean hideIdentity) {
         this.hideIdentity = hideIdentity;
+    }
+
+    public boolean isBusy() {
+        return busy;
+    }
+
+    public void setBusy(boolean busy) {
+        this.busy = busy;
     }
 }

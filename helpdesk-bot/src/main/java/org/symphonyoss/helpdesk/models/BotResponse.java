@@ -1,9 +1,9 @@
-package org.symphonyoss.helpdesk.models.responses;
+package org.symphonyoss.helpdesk.models;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.listeners.BotResponseListener;
+import org.symphonyoss.helpdesk.listeners.chat.BotResponseListener;
 import org.symphonyoss.symphony.agent.model.Message;
 
 /**
@@ -42,7 +42,7 @@ public abstract class BotResponse {
      */
     public abstract void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener);
 
-    public abstract boolean userHasPermission(long userid);
+    public abstract boolean userHasPermission(String userID);
 
     /**
      * Checks to see if the user's input fulfills the bot responses command requirements
@@ -55,7 +55,7 @@ public abstract class BotResponse {
      * </p>
      */
     public boolean isCommand(String[] chunks, Message message) {
-        String[] checkCommand = command.split(" ");
+        String[] checkCommand = command.split("\\s+");
 
         if ((chunks.length - checkCommand.length) + 1 <= numArguments)
             return false;

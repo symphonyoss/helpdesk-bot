@@ -55,6 +55,11 @@ public class MemberDatabase {
         new File(System.getProperty("files.json") + member.getUserID() + ".json").delete();
     }
 
+    public static void addMember(Member member) {
+        MemberDatabase.writeMember(member);
+        MemberDatabase.MEMBERS.put(member.getUserID().toString(), member);
+    }
+
     public static Member getMember(User user) {
         return MEMBERS.get(user.getId().toString());
     }
@@ -63,7 +68,11 @@ public class MemberDatabase {
         return MEMBERS.get(message.getFromUserId().toString());
     }
 
-    public static Member getMember(Long userID) {
-        return MEMBERS.get(userID.toString());
+    public static Member getMember(String userID) {
+        return MEMBERS.get(userID);
+    }
+
+    public static boolean hasMember(String userID) {
+        return MEMBERS.containsKey(userID);
     }
 }

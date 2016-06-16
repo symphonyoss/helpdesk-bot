@@ -1,13 +1,13 @@
-package org.symphonyoss.helpdesk.listeners;
+package org.symphonyoss.helpdesk.listeners.chat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
+import org.symphonyoss.helpdesk.enums.MLTypes;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.HelpDesk;
+import org.symphonyoss.helpdesk.utils.ClientDatabase;
 import org.symphonyoss.helpdesk.utils.MemberDatabase;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
@@ -37,18 +37,18 @@ public class HelpClientListener implements ChatListener {
 
         String[] chunks = mlMessageParser.getTextChunks();
 
-        HelpDesk.retrieveClient(message).getHelpRequests().add(message.getMessage());
+        ClientDatabase.retrieveClient(message).getHelpRequests().add(mlMessageParser.getText());
 
         for (Member member : MemberDatabase.MEMBERS.values())
             if (!member.isOnCall() && member.isSeeCommands()) {
-                if (HelpDesk.retrieveClient(message).getEmail() != null &&
-                        HelpDesk.retrieveClient(message).getEmail() != "") {
-                    Messenger.sendMessage(HelpBotConstants.START_ML + HelpBotConstants.START_BOLD
-                                    + HelpDesk.retrieveClient(message).getEmail() +
-                                    ": " + HelpBotConstants.END_BOLD + String.join(" ", chunks) + HelpBotConstants.END_ML,
+                if (ClientDatabase.retrieveClient(message).getEmail() != null &&
+                        ClientDatabase.retrieveClient(message).getEmail() != "") {
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                    + ClientDatabase.retrieveClient(message).getEmail() +
+                                    ": " + MLTypes.END_BOLD + String.join(" ", chunks) + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
                 } else {
-                    Messenger.sendMessage(HelpBotConstants.START_ML + HelpBotConstants.START_BOLD + message.getFromUserId() + ": " + HelpBotConstants.END_BOLD + String.join(" ", chunks) + "</messageML>",
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD + message.getFromUserId() + ": " + MLTypes.END_BOLD + String.join(" ", chunks) + "</messageML>",
                             MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
                 }
             }
