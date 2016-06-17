@@ -9,8 +9,11 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.models.responses.JoinChatResponse;
+import org.symphonyoss.helpdesk.models.responses.OnlineMembersResponse;
+import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCash;
+import org.symphonyoss.helpdesk.utils.HoldCash;
 import org.symphonyoss.helpdesk.utils.MemberCash;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
@@ -28,16 +31,19 @@ public class HelpClientListener implements ChatListener {
         this.symClient = symClient;
         botResponseListener = new BotResponseListener(symClient);
 
-        JoinChatResponse joinChat = new JoinChatResponse("Join chat ", 1);
-        joinChat.setPlaceHolder(0, "Client/Member");
-        joinChat.setPrefixRequirement(0, "@");
-        botResponseListener.getActiveResponses().add(joinChat);
+        OnlineMembersResponse onlineMembers = new OnlineMembersResponse("Online Members", 0);
+
+        botResponseListener.getActiveResponses().add(onlineMembers);
     }
 
     public void onChatMessage(Message message) {
         logger.debug("Client {} sent help request message.", message.getFromUserId());
         if (botResponseListener.isCommand(message))
             return;
+
+        HelpClient client = ClientCash.retrieveClient(message);
+        if(!HoldCash.hasClient(client))
+            HoldCash.putClientOnHold(client);
 
         MlMessageParser mlMessageParser;
         try {
