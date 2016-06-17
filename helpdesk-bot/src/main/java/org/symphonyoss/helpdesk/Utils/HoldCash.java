@@ -1,6 +1,7 @@
 package org.symphonyoss.helpdesk.utils;
 
 import org.symphonyoss.helpdesk.models.users.HelpClient;
+import org.symphonyoss.helpdesk.models.users.Member;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,19 @@ public class HoldCash {
             }
 
         return null;
+    }
+
+    public static String listQueue(){
+        String list = "";
+        for (HelpClient client: ONHOLD)
+            if(client.getEmail() != "" && client.getEmail() != null)
+                list += ", " + client.getEmail();
+             else
+                list += ", " + client.getUserID();
+        if(ONHOLD.size() > 0)
+            return list.substring(1);
+        else
+            return list;
     }
 
     public static boolean hasClient(HelpClient client) {

@@ -89,11 +89,14 @@ public class HelpDeskBot implements ChatServiceListener {
 
             OnlineMembersResponse onlineMembers = new OnlineMembersResponse("Online Members", 0);
 
+            ClientQueueResponse queueResponse  = new ClientQueueResponse("Client Queue", 0);
+
             memberResponseListener.getActiveResponses().add(acceptNextHelpClient);
             memberResponseListener.getActiveResponses().add(acceptHelpClient);
             memberResponseListener.getActiveResponses().add(toggleHelp);
             memberResponseListener.getActiveResponses().add(toggleIdentity);
             memberResponseListener.getActiveResponses().add(onlineMembers);
+            memberResponseListener.getActiveResponses().add(queueResponse);
             memberResponseListener.getActiveResponses().add(addMember);
             memberResponseListener.getActiveResponses().add(joinChat);
 
