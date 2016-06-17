@@ -54,6 +54,7 @@ public class JoinChatResponse extends BotResponse {
 
     @Override
     public boolean userHasPermission(String userID) {
-        return !DeskUserCash.getDeskUser(userID).isOnCall();
+        return !DeskUserCash.getDeskUser(userID).isOnCall()
+                && DeskUserCash.getDeskUser(userID).getUserType() == DeskUserType.MEMBER;
     }
 }

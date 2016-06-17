@@ -67,6 +67,16 @@ public class MemberCash {
         DeskUserCash.addUser(member);
     }
 
+    public static String listMembers(){
+        String list = "";
+        for (Member member: MEMBERS.values())
+            list += ", " + member.getEmail();
+        if(MEMBERS.size() > 0)
+            return list.substring(1);
+        else
+            return list;
+    }
+
     public static Member getMember(User user) {
         return MEMBERS.get(user.getId().toString());
     }

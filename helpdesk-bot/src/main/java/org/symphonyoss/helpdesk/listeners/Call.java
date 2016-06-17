@@ -34,6 +34,7 @@ public class Call implements ChatListener, ChatServiceListener {
     private final BotResponseListener memberListener;
     private final HelpClientListener helpClientListener;
     private BotResponseListener botResponseListener;
+    private boolean entered;
     private float inactivityTime;
 
     public Call(Member member, HelpClient client, BotResponseListener memberListener, HelpClientListener helpClientListener) {
@@ -90,6 +91,7 @@ public class Call implements ChatListener, ChatServiceListener {
                         + MLTypes.BREAK + MLTypes.START_BOLD + "Help Summary: " + MLTypes.END_BOLD + MLTypes.BREAK + getHelpList()
                         + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), memberListener.getSymClient());
             }
+            setEntered(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -150,24 +152,23 @@ public class Call implements ChatListener, ChatServiceListener {
 
         for (HelpClient c : clients)
             if (!member.isHideIdentity())
-                Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
-                        member.getEmail() + MLTypes.END_BOLD + " has entered the chat."
-                        , MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
+                Messenger.sendMessage(MLTypes.START_ML + "Member " + MLTypes.START_BOLD +
+                        member.getEmail() + MLTypes.END_BOLD + " has entered the chat." + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
             else
-                Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                Messenger.sendMessage(MLTypes.START_ML + "Member " + MLTypes.START_BOLD +
                         "Member " + members.indexOf(member) + MLTypes.END_BOLD + " has entered the chat."
-                        , MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
+                        +MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
 
 
         for (Member m : members)
             if (m != member) {
                 if (!member.isHideIdentity())
-                    Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
-                            member.getEmail() + MLTypes.END_BOLD + " has entered the chat."
+                    Messenger.sendMessage(MLTypes.START_ML + "Member " + MLTypes.START_BOLD +
+                            member.getEmail() + MLTypes.END_BOLD + " has entered the chat." +MLTypes.END_ML
                             , MessageSubmission.FormatEnum.MESSAGEML, m.getUserID(), memberListener.getSymClient());
                 else
-                    Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
-                            "Member " + members.indexOf(member) + MLTypes.END_BOLD + " has entered the chat."
+                    Messenger.sendMessage(MLTypes.START_ML + "Member " + MLTypes.START_BOLD +
+                            "Member " + members.indexOf(member) + MLTypes.END_BOLD + " has entered the chat." +MLTypes.END_ML
                             , MessageSubmission.FormatEnum.MESSAGEML, m.getUserID(), memberListener.getSymClient());
             }
     }
@@ -250,7 +251,7 @@ public class Call implements ChatListener, ChatServiceListener {
     }
 
     public void onChatMessage(Message message) {
-        if (botResponseListener.isCommand(message))
+        if (botResponseListener.isCommand(message) || !entered)
             return;
 
         MlMessageParser mlMessageParser;
@@ -341,12 +342,12 @@ public class Call implements ChatListener, ChatServiceListener {
 
     public void stopListening(Chat chat) {
         chat.removeListener(this);
-        chat.removeListener(botResponseListener);
+        botResponseListener.stopListening(chat);
     }
 
     public void listenOn(Chat chat) {
         chat.registerListener(this);
-        chat.registerListener(botResponseListener);
+        botResponseListener.listenOn(chat);
     }
 
     private String getClientList() {
@@ -417,5 +418,13 @@ public class Call implements ChatListener, ChatServiceListener {
 
     public void setBotResponseListener(BotResponseListener botResponseListener) {
         this.botResponseListener = botResponseListener;
+    }
+
+    public boolean isEntered() {
+        return entered;
+    }
+
+    public void setEntered(boolean entered) {
+        this.entered = entered;
     }
 }

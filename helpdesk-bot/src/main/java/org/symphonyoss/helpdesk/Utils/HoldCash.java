@@ -33,4 +33,8 @@ public class HoldCash {
 
         return null;
     }
+
+    public static boolean hasClient(HelpClient client) {
+        return ONHOLD.contains(client);
+    }
 }

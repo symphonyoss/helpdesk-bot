@@ -16,6 +16,7 @@ import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,6 +34,7 @@ public class BotResponseListener implements ChatListener {
     private final LinkedList<BotResponse> activeResponses = new LinkedList<BotResponse>();
     private final ConcurrentHashMap<String, LastBotResponse> lastResponse = new ConcurrentHashMap<String, LastBotResponse>();
     private SymphonyClient symClient;
+    private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();
 
     public BotResponseListener(SymphonyClient symClient) {
         this.symClient = symClient;
@@ -50,6 +52,8 @@ public class BotResponseListener implements ChatListener {
      */
 
     public void onChatMessage(Message message) {
+        if(entered.get(message.getStream()) == null || !entered.get(message.getStream()))
+            return;
         logger.debug("Received message for response.");
         MlMessageParser mlMessageParser;
 
@@ -164,9 +168,11 @@ public class BotResponseListener implements ChatListener {
 
     public void listenOn(Chat chat) {
         chat.registerListener(this);
+        entered.put(chat.getStream().getId(), true);
     }
 
     public void stopListening(Chat chat) {
         chat.removeListener(this);
+        entered.put(chat.getStream().getId(), false);
     }
 }

@@ -52,7 +52,8 @@ public class HelpDeskBot implements ChatServiceListener {
     private SymphonyClient symClient;
 
     public HelpDeskBot() {
-        init();
+        initConnection();
+        setupBot();
     }
 
     public static void main(String[] args) {
@@ -60,7 +61,65 @@ public class HelpDeskBot implements ChatServiceListener {
         new HelpDeskBot();
     }
 
-    public void init() {
+    public void setupBot() {
+        try {
+            MemberCash.loadMembers();
+
+            symClient.getChatService().registerListener(this);
+            helpClientListener = new HelpClientListener(symClient);
+            memberResponseListener = new BotResponseListener(symClient);
+
+            AcceptHelpResponse acceptNextHelpClient = new AcceptHelpResponse("Accept Next Client", 0, helpClientListener);
+
+            AcceptHelpResponse acceptHelpClient = new AcceptHelpResponse("Accept ", 1, helpClientListener);
+            acceptHelpClient.setPlaceHolder(0, "Client");
+            acceptHelpClient.setPrefixRequirement(0, "@");
+
+            ToggleSeeHelpResponse toggleHelp = new ToggleSeeHelpResponse("Toggle Online", 0);
+
+            ToggleIdentityResponse toggleIdentity = new ToggleIdentityResponse("Toggle Show Identity", 0);
+
+            AddMemberResponse addMember = new AddMemberResponse("Add Member", 1, helpClientListener);
+            addMember.setPlaceHolder(0, "Client");
+            addMember.setPrefixRequirement(0, "@");
+
+            JoinChatResponse joinChat = new JoinChatResponse("Join chat ", 1);
+            joinChat.setPlaceHolder(0, "Client/Member");
+            joinChat.setPrefixRequirement(0, "@");
+
+            OnlineMembersResponse onlineMembers = new OnlineMembersResponse("Online Members", 0);
+
+            memberResponseListener.getActiveResponses().add(acceptNextHelpClient);
+            memberResponseListener.getActiveResponses().add(acceptHelpClient);
+            memberResponseListener.getActiveResponses().add(toggleHelp);
+            memberResponseListener.getActiveResponses().add(toggleIdentity);
+            memberResponseListener.getActiveResponses().add(onlineMembers);
+            memberResponseListener.getActiveResponses().add(addMember);
+            memberResponseListener.getActiveResponses().add(joinChat);
+
+            Chat chat = new Chat();
+            chat.setLocalUser(symClient.getLocalUser());
+            Set<User> remoteUsers = new HashSet<User>();
+            remoteUsers.add(symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL));
+            chat.setRemoteUsers(remoteUsers);
+            chat.setStream(symClient.getStreamsClient().getStream(remoteUsers));
+
+            symClient.getChatService().addChat(chat);
+            //symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
+
+            User user = symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL);
+            MemberCash.writeMember(new Member(user.getEmailAddress(), user.getId()));
+
+            Thread inactivityThread = new InactivityThread();
+            inactivityThread.start();
+
+            System.out.println("Help desk bot is alive, and ready to help!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initConnection() {
 
 //        -Dkeystore.password=SymphonyIsGreat123
 //        -Dtruststore.password=SymphonyIsGreat123
@@ -98,55 +157,6 @@ public class HelpDeskBot implements ChatServiceListener {
                     System.getProperty("symphony.agent.pod.url")
             );
 
-            MemberCash.loadMembers();
-
-            symClient.getChatService().registerListener(this);
-            helpClientListener = new HelpClientListener(symClient);
-            memberResponseListener = new BotResponseListener(symClient);
-
-            AcceptHelpResponse acceptNextHelpClient = new AcceptHelpResponse("Accept Next Client", 0, helpClientListener);
-
-            AcceptHelpResponse acceptHelpClient = new AcceptHelpResponse("Accept ", 1, helpClientListener);
-            acceptHelpClient.setPlaceHolder(0, "Client");
-            acceptHelpClient.setPrefixRequirement(0, "@");
-
-            ToggleSeeHelpResponse toggleHelp = new ToggleSeeHelpResponse("Toggle Online", 0);
-
-            ToggleIdentityResponse toggleIdentity = new ToggleIdentityResponse("Toggle Show Identity", 0);
-
-            AddMemberResponse addMember = new AddMemberResponse("Add Member", 1, helpClientListener);
-            addMember.setPlaceHolder(0, "Client");
-            addMember.setPrefixRequirement(0, "@");
-
-            JoinChatResponse joinChat = new JoinChatResponse("Join chat ", 1);
-            joinChat.setPlaceHolder(0, "Client/Member");
-            joinChat.setPrefixRequirement(0, "@");
-
-            memberResponseListener.getActiveResponses().add(acceptNextHelpClient);
-            memberResponseListener.getActiveResponses().add(acceptHelpClient);
-            memberResponseListener.getActiveResponses().add(toggleHelp);
-            memberResponseListener.getActiveResponses().add(toggleIdentity);
-            memberResponseListener.getActiveResponses().add(addMember);
-            memberResponseListener.getActiveResponses().add(joinChat);
-
-            Chat chat = new Chat();
-            chat.setLocalUser(symClient.getLocalUser());
-            Set<User> remoteUsers = new HashSet<User>();
-            remoteUsers.add(symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL));
-            chat.setRemoteUsers(remoteUsers);
-            chat.setStream(symClient.getStreamsClient().getStream(remoteUsers));
-
-            symClient.getChatService().addChat(chat);
-            //symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
-
-            User user = symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL);
-            MemberCash.writeMember(new Member(user.getEmailAddress(), user.getId()));
-
-            Thread inactivityThread = new InactivityThread();
-            inactivityThread.start();
-
-            System.out.println("Help desk bot is alive, and ready to help!");
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,7 +170,7 @@ public class HelpDeskBot implements ChatServiceListener {
             if (users != null && users.size() == 1) {
                 User user = users.iterator().next();
                 if (MemberCash.hasMember(user.getId().toString())) {
-                    chat.registerListener(memberResponseListener);
+                    memberResponseListener.listenOn(chat);
                     Messenger.sendMessage("Joined help desk as member.",
                             MessageSubmission.FormatEnum.TEXT, chat, symClient);
                 } else {
