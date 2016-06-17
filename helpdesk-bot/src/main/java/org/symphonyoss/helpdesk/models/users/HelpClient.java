@@ -1,6 +1,9 @@
 package org.symphonyoss.helpdesk.models.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.symphonyoss.botresponse.enums.MLTypes;
+import org.symphonyoss.helpdesk.enums.DeskUserType;
+import org.symphonyoss.helpdesk.listeners.Call;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,22 +11,28 @@ import java.util.Set;
 /**
  * Created by nicktarsillo on 6/14/16.
  */
-public class HelpClient {
+public class HelpClient implements DeskUser {
+    @JsonIgnore
+    protected Call call;
     private String email;
     private Long userID;
     private boolean onCall;
     private Set<String> helpRequests = new HashSet<String>();
 
     public HelpClient(String email, Long userID) {
-        this.email = email;
-        this.userID = userID;
+        setEmail(email);
+        setUserID(userID);
+    }
+
+    public DeskUserType getUserType() {
+        return DeskUserType.HELP_CLIENT;
     }
 
     public String getHelpSummary() {
         String help;
-        if(email != null && !email.equalsIgnoreCase(""))
+        if (email != null && !email.equalsIgnoreCase(""))
             help = MLTypes.START_BOLD + "    For " + email + ": "
-                + MLTypes.END_BOLD + MLTypes.BREAK;
+                    + MLTypes.END_BOLD + MLTypes.BREAK;
         else
             help = MLTypes.START_BOLD + "    For " + userID + ": "
                     + MLTypes.END_BOLD + MLTypes.BREAK;
@@ -33,20 +42,20 @@ public class HelpClient {
         return help;
     }
 
-    public String getEmail() {
-        return email;
+    public Set<String> getHelpRequests() {
+        return helpRequests;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setHelpRequests(Set<String> helpRequests) {
+        this.helpRequests = helpRequests;
     }
 
-    public Long getUserID() {
-        return userID;
+    public Call getCall() {
+        return call;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
+    public void setCall(Call call) {
+        this.call = call;
     }
 
     public boolean isOnCall() {
@@ -57,11 +66,19 @@ public class HelpClient {
         this.onCall = onCall;
     }
 
-    public Set<String> getHelpRequests() {
-        return helpRequests;
+    public Long getUserID() {
+        return userID;
     }
 
-    public void setHelpRequests(Set<String> helpRequests) {
-        this.helpRequests = helpRequests;
+    public void setUserID(Long userID) {
+        this.userID = userID;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

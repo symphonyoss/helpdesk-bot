@@ -20,24 +20,20 @@ package org.symphonyoss.helpdesk.bots;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.impl.SymphonyBasicClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.listeners.presence.MemberPresenceListener;
-import org.symphonyoss.helpdesk.models.responses.AcceptHelpResponse;
-import org.symphonyoss.helpdesk.models.responses.AddMemberResponse;
-import org.symphonyoss.helpdesk.models.responses.ToggleIdentityResponse;
-import org.symphonyoss.helpdesk.models.responses.ToggleSeeHelpResponse;
+import org.symphonyoss.helpdesk.models.responses.*;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.threads.InactivityThread;
-import org.symphonyoss.helpdesk.utils.ClientDatabase;
-import org.symphonyoss.helpdesk.utils.HoldDesk;
-import org.symphonyoss.helpdesk.utils.MemberDatabase;
+import org.symphonyoss.helpdesk.utils.ClientCash;
+import org.symphonyoss.helpdesk.utils.HoldCash;
+import org.symphonyoss.helpdesk.utils.MemberCash;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
@@ -102,7 +98,7 @@ public class HelpDeskBot implements ChatServiceListener {
                     System.getProperty("symphony.agent.pod.url")
             );
 
-            MemberDatabase.loadMembers();
+            MemberCash.loadMembers();
 
             symClient.getChatService().registerListener(this);
             helpClientListener = new HelpClientListener(symClient);
@@ -122,11 +118,16 @@ public class HelpDeskBot implements ChatServiceListener {
             addMember.setPlaceHolder(0, "Client");
             addMember.setPrefixRequirement(0, "@");
 
+            JoinChatResponse joinChat = new JoinChatResponse("Join chat ", 1);
+            joinChat.setPlaceHolder(0, "Client/Member");
+            joinChat.setPrefixRequirement(0, "@");
+
             memberResponseListener.getActiveResponses().add(acceptNextHelpClient);
             memberResponseListener.getActiveResponses().add(acceptHelpClient);
             memberResponseListener.getActiveResponses().add(toggleHelp);
             memberResponseListener.getActiveResponses().add(toggleIdentity);
             memberResponseListener.getActiveResponses().add(addMember);
+            memberResponseListener.getActiveResponses().add(joinChat);
 
             Chat chat = new Chat();
             chat.setLocalUser(symClient.getLocalUser());
@@ -136,7 +137,10 @@ public class HelpDeskBot implements ChatServiceListener {
             chat.setStream(symClient.getStreamsClient().getStream(remoteUsers));
 
             symClient.getChatService().addChat(chat);
-            symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
+            //symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
+
+            User user = symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL);
+            MemberCash.writeMember(new Member(user.getEmailAddress(), user.getId()));
 
             Thread inactivityThread = new InactivityThread();
             inactivityThread.start();
@@ -155,13 +159,13 @@ public class HelpDeskBot implements ChatServiceListener {
             Set<User> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
                 User user = users.iterator().next();
-                if (MemberDatabase.hasMember(user.getId().toString())) {
+                if (MemberCash.hasMember(user.getId().toString())) {
                     chat.registerListener(memberResponseListener);
                     Messenger.sendMessage("Joined help desk as member.",
                             MessageSubmission.FormatEnum.TEXT, chat, symClient);
                 } else {
-                    HoldDesk.putClientOnHold(ClientDatabase.addClient(user));
-                    chat.registerListener(helpClientListener);
+                    HoldCash.putClientOnHold(ClientCash.addClient(user));
+                    helpClientListener.listenOn(chat);
                     Messenger.sendMessage("Joined help desk as help client.",
                             MessageSubmission.FormatEnum.TEXT, chat, symClient);
                 }
@@ -174,12 +178,12 @@ public class HelpDeskBot implements ChatServiceListener {
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed chat connection: " + chat.getStream());
         User user = chat.getRemoteUsers().iterator().next();
-        if (MemberDatabase.MEMBERS.containsKey(user.getEmailAddress())
-                && !MemberDatabase.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
+        if (MemberCash.MEMBERS.containsKey(user.getEmailAddress())
+                && !MemberCash.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
             chat.removeListener(memberResponseListener);
-        } else if (ClientDatabase.retrieveClient(user).isOnCall()) {
+        } else if (ClientCash.retrieveClient(user).isOnCall()) {
             chat.removeListener(helpClientListener);
-            ClientDatabase.removeClient(user);
+            ClientCash.removeClient(user);
         }
     }
 }

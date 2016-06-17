@@ -1,31 +1,34 @@
 package org.symphonyoss.helpdesk.models.users;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.symphonyoss.helpdesk.enums.DeskUserType;
+import org.symphonyoss.helpdesk.listeners.Call;
 
 /**
  * Created by nicktarsillo on 6/14/16.
  */
-public class Member {
+public class Member implements DeskUser {
+    protected Call call;
     private String email;
     private Long userID;
+    private boolean onCall;
     private boolean seeCommands = true;
     private boolean busy;
     private boolean hideIdentity;
-    @JsonIgnore
-    private boolean onCall = false;
 
     public Member(String email, Long userID) {
-        this.email = email;
-        this.userID = userID;
+        setEmail(email);
+        setUserID(userID);
     }
 
-    @JsonCreator
     public Member(String email, Long userID, boolean seeCommands, boolean hideIdentity) {
-        this.email = email;
-        this.userID = userID;
+        setEmail(email);
+        setUserID(userID);
         this.seeCommands = seeCommands;
         this.hideIdentity = hideIdentity;
+    }
+
+    public DeskUserType getUserType() {
+        return DeskUserType.MEMBER;
     }
 
     public Long getUserID() {
@@ -74,5 +77,17 @@ public class Member {
 
     public void setBusy(boolean busy) {
         this.busy = busy;
+    }
+
+    public Call getCall() {
+        return call;
+    }
+
+    public void setCall(Call call) {
+        this.call = call;
+    }
+
+    public MemberWrapper toWrapper() {
+        return new MemberWrapper(email, userID, seeCommands, hideIdentity);
     }
 }

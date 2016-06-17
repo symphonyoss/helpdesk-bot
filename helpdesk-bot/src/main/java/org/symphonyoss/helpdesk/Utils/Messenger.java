@@ -6,7 +6,6 @@ import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.Stream;
 import org.symphonyoss.symphony.pod.model.UserIdList;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 /**
  * Created by nicktarsillo on 6/14/16.
@@ -64,12 +63,12 @@ public class Messenger {
         }
     }
 
-    public static Chat getChat(Long userID, SymphonyClient symClient){
+    public static Chat getChat(Long userID, SymphonyClient symClient) {
         UserIdList list = new UserIdList();
         list.add(userID);
         Stream stream = null;
         try {
-             stream = symClient.getStreamsClient().getStream(list);
+            stream = symClient.getStreamsClient().getStream(list);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,10 +1,10 @@
 package org.symphonyoss.helpdesk.models.responses;
 
-import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.botresponse.models.BotResponse;
+import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.MemberDatabase;
+import org.symphonyoss.helpdesk.utils.MemberCash;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -19,7 +19,7 @@ public class ToggleIdentityResponse extends BotResponse {
 
     @Override
     public void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener) {
-        Member member = MemberDatabase.getMember(message);
+        Member member = MemberCash.getMember(message);
         member.setHideIdentity(!member.isHideIdentity());
         if (member.isHideIdentity())
             Messenger.sendMessage("Your identity will now be hidden.",
@@ -28,12 +28,12 @@ public class ToggleIdentityResponse extends BotResponse {
             Messenger.sendMessage("Your identity will now be shown.",
                     MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
 
-        MemberDatabase.writeMember(member);
+        MemberCash.writeMember(member);
     }
 
     @Override
     public boolean userHasPermission(String userID) {
-        return MemberDatabase.hasMember(userID)
-                && !MemberDatabase.getMember(userID).isOnCall();
+        return MemberCash.hasMember(userID)
+                && !MemberCash.getMember(userID).isOnCall();
     }
 }

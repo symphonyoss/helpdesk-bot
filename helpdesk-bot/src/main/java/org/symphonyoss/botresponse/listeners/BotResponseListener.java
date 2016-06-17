@@ -8,6 +8,7 @@ import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.botresponse.models.LastBotResponse;
 import org.symphonyoss.botresponse.utils.BotInterpreter;
 import org.symphonyoss.client.SymphonyClient;
+import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
@@ -92,7 +93,7 @@ public class BotResponseListener implements ChatListener {
             LastBotResponse interpret = BotInterpreter.interpret(activeResponses, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
             Messenger.sendMessage(MLTypes.START_ML + "Did you mean "
                             + MLTypes.START_BOLD + interpret.getMlMessageParser().getText()
-                            + MLTypes.END_BOLD + "? (Type " + MLTypes.START_BOLD + "Run Last"
+                            + MLTypes.END_BOLD + "? (Type " + MLTypes.START_BOLD + BotConstants.COMMAND + "Run Last"
                             + MLTypes.END_BOLD + " to run command)" + MLTypes.END_ML,
                     MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
 
@@ -139,5 +140,33 @@ public class BotResponseListener implements ChatListener {
 
     public SymphonyClient getSymClient() {
         return symClient;
+    }
+
+    public boolean isCommand(Message message) {
+        logger.debug("Received message for response.");
+        MlMessageParser mlMessageParser;
+
+        try {
+            mlMessageParser = new MlMessageParser(symClient);
+            mlMessageParser.parseMessage(message.getMessage());
+
+            String[] chunks = mlMessageParser.getTextChunks();
+
+            if (chunks[0].charAt(0) == BotConstants.COMMAND) {
+                return true;
+            } else
+                return false;
+        } catch (Exception e) {
+            logger.error("Could not parse message {}", message.getMessage(), e);
+        }
+        return false;
+    }
+
+    public void listenOn(Chat chat) {
+        chat.registerListener(this);
+    }
+
+    public void stopListening(Chat chat){
+        chat.removeListener(this);
     }
 }

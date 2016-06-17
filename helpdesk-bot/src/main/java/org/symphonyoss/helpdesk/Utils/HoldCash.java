@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by nicktarsillo on 6/15/16.
  */
-public class HoldDesk {
+public class HoldCash {
     public static final ArrayList<HelpClient> ONHOLD = new ArrayList<HelpClient>();
 
     public static void putClientOnHold(HelpClient client) {
@@ -26,7 +26,7 @@ public class HoldDesk {
     }
 
     public static HelpClient findClientCredentialMatch(String credential) {
-        for (HelpClient client : HoldDesk.ONHOLD)
+        for (HelpClient client : HoldCash.ONHOLD)
             if (credential.equalsIgnoreCase(client.getEmail()) || credential.equalsIgnoreCase(client.getUserID().toString())) {
                 return client;
             }
