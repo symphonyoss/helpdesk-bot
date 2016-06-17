@@ -69,8 +69,15 @@ public class MemberCash {
 
     public static String listMembers(){
         String list = "";
-        for (Member member: MEMBERS.values())
-            list += ", " + member.getEmail();
+        int index = 1;
+        for (Member member: MEMBERS.values()) {
+            if (!member.isHideIdentity())
+                list += ", " + member.getEmail();
+            else
+                list += ", Member " + index;
+            index++;
+        }
+
         if(MEMBERS.size() > 0)
             return list.substring(1);
         else
