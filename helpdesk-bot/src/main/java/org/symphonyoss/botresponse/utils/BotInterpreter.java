@@ -6,13 +6,13 @@ import org.symphonyoss.botresponse.models.LastBotResponse;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * Created by nicktarsillo on 6/15/16.
  */
 public class BotInterpreter {
-    public static boolean interpretable(HashSet<BotResponse> responses, String[] chunks, double closenessFactor) {
+    public static boolean interpretable(LinkedList<BotResponse> responses, String[] chunks, double closenessFactor) {
         for (BotResponse response : responses) {
             if (chunks.length < response.getNumArguments())
                 break;
@@ -32,7 +32,7 @@ public class BotInterpreter {
         return false;
     }
 
-    public static LastBotResponse interpret(HashSet<BotResponse> responses, String[] chunks, SymphonyClient symClient, double closenessFactor) {
+    public static LastBotResponse interpret(LinkedList<BotResponse> responses, String[] chunks, SymphonyClient symClient, double closenessFactor) {
         for (BotResponse response : responses) {
             if (chunks.length < response.getNumArguments())
                 break;

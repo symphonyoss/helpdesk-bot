@@ -16,7 +16,7 @@ import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BotResponseListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(BotResponseListener.class);
-    private final HashSet<BotResponse> activeResponses = new HashSet<BotResponse>();
+    private final LinkedList<BotResponse> activeResponses = new LinkedList<BotResponse>();
     private final ConcurrentHashMap<String, LastBotResponse> lastResponse = new ConcurrentHashMap<String, LastBotResponse>();
     private SymphonyClient symClient;
 
@@ -86,7 +86,7 @@ public class BotResponseListener implements ChatListener {
         if (!responded
                 && !(mlMessageParser.getText().trim().equalsIgnoreCase("Run Last") && lastResponse.get(message.getFromUserId().toString()) != null)
                 && !BotInterpreter.interpretable(activeResponses, chunks, HelpBotConstants.CORRECTFACTOR))
-            sendUsage(message);
+            sendUsage(message, mlMessageParser);
         else if (!responded && !(mlMessageParser.getText().trim().equalsIgnoreCase("Run Last")
                 && lastResponse.get(message.getFromUserId().toString()) != null)
                 && permission) {
@@ -104,12 +104,12 @@ public class BotResponseListener implements ChatListener {
         }
     }
 
-    private void sendUsage(Message message) {
+    private void sendUsage(Message message, MlMessageParser mlMessageParser) {
 
         MessageSubmission aMessage = new MessageSubmission();
         aMessage.setFormat(MessageSubmission.FormatEnum.MESSAGEML);
 
-        String usage = MLTypes.START_ML + "Sorry...  " + MLTypes.BREAK + MLTypes.START_BOLD
+        String usage = MLTypes.START_ML + "Sorry, " + mlMessageParser.getText() + " is not an interpretable command." + MLTypes.BREAK + MLTypes.START_BOLD
                 + "Check the usage:" + MLTypes.END_BOLD + MLTypes.BREAK;
         for (BotResponse response : activeResponses)
             if (response.userHasPermission(message.getFromUserId().toString()))
@@ -134,7 +134,7 @@ public class BotResponseListener implements ChatListener {
         return null;
     }
 
-    public HashSet<BotResponse> getActiveResponses() {
+    public LinkedList<BotResponse> getActiveResponses() {
         return activeResponses;
     }
 
@@ -166,7 +166,7 @@ public class BotResponseListener implements ChatListener {
         chat.registerListener(this);
     }
 
-    public void stopListening(Chat chat){
+    public void stopListening(Chat chat) {
         chat.removeListener(this);
     }
 }
