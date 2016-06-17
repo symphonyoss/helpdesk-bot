@@ -8,10 +8,7 @@ import org.symphonyoss.helpdesk.models.users.MemberWrapper;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.pod.model.User;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +20,18 @@ public class MemberCash {
     private static final Logger logger = LoggerFactory.getLogger(MemberCash.class);
 
     public static void loadMembers() {
-        File[] files = new File(System.getProperty("files.json")).listFiles();
+        File[] files = new File(System.getProperty("files.json")).listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return !name.equals(".DS_Store");
+            }
+        });
 
         Gson gson = new Gson();
 
         if (files != null) {
             for (File file : files) {
                 try {
+                    logger.debug(file.getName());
                     Member member = gson.fromJson(new FileReader(file), MemberWrapper.class).toMember();
                     addMember(member);
                     logger.debug("Loaded member {}", member.getUserID());

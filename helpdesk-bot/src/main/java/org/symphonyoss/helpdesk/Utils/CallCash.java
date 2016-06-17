@@ -9,7 +9,7 @@ import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -32,16 +32,12 @@ public class CallCash {
     }
 
     public static void checkCallInactivity(int milliSeconds) {
-        HashSet<Call> endCalls = new HashSet<Call>();
-        for (Call call : ACTIVECALLS) {
+        for (Call call : new LinkedList<Call>(ACTIVECALLS)) {
             call.setInactivityTime(call.getInactivityTime() + milliSeconds);
-            if (call.getInactivityTime() > HelpBotConstants.MAX_INACTIVITY)
-                endCalls.add(call);
-        }
-
-        for (Call call : endCalls) {
-            endCall(call);
-            logger.debug("Removed call due to inactivity.");
+            if (call.getInactivityTime() > HelpBotConstants.MAX_INACTIVITY) {
+                endCall(call);
+                logger.debug("Removed call due to inactivity.");
+            }
         }
     }
 }

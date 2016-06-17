@@ -10,6 +10,8 @@ import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.responses.ExitResponse;
+import org.symphonyoss.helpdesk.models.responses.HelpSummaryResponse;
+import org.symphonyoss.helpdesk.models.responses.RoomInfoResponse;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.CallCash;
@@ -20,6 +22,7 @@ import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by nicktarsillo on 6/14/16.
@@ -43,6 +46,13 @@ public class Call implements ChatListener, ChatServiceListener {
     public void enterCall() {
         botResponseListener = new BotResponseListener(memberListener.getSymClient());
         ExitResponse exitResponse = new ExitResponse("Exit", 0, this);
+
+        RoomInfoResponse sendInfo = new RoomInfoResponse("Room Info", 0);
+
+        HelpSummaryResponse sendSummary = new HelpSummaryResponse("Help Summary", 0);
+
+        botResponseListener.getActiveResponses().add(sendInfo);
+        botResponseListener.getActiveResponses().add(sendSummary);
         botResponseListener.getActiveResponses().add(exitResponse);
 
         for (Member member : members) {
@@ -163,9 +173,9 @@ public class Call implements ChatListener, ChatServiceListener {
     }
 
     public void exitCall() {
-        for (Member member : members)
+        for (Member member : new LinkedList<Member>(members))
             exit(member);
-        for (HelpClient client : clients)
+        for (HelpClient client : new LinkedList<HelpClient>(clients))
             exit(client);
     }
 
@@ -200,7 +210,7 @@ public class Call implements ChatListener, ChatServiceListener {
         client.setOnCall(false);
         clients.remove(client);
 
-        if(clients.size() == 0 && members.size() == 0)
+        if (clients.size() == 0 && members.size() == 0)
             CallCash.endCall(this);
     }
 
@@ -235,12 +245,12 @@ public class Call implements ChatListener, ChatServiceListener {
         member.setOnCall(false);
         members.remove(member);
 
-        if(clients.size() == 0 && members.size() == 0)
+        if (clients.size() == 0 && members.size() == 0)
             CallCash.endCall(this);
     }
 
     public void onChatMessage(Message message) {
-        if(botResponseListener.isCommand(message))
+        if (botResponseListener.isCommand(message))
             return;
 
         MlMessageParser mlMessageParser;
@@ -314,6 +324,19 @@ public class Call implements ChatListener, ChatServiceListener {
                             MessageSubmission.FormatEnum.MESSAGEML, c.getEmail(), memberListener.getSymClient());
             }
         }
+    }
+
+    public void sendRoomInfo(Message message) {
+        Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK + MLTypes.BREAK + MLTypes.START_BOLD
+                + "Clients in room: " + MLTypes.END_BOLD + getClientList()
+                + MLTypes.BREAK + MLTypes.START_BOLD + "Members in room: " + MLTypes.END_BOLD + getMemberList()
+                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, message, memberListener.getSymClient());
+    }
+
+    public void sendHelpSummary(Message message) {
+        Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK + MLTypes.BREAK + MLTypes.START_BOLD
+                + "Help Summary: " + MLTypes.END_BOLD + MLTypes.BREAK + getHelpList()
+                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, message, memberListener.getSymClient());
     }
 
     public void stopListening(Chat chat) {

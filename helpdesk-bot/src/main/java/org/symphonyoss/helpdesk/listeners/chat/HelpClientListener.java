@@ -36,7 +36,7 @@ public class HelpClientListener implements ChatListener {
 
     public void onChatMessage(Message message) {
         logger.debug("Client {} sent help request message.", message.getFromUserId());
-        if(botResponseListener.isCommand(message))
+        if (botResponseListener.isCommand(message))
             return;
 
         MlMessageParser mlMessageParser;
