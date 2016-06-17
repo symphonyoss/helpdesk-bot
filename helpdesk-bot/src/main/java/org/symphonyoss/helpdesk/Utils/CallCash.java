@@ -2,9 +2,9 @@ package org.symphonyoss.helpdesk.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.Call;
-import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by nicktarsillo on 6/16/16.
  */
-public class CallDesk {
+public class CallCash {
     public static final ConcurrentLinkedQueue<Call> ACTIVECALLS = new ConcurrentLinkedQueue<Call>();
-    private static final Logger logger = LoggerFactory.getLogger(HoldDesk.class);
+    private static final Logger logger = LoggerFactory.getLogger(HoldCash.class);
 
     public static Call newCall(Member member, HelpClient helpClient, BotResponseListener listener, HelpClientListener helpListener) {
         Call newCall = new Call(member, helpClient, listener, helpListener);

@@ -2,8 +2,8 @@ package org.symphonyoss.botresponse.models;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.botresponse.listeners.BotResponseListener;
+import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.symphony.agent.model.Message;
 
 /**

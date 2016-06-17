@@ -2,7 +2,7 @@ package org.symphonyoss.helpdesk.listeners.presence;
 
 import org.symphonyoss.client.services.PresenceListener;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.MemberDatabase;
+import org.symphonyoss.helpdesk.utils.MemberCash;
 import org.symphonyoss.symphony.pod.model.UserPresence;
 
 /**
@@ -10,8 +10,8 @@ import org.symphonyoss.symphony.pod.model.UserPresence;
  */
 public class MemberPresenceListener implements PresenceListener {
     public void onUserPresence(UserPresence userPresence) {
-        if (MemberDatabase.MEMBERS.containsKey(userPresence.getUid().toString())) {
-            Member member = MemberDatabase.getMember(userPresence.getUid().toString());
+        if (MemberCash.MEMBERS.containsKey(userPresence.getUid().toString())) {
+            Member member = MemberCash.getMember(userPresence.getUid().toString());
             if (userPresence.getCategory() == UserPresence.CategoryEnum.AVAILABLE)
                 member.setBusy(false);
             else

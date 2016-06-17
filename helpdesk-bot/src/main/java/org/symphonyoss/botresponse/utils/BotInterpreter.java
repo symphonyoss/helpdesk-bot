@@ -1,10 +1,10 @@
 package org.symphonyoss.botresponse.utils;
 
-import org.symphonyoss.client.SymphonyClient;
-import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.botresponse.enums.MLTypes;
 import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.botresponse.models.LastBotResponse;
+import org.symphonyoss.client.SymphonyClient;
+import org.symphonyoss.client.util.MlMessageParser;
 
 import java.util.HashSet;
 

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.helpdesk.models.users.Member;
+import org.symphonyoss.helpdesk.models.users.MemberWrapper;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.pod.model.User;
 
@@ -17,19 +18,20 @@ import java.util.Map;
 /**
  * Created by nicktarsillo on 6/14/16.
  */
-public class MemberDatabase {
+public class MemberCash {
     public static final Map<String, Member> MEMBERS = new HashMap<String, Member>();
-    private static final Logger logger = LoggerFactory.getLogger(MemberDatabase.class);
+    private static final Logger logger = LoggerFactory.getLogger(MemberCash.class);
 
     public static void loadMembers() {
         File[] files = new File(System.getProperty("files.json")).listFiles();
 
         Gson gson = new Gson();
+
         if (files != null) {
             for (File file : files) {
                 try {
-                    Member member = gson.fromJson(new FileReader(file), Member.class);
-                    MEMBERS.put(member.getUserID().toString(), member);
+                    Member member = gson.fromJson(new FileReader(file), MemberWrapper.class).toMember();
+                    addMember(member);
                     logger.debug("Loaded member {}", member.getUserID());
                 } catch (IOException e) {
                     logger.error("Could not load json {} ", file.getName(), e);
@@ -42,7 +44,8 @@ public class MemberDatabase {
         try {
             Gson gson = new Gson();
             FileWriter jsonFile = new FileWriter(System.getProperty("files.json") + member.getUserID() + ".json");
-            gson.toJson(member, jsonFile);
+            String toJson = gson.toJson(member.toWrapper(), MemberWrapper.class);
+            jsonFile.write(toJson);
             jsonFile.flush();
             jsonFile.close();
 
@@ -53,11 +56,13 @@ public class MemberDatabase {
 
     public static void removeMember(Member member) {
         new File(System.getProperty("files.json") + member.getUserID() + ".json").delete();
+        DeskUserCash.removeUser(member);
     }
 
     public static void addMember(Member member) {
-        MemberDatabase.writeMember(member);
-        MemberDatabase.MEMBERS.put(member.getUserID().toString(), member);
+        MemberCash.writeMember(member);
+        MemberCash.MEMBERS.put(member.getUserID().toString(), member);
+        DeskUserCash.addUser(member);
     }
 
     public static Member getMember(User user) {

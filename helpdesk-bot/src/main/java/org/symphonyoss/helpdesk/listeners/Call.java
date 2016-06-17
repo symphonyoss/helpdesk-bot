@@ -2,23 +2,22 @@ package org.symphonyoss.helpdesk.listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.symphonyoss.botresponse.enums.MLTypes;
+import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.botresponse.enums.MLTypes;
-import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.responses.ExitResponse;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.CallDesk;
-import org.symphonyoss.helpdesk.utils.ClientDatabase;
-import org.symphonyoss.helpdesk.utils.MemberDatabase;
+import org.symphonyoss.helpdesk.utils.CallCash;
+import org.symphonyoss.helpdesk.utils.ClientCash;
+import org.symphonyoss.helpdesk.utils.MemberCash;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.pod.model.UserIdList;
 
 import java.util.ArrayList;
 
@@ -46,32 +45,34 @@ public class Call implements ChatListener, ChatServiceListener {
         ExitResponse exitResponse = new ExitResponse("Exit", 0, this);
         botResponseListener.getActiveResponses().add(exitResponse);
 
-        for (Member member : members)
+        for (Member member : members) {
             member.setOnCall(true);
-        for(HelpClient client: clients)
+            member.setCall(this);
+        }
+        for (HelpClient client : clients) {
             client.setOnCall(true);
+            client.setCall(this);
+        }
 
         try {
 
             for (HelpClient client : clients) {
                 Chat chat = Messenger.getChat(client.getUserID(), memberListener.getSymClient());
 
-                chat.removeListener(memberListener);
-                chat.registerListener(this);
-                chat.registerListener(botResponseListener);
+                helpClientListener.stopListening(chat);
+                listenOn(chat);
 
                 Messenger.sendMessage(MLTypes.START_ML + "Connected to help chat."
-                                + MLTypes.BREAK + MLTypes.START_BOLD + "Clients in room: " + MLTypes.END_BOLD + getClientList()
-                                  + MLTypes.BREAK + MLTypes.START_BOLD + "Members in room: " + MLTypes.END_BOLD + getMemberList()
-                                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+                        + MLTypes.BREAK + MLTypes.START_BOLD + "Clients in room: " + MLTypes.END_BOLD + getClientList()
+                        + MLTypes.BREAK + MLTypes.START_BOLD + "Members in room: " + MLTypes.END_BOLD + getMemberList()
+                        + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
             }
 
             for (Member member : members) {
                 Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
 
-                chat.removeListener(memberListener);
-                chat.registerListener(this);
-                chat.registerListener(botResponseListener);
+                memberListener.stopListening(chat);
+                listenOn(chat);
 
                 Messenger.sendMessage(MLTypes.START_ML + "Connected to help chat."
                         + MLTypes.BREAK + MLTypes.START_BOLD + "Clients in room: " + MLTypes.END_BOLD + getClientList()
@@ -84,24 +85,100 @@ public class Call implements ChatListener, ChatServiceListener {
         }
     }
 
-    public void exitCall() {
-        for (Member member : members)
-            exit(member);
-        for(HelpClient client: clients)
-            exit(client);
-    }
-
-    public void exit(HelpClient client){
+    public void enter(HelpClient client) {
+        clients.add(client);
+        client.setOnCall(true);
+        client.setCall(this);
 
         Chat chat = Messenger.getChat(client.getUserID(), memberListener.getSymClient());
 
-        chat.removeListener(this);
-        chat.removeListener(botResponseListener);
-        chat.registerListener(memberListener);
+        helpClientListener.stopListening(chat);
+        listenOn(chat);
+
+        Messenger.sendMessage(MLTypes.START_ML + "Connected to help chat."
+                + MLTypes.BREAK + MLTypes.START_BOLD + "Clients in room: " + MLTypes.END_BOLD + getClientList()
+                + MLTypes.BREAK + MLTypes.START_BOLD + "Members in room: " + MLTypes.END_BOLD + getMemberList()
+                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, client.getUserID(), memberListener.getSymClient());
+
+        for (HelpClient c : clients)
+            if (c != client) {
+                if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+                    Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                            client.getEmail() + MLTypes.END_BOLD + " has entered the chat."
+                            , MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
+                else
+                    Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                            client.getUserID() + MLTypes.END_BOLD + " has entered the chat."
+                            , MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
+            }
+
+        for (Member m : members)
+            if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+                Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                        client.getEmail() + MLTypes.END_BOLD + " has entered the chat."
+                        , MessageSubmission.FormatEnum.MESSAGEML, m.getUserID(), memberListener.getSymClient());
+            else
+                Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                        client.getUserID() + MLTypes.END_BOLD + " has entered the chat."
+                        , MessageSubmission.FormatEnum.MESSAGEML, m.getUserID(), memberListener.getSymClient());
+    }
+
+    public void enter(Member member) {
+        members.add(member);
+        member.setOnCall(true);
+        member.setCall(this);
+
+        Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
+
+        helpClientListener.stopListening(chat);
+        listenOn(chat);
+
+        Messenger.sendMessage(MLTypes.START_ML + "Connected to help chat."
+                + MLTypes.BREAK + MLTypes.START_BOLD + "Clients in room: " + MLTypes.END_BOLD + getClientList()
+                + MLTypes.BREAK + MLTypes.START_BOLD + "Members in room: " + MLTypes.END_BOLD + getMemberList()
+                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), memberListener.getSymClient());
+
+        for (HelpClient c : clients)
+            if (!member.isHideIdentity())
+                Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                        member.getEmail() + MLTypes.END_BOLD + " has entered the chat."
+                        , MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
+            else
+                Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                        "Member " + members.indexOf(member) + MLTypes.END_BOLD + " has entered the chat."
+                        , MessageSubmission.FormatEnum.MESSAGEML, c.getUserID(), memberListener.getSymClient());
+
+
+        for (Member m : members)
+            if (m != member) {
+                if (!member.isHideIdentity())
+                    Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                            member.getEmail() + MLTypes.END_BOLD + " has entered the chat."
+                            , MessageSubmission.FormatEnum.MESSAGEML, m.getUserID(), memberListener.getSymClient());
+                else
+                    Messenger.sendMessage(MLTypes.START_ML + "Help client " + MLTypes.START_BOLD +
+                            "Member " + members.indexOf(member) + MLTypes.END_BOLD + " has entered the chat."
+                            , MessageSubmission.FormatEnum.MESSAGEML, m.getUserID(), memberListener.getSymClient());
+            }
+    }
+
+    public void exitCall() {
+        for (Member member : members)
+            exit(member);
+        for (HelpClient client : clients)
+            exit(client);
+    }
+
+    public void exit(HelpClient client) {
+
+        Chat chat = Messenger.getChat(client.getUserID(), memberListener.getSymClient());
+
+        stopListening(chat);
+        helpClientListener.listenOn(chat);
         Messenger.sendMessage("You have exited the call.", MessageSubmission.FormatEnum.TEXT, client.getUserID(), memberListener.getSymClient());
 
         for (HelpClient c : clients) {
-            if(c != client) {
+            if (c != client) {
                 if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
                     Messenger.sendMessage(client.getEmail() + " has left the call.",
                             MessageSubmission.FormatEnum.TEXT, c.getUserID(), memberListener.getSymClient());
@@ -112,7 +189,7 @@ public class Call implements ChatListener, ChatServiceListener {
         }
 
         for (Member m : members) {
-            if(client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+            if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
                 Messenger.sendMessage(client.getEmail() + " has left the call.",
                         MessageSubmission.FormatEnum.TEXT, m.getUserID(), memberListener.getSymClient());
             else
@@ -120,29 +197,32 @@ public class Call implements ChatListener, ChatServiceListener {
                         MessageSubmission.FormatEnum.TEXT, m.getUserID(), memberListener.getSymClient());
         }
 
+        client.setOnCall(false);
         clients.remove(client);
+
+        if(clients.size() == 0 && members.size() == 0)
+            CallCash.endCall(this);
     }
 
-    public void exit(Member member){
+    public void exit(Member member) {
 
         Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
 
-        chat.removeListener(this);
-        chat.removeListener(botResponseListener);
-        chat.registerListener(memberListener);
+        stopListening(chat);
+        memberListener.listenOn(chat);
         Messenger.sendMessage("You have exited the call.", MessageSubmission.FormatEnum.TEXT, member.getEmail(), memberListener.getSymClient());
 
         for (HelpClient client : clients) {
-            if(!member.isHideIdentity())
-             Messenger.sendMessage(member.getEmail() + " has left the call.",
-                    MessageSubmission.FormatEnum.TEXT, client.getUserID(), memberListener.getSymClient());
+            if (!member.isHideIdentity())
+                Messenger.sendMessage(member.getEmail() + " has left the call.",
+                        MessageSubmission.FormatEnum.TEXT, client.getUserID(), memberListener.getSymClient());
             else
                 Messenger.sendMessage("Member " + members.indexOf(member) + " has left the call.",
-                    MessageSubmission.FormatEnum.TEXT, client.getUserID(), memberListener.getSymClient());
+                        MessageSubmission.FormatEnum.TEXT, client.getUserID(), memberListener.getSymClient());
         }
 
         for (Member m : members) {
-            if(m != member) {
+            if (m != member) {
                 if (!member.isHideIdentity())
                     Messenger.sendMessage(member.getEmail() + " has left the call.",
                             MessageSubmission.FormatEnum.TEXT, m.getEmail(), memberListener.getSymClient());
@@ -152,10 +232,17 @@ public class Call implements ChatListener, ChatServiceListener {
             }
         }
 
+        member.setOnCall(false);
         members.remove(member);
+
+        if(clients.size() == 0 && members.size() == 0)
+            CallCash.endCall(this);
     }
 
     public void onChatMessage(Message message) {
+        if(botResponseListener.isCommand(message))
+            return;
+
         MlMessageParser mlMessageParser;
 
         try {
@@ -168,21 +255,21 @@ public class Call implements ChatListener, ChatServiceListener {
 
         String text = mlMessageParser.getText();
         Member member = null;
-        if(MemberDatabase.hasMember(message.getFromUserId().toString()))
-            member = MemberDatabase.getMember(message);
+        if (MemberCash.hasMember(message.getFromUserId().toString()))
+            member = MemberCash.getMember(message);
 
-        if(member != null)
+        if (member != null)
             relayMemberMessage(member, text);
         else
-             relayClientMessage(ClientDatabase.retrieveClient(message), text);
+            relayClientMessage(ClientCash.retrieveClient(message), text);
         setInactivityTime(0);
     }
 
 
     private void relayMemberMessage(Member member, String text) {
         for (Member m : members) {
-            if(member != m) {
-                if (member.isHideIdentity())
+            if (member != m) {
+                if (!member.isHideIdentity())
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + member.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), memberListener.getSymClient());
@@ -193,7 +280,7 @@ public class Call implements ChatListener, ChatServiceListener {
             }
         }
         for (HelpClient client : clients) {
-            if (member.isHideIdentity())
+            if (!member.isHideIdentity())
                 Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                 + member.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                         MessageSubmission.FormatEnum.MESSAGEML, client.getEmail(), memberListener.getSymClient());
@@ -206,17 +293,17 @@ public class Call implements ChatListener, ChatServiceListener {
 
     private void relayClientMessage(HelpClient client, String text) {
         for (Member m : members) {
-                if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + client.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), memberListener.getSymClient());
-                else
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + client.getUserID() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), memberListener.getSymClient());
+            if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                + client.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
+                        MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), memberListener.getSymClient());
+            else
+                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                + client.getUserID() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
+                        MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), memberListener.getSymClient());
         }
         for (HelpClient c : clients) {
-            if(c != client) {
+            if (c != client) {
                 if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + client.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
@@ -229,33 +316,42 @@ public class Call implements ChatListener, ChatServiceListener {
         }
     }
 
+    public void stopListening(Chat chat) {
+        chat.removeListener(this);
+        chat.removeListener(botResponseListener);
+    }
 
-    private String getClientList(){
+    public void listenOn(Chat chat) {
+        chat.registerListener(this);
+        chat.registerListener(botResponseListener);
+    }
+
+    private String getClientList() {
         String list = "";
-        for(HelpClient client: clients)
-        if(client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
-            list += client.getEmail();
-        else
-            list += "," + client.getUserID();
-        return list.substring(1);
+        for (HelpClient client : clients)
+            if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+                list += client.getEmail();
+            else
+                list += "," + client.getUserID();
+        return list.substring(0);
     }
 
 
-    private String getHelpList(){
+    private String getHelpList() {
         String list = "";
-        for(HelpClient client: clients)
+        for (HelpClient client : clients)
             list += client.getHelpSummary();
-        return list.substring(1);
+        return list;
     }
 
-    private String getMemberList(){
+    private String getMemberList() {
         String list = "";
-        for(Member member: members)
-            if(!member.isHideIdentity())
+        for (Member member : members)
+            if (!member.isHideIdentity())
                 list += member.getEmail();
             else
                 list += "," + member.getUserID();
-        return list.substring(1);
+        return list.substring(0);
     }
 
     public void onNewChat(Chat chat) {
@@ -271,9 +367,9 @@ public class Call implements ChatListener, ChatServiceListener {
             member.setOnCall(false);
             members.remove(member);
             if (members.size() == 0)
-                CallDesk.endCall(this);
+                CallCash.endCall(this);
         } else
-            CallDesk.endCall(this);
+            CallCash.endCall(this);
     }
 
     public ArrayList<Member> getMembers() {
