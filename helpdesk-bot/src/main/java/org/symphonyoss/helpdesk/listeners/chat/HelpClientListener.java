@@ -8,11 +8,10 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.models.responses.JoinChatResponse;
-import org.symphonyoss.helpdesk.models.responses.OnlineMembersResponse;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.ClientCash;
-import org.symphonyoss.helpdesk.utils.MemberCash;
+import org.symphonyoss.helpdesk.utils.ClientCache;
+import org.symphonyoss.helpdesk.utils.HoldCache;
+import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -22,23 +21,21 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
  */
 public class HelpClientListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(BotResponseListener.class);
-    private BotResponseListener botResponseListener;
+    private BotResponseListener helpResponseListener;
     private SymphonyClient symClient;
 
     public HelpClientListener(SymphonyClient symClient) {
         this.symClient = symClient;
-        botResponseListener = new BotResponseListener(symClient);
-
-        OnlineMembersResponse onlineMembersResponse = new OnlineMembersResponse("Online Members ", 0);
-
-        botResponseListener.getActiveResponses().add(onlineMembersResponse);
+        helpResponseListener = new HelpClientResponseListener(symClient);
     }
 
     public void onChatMessage(Message message) {
         logger.debug("Client {} sent help request message.", message.getFromUserId());
-        if (botResponseListener.isCommand(message))
+        if (helpResponseListener.isCommand(message))
             return;
 
+        if(!HoldCache.hasClient(ClientCache.retrieveClient(message)))
+            HoldCache.putClientOnHold(ClientCache.retrieveClient(message));
 
         MlMessageParser mlMessageParser;
         try {
@@ -50,14 +47,14 @@ public class HelpClientListener implements ChatListener {
 
         String[] chunks = mlMessageParser.getTextChunks();
 
-        ClientCash.retrieveClient(message).getHelpRequests().add(mlMessageParser.getText());
+        ClientCache.retrieveClient(message).getHelpRequests().add(mlMessageParser.getText());
 
-        for (Member member : MemberCash.MEMBERS.values())
+        for (Member member : MemberCache.MEMBERS.values())
             if (!member.isOnCall() && member.isSeeCommands()) {
-                if (ClientCash.retrieveClient(message).getEmail() != null &&
-                        ClientCash.retrieveClient(message).getEmail() != "") {
+                if (ClientCache.retrieveClient(message).getEmail() != null &&
+                        ClientCache.retrieveClient(message).getEmail() != "") {
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + ClientCash.retrieveClient(message).getEmail() +
+                                    + ClientCache.retrieveClient(message).getEmail() +
                                     ": " + MLTypes.END_BOLD + String.join(" ", chunks) + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
                 } else {
@@ -68,12 +65,12 @@ public class HelpClientListener implements ChatListener {
     }
 
     public void listenOn(Chat chat) {
-        botResponseListener.listenOn(chat);
+        helpResponseListener.listenOn(chat);
         chat.registerListener(this);
     }
 
     public void stopListening(Chat chat) {
-        botResponseListener.stopListening(chat);
+        helpResponseListener.stopListening(chat);
         chat.removeListener(this);
     }
 

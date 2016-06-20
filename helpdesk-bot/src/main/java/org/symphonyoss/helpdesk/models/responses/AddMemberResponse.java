@@ -4,11 +4,11 @@ import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.ClientCash;
-import org.symphonyoss.helpdesk.utils.MemberCash;
+import org.symphonyoss.helpdesk.utils.ClientCache;
+import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -34,15 +34,18 @@ public class AddMemberResponse extends BotResponse {
 
         try {
             User user = listener.getSymClient().getUsersClient().getUserFromEmail(email);
-            if (user != null && !MemberCash.hasMember(user.getId().toString())) {
+            if (user != null && !MemberCache.hasMember(user.getId().toString())) {
                 Member member = new Member(email,
                         user.getId());
-                MemberCash.addMember(member);
+                MemberCache.addMember(member);
 
-                HelpClient client = ClientCash.removeClient(user);
-                Messenger.sendMessage("You have been promoted to member!", MessageSubmission.FormatEnum.TEXT,
+                if(ClientCache.hasClient(user.getId()))
+                  ClientCache.removeClient(user);
+                Messenger.sendMessage(HelpBotConstants.PROMOTED, MessageSubmission.FormatEnum.TEXT,
                         user.getId(), listener.getSymClient());
-                Messenger.sendMessage("You have promoted " + email + " to member!", MessageSubmission.FormatEnum.TEXT,
+
+                Messenger.sendMessage(HelpBotConstants.PROMOTED_USER + email + HelpBotConstants.TO_MEMBER,
+                        MessageSubmission.FormatEnum.TEXT,
                         message, listener.getSymClient());
 
                 UserIdList list = new UserIdList();
@@ -50,10 +53,9 @@ public class AddMemberResponse extends BotResponse {
                 Chat chat = listener.getSymClient().getChatService().getChatByStream(
                         listener.getSymClient().getStreamsClient().getStream(list).getId());
                 helpClientListener.stopListening(chat);
-                chat.registerListener(listener);
+                listener.listenOn(chat);
             } else {
-                Messenger.sendMessage("Failed to promote client to member. Either client does not exist " +
-                                "or client is already a member.", MessageSubmission.FormatEnum.TEXT,
+                Messenger.sendMessage(HelpBotConstants.PROMOTION_FAILED, MessageSubmission.FormatEnum.TEXT,
                         message, listener.getSymClient());
             }
         } catch (Exception e) {
@@ -63,7 +65,7 @@ public class AddMemberResponse extends BotResponse {
 
     @Override
     public boolean userHasPermission(String userID) {
-        return MemberCash.hasMember(userID)
-                && !MemberCash.getMember(userID).isOnCall();
+        return MemberCache.hasMember(userID)
+                && !MemberCache.getMember(userID).isOnCall();
     }
 }

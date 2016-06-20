@@ -3,12 +3,13 @@ package org.symphonyoss.helpdesk.models.responses;
 import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.CallCash;
-import org.symphonyoss.helpdesk.utils.HoldCash;
-import org.symphonyoss.helpdesk.utils.MemberCash;
+import org.symphonyoss.helpdesk.utils.CallCache;
+import org.symphonyoss.helpdesk.utils.HoldCache;
+import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -28,31 +29,31 @@ public class AcceptHelpResponse extends BotResponse {
     public void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener) {
         String[] chunks = mlMessageParser.getTextChunks();
 
-        Member member = MemberCash.getMember(message);
+        Member member = MemberCache.getMember(message);
         if (chunks.length > getCommand().split(" ").length) {
             String email = String.join(" ", chunks);
             email = email.substring(email.indexOf(getPrefixRequirement(0)) + 1);
 
-            HelpClient helpClient = HoldCash.findClientCredentialMatch(email);
+            HelpClient helpClient = HoldCache.findClientCredentialMatch(email);
 
             if (helpClient != null) {
-                CallCash.newCall(member, HoldCash.pickUpClient(helpClient), listener, helpListener);
+                CallCache.newCall(member, HoldCache.pickUpClient(helpClient), listener, helpListener, listener.getSymClient());
             } else
-                Messenger.sendMessage(email + " does not exist, or has not requested help.",
+                Messenger.sendMessage(email + HelpBotConstants.NOT_FOUND,
                         MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
         } else {
-            if (HoldCash.ONHOLD.size() > 0) {
-                CallCash.newCall(member, HoldCash.pickUpNextClient(), listener, helpListener);
+            if (HoldCache.ONHOLD.size() > 0) {
+                CallCache.newCall(member, HoldCache.pickUpNextClient(), listener, helpListener, listener.getSymClient());
             } else
-                Messenger.sendMessage("There are no users that need help currently.",
+                Messenger.sendMessage(HelpBotConstants.NO_USERS,
                         MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
         }
     }
 
     @Override
     public boolean userHasPermission(String userID) {
-        return MemberCash.hasMember(userID)
-                && !MemberCash.getMember(userID).isOnCall();
+        return MemberCache.hasMember(userID)
+                && !MemberCache.getMember(userID).isOnCall();
     }
 
     public HelpClientListener getHelpListener() {

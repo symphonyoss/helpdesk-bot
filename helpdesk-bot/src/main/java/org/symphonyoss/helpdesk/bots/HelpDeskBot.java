@@ -28,12 +28,13 @@ import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.models.responses.*;
+import org.symphonyoss.helpdesk.listeners.chat.MemberResponseListener;
+import org.symphonyoss.helpdesk.listeners.presence.MemberPresenceListener;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.threads.InactivityThread;
-import org.symphonyoss.helpdesk.utils.ClientCash;
-import org.symphonyoss.helpdesk.utils.HoldCash;
-import org.symphonyoss.helpdesk.utils.MemberCash;
+import org.symphonyoss.helpdesk.utils.ClientCache;
+import org.symphonyoss.helpdesk.utils.HoldCache;
+import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
@@ -63,55 +64,13 @@ public class HelpDeskBot implements ChatServiceListener {
 
     public void setupBot() {
         try {
-            MemberCash.loadMembers();
+            MemberCache.loadMembers();
 
             symClient.getChatService().registerListener(this);
             helpClientListener = new HelpClientListener(symClient);
-            memberResponseListener = new BotResponseListener(symClient);
+            memberResponseListener = new MemberResponseListener(symClient, helpClientListener);
 
-            AcceptHelpResponse acceptNextHelpClient = new AcceptHelpResponse("Accept Next Client", 0, helpClientListener);
-
-            AcceptHelpResponse acceptHelpClient = new AcceptHelpResponse("Accept ", 1, helpClientListener);
-            acceptHelpClient.setPlaceHolder(0, "Client");
-            acceptHelpClient.setPrefixRequirement(0, "@");
-
-            ToggleSeeHelpResponse toggleHelp = new ToggleSeeHelpResponse("Toggle Online", 0);
-
-            ToggleIdentityResponse toggleIdentity = new ToggleIdentityResponse("Toggle Show Identity", 0);
-
-            AddMemberResponse addMember = new AddMemberResponse("Add Member", 1, helpClientListener);
-            addMember.setPlaceHolder(0, "Client");
-            addMember.setPrefixRequirement(0, "@");
-
-            JoinChatResponse joinChat = new JoinChatResponse("Join chat ", 1);
-            joinChat.setPlaceHolder(0, "Client/Member");
-            joinChat.setPrefixRequirement(0, "@");
-
-            OnlineMembersResponse onlineMembers = new OnlineMembersResponse("Online Members", 0);
-
-            ClientQueueResponse queueResponse  = new ClientQueueResponse("Client Queue", 0);
-
-            memberResponseListener.getActiveResponses().add(acceptNextHelpClient);
-            memberResponseListener.getActiveResponses().add(acceptHelpClient);
-            memberResponseListener.getActiveResponses().add(toggleHelp);
-            memberResponseListener.getActiveResponses().add(toggleIdentity);
-            memberResponseListener.getActiveResponses().add(onlineMembers);
-            memberResponseListener.getActiveResponses().add(queueResponse);
-            memberResponseListener.getActiveResponses().add(addMember);
-            memberResponseListener.getActiveResponses().add(joinChat);
-
-            Chat chat = new Chat();
-            chat.setLocalUser(symClient.getLocalUser());
-            Set<User> remoteUsers = new HashSet<User>();
-            remoteUsers.add(symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL));
-            chat.setRemoteUsers(remoteUsers);
-            chat.setStream(symClient.getStreamsClient().getStream(remoteUsers));
-
-            symClient.getChatService().addChat(chat);
-            //symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
-
-            User user = symClient.getUsersClient().getUserFromEmail(HelpBotConstants.ADMINEMAIL);
-            MemberCash.writeMember(new Member(user.getEmailAddress(), user.getId()));
+            symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
 
             Thread inactivityThread = new InactivityThread();
             inactivityThread.start();
@@ -172,12 +131,13 @@ public class HelpDeskBot implements ChatServiceListener {
             Set<User> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
                 User user = users.iterator().next();
-                if (MemberCash.hasMember(user.getId().toString())) {
+                if (MemberCache.hasMember(user.getId().toString())) {
                     memberResponseListener.listenOn(chat);
+                    MemberCache.getMember(user).setOnline(true);
                     Messenger.sendMessage("Joined help desk as member.",
                             MessageSubmission.FormatEnum.TEXT, chat, symClient);
                 } else {
-                    HoldCash.putClientOnHold(ClientCash.addClient(user));
+                    HoldCache.putClientOnHold(ClientCache.addClient(user));
                     helpClientListener.listenOn(chat);
                     Messenger.sendMessage("Joined help desk as help client.",
                             MessageSubmission.FormatEnum.TEXT, chat, symClient);
@@ -191,12 +151,13 @@ public class HelpDeskBot implements ChatServiceListener {
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed chat connection: " + chat.getStream());
         User user = chat.getRemoteUsers().iterator().next();
-        if (MemberCash.MEMBERS.containsKey(user.getEmailAddress())
-                && !MemberCash.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
+        if (MemberCache.MEMBERS.containsKey(user.getEmailAddress())
+                && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
             chat.removeListener(memberResponseListener);
-        } else if (ClientCash.retrieveClient(user).isOnCall()) {
+            MemberCache.getMember(user).setOnline(false);
+        } else if (ClientCache.retrieveClient(user).isOnCall()) {
             chat.removeListener(helpClientListener);
-            ClientCash.removeClient(user);
+            ClientCache.removeClient(user);
         }
     }
 }

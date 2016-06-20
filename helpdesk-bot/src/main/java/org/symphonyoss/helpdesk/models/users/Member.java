@@ -7,13 +7,14 @@ import org.symphonyoss.helpdesk.listeners.Call;
  * Created by nicktarsillo on 6/14/16.
  */
 public class Member implements DeskUser {
-    protected Call call;
+    private Call call;
     private String email;
     private Long userID;
     private boolean onCall;
     private boolean seeCommands = true;
     private boolean busy;
     private boolean hideIdentity;
+    private boolean online;
 
     public Member(String email, Long userID) {
         setEmail(email);
@@ -87,7 +88,15 @@ public class Member implements DeskUser {
         this.call = call;
     }
 
-    public MemberWrapper toWrapper() {
-        return new MemberWrapper(email, userID, seeCommands, hideIdentity);
+    public SerializableMember toSerializable() {
+        return new SerializableMember(email, userID, seeCommands, hideIdentity);
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 }

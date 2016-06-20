@@ -1,14 +1,13 @@
 package org.symphonyoss.helpdesk.utils;
 
 import org.symphonyoss.helpdesk.models.users.HelpClient;
-import org.symphonyoss.helpdesk.models.users.Member;
 
 import java.util.ArrayList;
 
 /**
  * Created by nicktarsillo on 6/15/16.
  */
-public class HoldCash {
+public class HoldCache {
     public static final ArrayList<HelpClient> ONHOLD = new ArrayList<HelpClient>();
 
     public static void putClientOnHold(HelpClient client) {
@@ -27,7 +26,7 @@ public class HoldCash {
     }
 
     public static HelpClient findClientCredentialMatch(String credential) {
-        for (HelpClient client : HoldCash.ONHOLD)
+        for (HelpClient client : HoldCache.ONHOLD)
             if (credential.equalsIgnoreCase(client.getEmail()) || credential.equalsIgnoreCase(client.getUserID().toString())) {
                 return client;
             }

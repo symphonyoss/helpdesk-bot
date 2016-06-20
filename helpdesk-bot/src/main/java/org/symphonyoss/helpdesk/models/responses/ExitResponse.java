@@ -6,8 +6,8 @@ import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.listeners.Call;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.ClientCash;
-import org.symphonyoss.helpdesk.utils.MemberCash;
+import org.symphonyoss.helpdesk.utils.ClientCache;
+import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.symphony.agent.model.Message;
 
 /**
@@ -23,8 +23,8 @@ public class ExitResponse extends BotResponse {
 
     @Override
     public void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener) {
-        Member member = MemberCash.getMember(message);
-        HelpClient client = ClientCash.retrieveClient(message);
+        Member member = MemberCache.getMember(message);
+        HelpClient client = ClientCache.retrieveClient(message);
 
         if (member != null)
             call.exit(member);

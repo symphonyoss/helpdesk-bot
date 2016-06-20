@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.models.users.MemberWrapper;
+import org.symphonyoss.helpdesk.models.users.SerializableMember;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.pod.model.User;
 
@@ -15,9 +15,9 @@ import java.util.Map;
 /**
  * Created by nicktarsillo on 6/14/16.
  */
-public class MemberCash {
+public class MemberCache {
     public static final Map<String, Member> MEMBERS = new HashMap<String, Member>();
-    private static final Logger logger = LoggerFactory.getLogger(MemberCash.class);
+    private static final Logger logger = LoggerFactory.getLogger(MemberCache.class);
 
     public static void loadMembers() {
         File[] files = new File(System.getProperty("files.json")).listFiles(new FilenameFilter() {
@@ -32,7 +32,7 @@ public class MemberCash {
             for (File file : files) {
                 try {
                     logger.debug(file.getName());
-                    Member member = gson.fromJson(new FileReader(file), MemberWrapper.class).toMember();
+                    Member member = gson.fromJson(new FileReader(file), SerializableMember.class).toMember();
                     addMember(member);
                     logger.debug("Loaded member {}", member.getUserID());
                 } catch (IOException e) {
@@ -46,7 +46,7 @@ public class MemberCash {
         try {
             Gson gson = new Gson();
             FileWriter jsonFile = new FileWriter(System.getProperty("files.json") + member.getUserID() + ".json");
-            String toJson = gson.toJson(member.toWrapper(), MemberWrapper.class);
+            String toJson = gson.toJson(member.toSerializable(), SerializableMember.class);
             jsonFile.write(toJson);
             jsonFile.flush();
             jsonFile.close();
@@ -58,13 +58,13 @@ public class MemberCash {
 
     public static void removeMember(Member member) {
         new File(System.getProperty("files.json") + member.getUserID() + ".json").delete();
-        DeskUserCash.removeUser(member);
+        DeskUserCache.removeUser(member);
     }
 
     public static void addMember(Member member) {
-        MemberCash.writeMember(member);
-        MemberCash.MEMBERS.put(member.getUserID().toString(), member);
-        DeskUserCash.addUser(member);
+        MemberCache.writeMember(member);
+        MemberCache.MEMBERS.put(member.getUserID().toString(), member);
+        DeskUserCache.addUser(member);
     }
 
     public static String listMembers(){
@@ -79,6 +79,25 @@ public class MemberCash {
         }
 
         if(MEMBERS.size() > 0)
+            return list.substring(1);
+        else
+            return list;
+    }
+
+    public static String listOnlineMembers(){
+        String list = "";
+        int index = 1;
+        for (Member member: MEMBERS.values()) {
+            if(member.isOnline() && !member.isBusy()) {
+                if (!member.isHideIdentity())
+                    list += ", " + member.getEmail();
+                else
+                    list += ", Member " + index;
+            }
+            index++;
+        }
+
+        if(list.length() > 0)
             return list.substring(1);
         else
             return list;

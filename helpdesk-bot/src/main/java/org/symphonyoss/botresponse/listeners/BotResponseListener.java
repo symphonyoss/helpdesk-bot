@@ -34,6 +34,7 @@ public class BotResponseListener implements ChatListener {
     private final LinkedList<BotResponse> activeResponses = new LinkedList<BotResponse>();
     private final ConcurrentHashMap<String, LastBotResponse> lastResponse = new ConcurrentHashMap<String, LastBotResponse>();
     private SymphonyClient symClient;
+    private boolean pushCommands;
     private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();
 
     public BotResponseListener(SymphonyClient symClient) {
@@ -52,7 +53,9 @@ public class BotResponseListener implements ChatListener {
      */
 
     public void onChatMessage(Message message) {
-        if(entered.get(message.getStream()) == null || !entered.get(message.getStream()))
+        if((entered.get(message.getStream()) == null
+                || !entered.get(message.getStream()))
+                && !isPushCommands())
             return;
         logger.debug("Received message for response.");
         MlMessageParser mlMessageParser;
@@ -95,10 +98,9 @@ public class BotResponseListener implements ChatListener {
                 && lastResponse.get(message.getFromUserId().toString()) != null)
                 && permission) {
             LastBotResponse interpret = BotInterpreter.interpret(activeResponses, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
-            Messenger.sendMessage(MLTypes.START_ML + "Did you mean "
+            Messenger.sendMessage(MLTypes.START_ML + BotConstants.SUGGEST
                             + MLTypes.START_BOLD + interpret.getMlMessageParser().getText()
-                            + MLTypes.END_BOLD + "? (Type " + MLTypes.START_BOLD + BotConstants.COMMAND + "Run Last"
-                            + MLTypes.END_BOLD + " to run command)" + MLTypes.END_ML,
+                            + MLTypes.END_BOLD + BotConstants.USE_SUGGESTION + MLTypes.END_ML,
                     MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
 
             lastResponse.put(message.getFromUserId().toString(), interpret);
@@ -113,8 +115,9 @@ public class BotResponseListener implements ChatListener {
         MessageSubmission aMessage = new MessageSubmission();
         aMessage.setFormat(MessageSubmission.FormatEnum.MESSAGEML);
 
-        String usage = MLTypes.START_ML + "Sorry, " + mlMessageParser.getText() + " is not an interpretable command." + MLTypes.BREAK + MLTypes.START_BOLD
-                + "Check the usage:" + MLTypes.END_BOLD + MLTypes.BREAK;
+        String usage = MLTypes.START_ML + mlMessageParser.getText() + BotConstants.NOT_INTERPRETABLE
+                + MLTypes.BREAK + MLTypes.START_BOLD
+                + BotConstants.USAGE + MLTypes.END_BOLD + MLTypes.BREAK;
         for (BotResponse response : activeResponses)
             if (response.userHasPermission(message.getFromUserId().toString()))
                 usage += response.toMLString();
@@ -125,7 +128,7 @@ public class BotResponseListener implements ChatListener {
     }
 
     private void sendNoPermission(Message message) {
-        Messenger.sendMessage("Sorry, you cannot use that command.",
+        Messenger.sendMessage(BotConstants.NO_PERMISSION,
                 MessageSubmission.FormatEnum.TEXT, message, symClient);
     }
 
@@ -174,5 +177,13 @@ public class BotResponseListener implements ChatListener {
     public void stopListening(Chat chat) {
         chat.removeListener(this);
         entered.put(chat.getStream().getId(), false);
+    }
+
+    public boolean isPushCommands() {
+        return pushCommands;
+    }
+
+    public void setPushCommands(boolean pushCommands) {
+        this.pushCommands = pushCommands;
     }
 }
