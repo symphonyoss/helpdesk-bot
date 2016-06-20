@@ -3,8 +3,9 @@ package org.symphonyoss.helpdesk.models.responses;
 import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.MemberCash;
+import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -19,21 +20,21 @@ public class ToggleSeeHelpResponse extends BotResponse {
 
     @Override
     public void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener) {
-        Member member = MemberCash.getMember(message);
+        Member member = MemberCache.getMember(message);
         member.setSeeCommands(!member.isSeeCommands());
         if (member.isSeeCommands())
-            Messenger.sendMessage("You will now see help request messages.",
+            Messenger.sendMessage(HelpBotConstants.SEE_HELP,
                     MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
         else
-            Messenger.sendMessage("You will no longer see help requests.",
+            Messenger.sendMessage(HelpBotConstants.HIDE_HELP,
                     MessageSubmission.FormatEnum.TEXT, message, listener.getSymClient());
 
-        MemberCash.writeMember(member);
+        MemberCache.writeMember(member);
     }
 
     @Override
     public boolean userHasPermission(String userID) {
-        return MemberCash.hasMember(userID)
-                && !MemberCash.getMember(userID).isOnCall();
+        return MemberCache.hasMember(userID)
+                && !MemberCache.getMember(userID).isOnCall();
     }
 }

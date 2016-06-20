@@ -4,7 +4,7 @@ import org.symphonyoss.botresponse.listeners.BotResponseListener;
 import org.symphonyoss.botresponse.models.BotResponse;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.models.users.DeskUser;
-import org.symphonyoss.helpdesk.utils.DeskUserCash;
+import org.symphonyoss.helpdesk.utils.DeskUserCache;
 import org.symphonyoss.symphony.agent.model.Message;
 
 /**
@@ -17,7 +17,7 @@ public class RoomInfoResponse extends BotResponse {
 
     @Override
     public void respond(MlMessageParser mlMessageParser, Message message, BotResponseListener listener) {
-        DeskUser deskUser = DeskUserCash.getDeskUser(message.getFromUserId().toString());
+        DeskUser deskUser = DeskUserCache.getDeskUser(message.getFromUserId().toString());
         deskUser.getCall().sendRoomInfo(message);
     }
 

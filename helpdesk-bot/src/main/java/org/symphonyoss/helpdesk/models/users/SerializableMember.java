@@ -3,13 +3,13 @@ package org.symphonyoss.helpdesk.models.users;
 /**
  * Created by nicktarsillo on 6/17/16.
  */
-public class MemberWrapper {
+public class SerializableMember {
     private String email;
     private Long userID;
     private boolean seeCommands = true;
     private boolean hideIdentity;
 
-    public MemberWrapper(String email, Long userID, boolean seeCommands, boolean hideIdentity) {
+    public SerializableMember(String email, Long userID, boolean seeCommands, boolean hideIdentity) {
         this.email = email;
         this.userID = userID;
         this.seeCommands = seeCommands;

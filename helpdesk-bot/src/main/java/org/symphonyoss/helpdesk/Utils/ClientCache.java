@@ -9,14 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by nicktarsillo on 6/16/16.
  */
-public class ClientCash {
+public class ClientCache {
     public static final ConcurrentHashMap<String, HelpClient> ALLCLIENTS = new ConcurrentHashMap<String, HelpClient>();
 
     public static HelpClient addClient(User user) {
         HelpClient helpClient = new HelpClient(user.getEmailAddress(), user.getId());
         ALLCLIENTS.put(user.getId().toString(),
                 helpClient);
-        DeskUserCash.addUser(helpClient);
+        DeskUserCache.addUser(helpClient);
         return helpClient;
     }
 
@@ -26,7 +26,7 @@ public class ClientCash {
 
     public static HelpClient removeClient(User user) {
         HelpClient client = ALLCLIENTS.remove(user.getId());
-        DeskUserCash.removeUser(client);
+        DeskUserCache.removeUser(client);
         return client;
     }
 
@@ -36,5 +36,9 @@ public class ClientCash {
 
     public static HelpClient retrieveClient(String userID) {
         return ALLCLIENTS.get(userID);
+    }
+
+    public static boolean hasClient(Long id) {
+        return ALLCLIENTS.containsKey(id.toString());
     }
 }

@@ -3,7 +3,7 @@ package org.symphonyoss.helpdesk.threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.utils.CallCash;
+import org.symphonyoss.helpdesk.utils.CallCache;
 
 /**
  * Created by nicktarsillo on 6/15/16.
@@ -24,7 +24,7 @@ public class InactivityThread extends Thread {
                 e.printStackTrace();
             }
             logger.debug("Inactivity tick triggered. Adding {} miliseconds.", HelpBotConstants.INACTIVITY_INTERVAL);
-            CallCash.checkCallInactivity(HelpBotConstants.INACTIVITY_INTERVAL);
+            CallCache.checkCallInactivity(HelpBotConstants.INACTIVITY_INTERVAL);
         }
     }
 }
