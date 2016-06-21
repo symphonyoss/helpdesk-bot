@@ -8,7 +8,7 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.listeners.command.HelpClientResponseListener;
+import org.symphonyoss.helpdesk.listeners.command.HelpClientCommandListener;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
@@ -19,6 +19,7 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
 /**
  * Created by nicktarsillo on 6/14/16.
+ * The main listener for dealing with clients requesting help
  */
 public class HelpClientListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
@@ -27,9 +28,15 @@ public class HelpClientListener implements ChatListener {
 
     public HelpClientListener(SymphonyClient symClient) {
         this.symClient = symClient;
-        helpResponseListener = new HelpClientResponseListener(symClient);
+        helpResponseListener = new HelpClientCommandListener(symClient);
     }
 
+    /**
+     * A method called from the chat listener, when a new chat message is received.
+     * If the received message is not a command, relay the message to the onlines, off call
+     * members.
+     * @param message   the received message
+     */
     public void onChatMessage(Message message) {
         logger.debug("Client {} sent help request message.", message.getFromUserId());
         if (helpResponseListener.isCommand(message))
@@ -51,9 +58,9 @@ public class HelpClientListener implements ChatListener {
         ClientCache.retrieveClient(message).getHelpRequests().add(mlMessageParser.getText());
 
         for (Member member : MemberCache.MEMBERS.values())
-            if (!member.isOnCall() && member.isSeeCommands()) {
+            if (!member.isOnCall() && member.isSeeHelpRequests()) {
                 if (ClientCache.retrieveClient(message).getEmail() != null &&
-                        ClientCache.retrieveClient(message).getEmail() != "") {
+                        ClientCache.retrieveClient(message).getEmail().equals("")) {
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + ClientCache.retrieveClient(message).getEmail() +
                                     ": " + MLTypes.END_BOLD + String.join(" ", chunks) + MLTypes.END_ML,
@@ -65,11 +72,19 @@ public class HelpClientListener implements ChatListener {
             }
     }
 
+    /**
+     * Register this listener to the chat appropriately
+     * @param chat the chat to register this listener on
+     */
     public void listenOn(Chat chat) {
         helpResponseListener.listenOn(chat);
         chat.registerListener(this);
     }
 
+    /**
+     * Remove this listener from the chat appropriately
+     * @param chat the chat to remove this listener from
+     */
     public void stopListening(Chat chat) {
         helpResponseListener.stopListening(chat);
         chat.removeListener(this);

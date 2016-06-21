@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.helpdesk.models.Call;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/14/16.
+ * A model that represents a help client.
  */
 public class HelpClient implements DeskUser {
     @JsonIgnore
@@ -24,10 +24,16 @@ public class HelpClient implements DeskUser {
         setUserID(userID);
     }
 
+    /**
+     * @return   the type of user (Help Client)
+     */
     public DeskUserType getUserType() {
         return DeskUserType.HELP_CLIENT;
     }
 
+    /**
+     * @return   a summary of all the clients help requests
+     */
     public String getHelpSummary() {
         String help;
         if (email != null && !email.equalsIgnoreCase(""))

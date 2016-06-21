@@ -11,17 +11,17 @@ import org.symphonyoss.helpdesk.utils.DeskUserCache;
 import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.symphony.pod.model.User;
 
-import java.util.HashMap;
 import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/21/16.
+ * Handles removing or adding chats in a call.
  */
-public class CallServiceListener implements ChatServiceListener{
+public class CallServiceListener implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(CallServiceListener.class);
     private Call call;
 
-    public CallServiceListener(){
+    public CallServiceListener(Call call) {
         this.call = call;
     }
 
@@ -29,6 +29,10 @@ public class CallServiceListener implements ChatServiceListener{
         //Not possible so do nothing
     }
 
+    /**
+     * On remove chat, exit remote user from call
+     * @param chat   the removed chat
+     */
     public void onRemovedChat(Chat chat) {
         Set<User> users = chat.getRemoteUsers();
         if (users.size() > 0) {

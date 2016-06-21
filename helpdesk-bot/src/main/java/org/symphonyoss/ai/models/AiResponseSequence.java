@@ -5,11 +5,12 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/20/16.
+ * A model that represents a sequence of responses from the ai
  */
-public class AiResponseList {
+public class AiResponseSequence {
     private Set<AiResponse> aiResponseSet = new HashSet<AiResponse>();
 
-    public AiResponseList() {
+    public AiResponseSequence() {
 
     }
 

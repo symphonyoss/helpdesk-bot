@@ -4,7 +4,7 @@ import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
-import org.symphonyoss.ai.models.AiResponseList;
+import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.util.MlMessageParser;
@@ -20,6 +20,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 6/15/16.
+ * An AiAction that allows a member to add a member to the member cache.
  */
 public class AddMemberAction implements AiAction {
     private HelpClientListener helpClientListener;
@@ -28,10 +29,24 @@ public class AddMemberAction implements AiAction {
 
     public AddMemberAction(HelpClientListener helpClientListener, AiCommandListener aiCommandListener, SymphonyClient symClient) {
         this.helpClientListener = helpClientListener;
+        this.commandListener = aiCommandListener;
+        this.symClient = symClient;
     }
 
-    public AiResponseList respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
-        AiResponseList responseList = new AiResponseList();
+    /**
+     * Promotes a client to member, as commanded from another member.
+     * Parse message for email.
+     * Find client by email.
+     * Create new member, remove old client.
+     * Add to cache, write to file.
+     *
+     * @param mlMessageParser   the parser contains the input in ML
+     * @param message   the received message
+     * @param command   the command that triggered this action
+     * @return   the sequence of responses generated from this action
+     */
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+        AiResponseSequence responseList = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
 
         String[] chunks = mlMessageParser.getTextChunks();

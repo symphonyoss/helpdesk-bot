@@ -10,10 +10,19 @@ import java.util.LinkedList;
 
 /**
  * Created by nicktarsillo on 6/15/16.
+ * A static class used to determine if a command suggestion can be made.
  */
 public class AiSpellParser {
-    public static boolean canParse(LinkedList<AiCommand> responses, String[] chunks, double closenessFactor) {
-        for (AiCommand response : responses) {
+    /**
+     * Determines if a given input matches another command closely enough,
+     * in order to suggest a command
+     * @param commands   the list of commands to compare
+     * @param chunks   the text chunks
+     * @param closenessFactor   the minimum closeness value needed to be considered a match
+     * @return   if a suggestion can be made
+     */
+    public static boolean canParse(LinkedList<AiCommand> commands, String[] chunks, double closenessFactor) {
+        for (AiCommand response : commands) {
             if (chunks.length < response.getNumArguments())
                 break;
             int likeness = 0;
@@ -32,8 +41,16 @@ public class AiSpellParser {
         return false;
     }
 
-    public static AiLastCommand parse(LinkedList<AiCommand> responses, String[] chunks, SymphonyClient symClient, double closenessFactor) {
-        for (AiCommand response : responses) {
+    /**
+     * Find a close matching command.
+     * @param commands   the list of commands to compare
+     * @param chunks    the text chunks
+     * @param symClient   the ai sym client
+     * @param closenessFactor   the minimum closeness value needed to be considered a match
+     * @return
+     */
+    public static AiLastCommand parse(LinkedList<AiCommand> commands, String[] chunks, SymphonyClient symClient, double closenessFactor) {
+        for (AiCommand response : commands) {
             if (chunks.length < response.getNumArguments())
                 break;
             int likeness = 0;
@@ -66,10 +83,17 @@ public class AiSpellParser {
         return null;
     }
 
+    /**
+     * Determines if one string is closely matched to another
+     * @param input1   the first string
+     * @param input2   the second string
+     * @param closenessFactor   the minimum closeness value needed to be considered a match
+     * @return   if the two strings are close
+     */
     private static boolean isCloseTo(String input1, String input2, double closenessFactor) {
         int likeness = 0;
-        String larger = "";
-        String smaller = "";
+        String larger;
+        String smaller;
 
         if (input1.length() > input2.length()) {
             larger = input1;

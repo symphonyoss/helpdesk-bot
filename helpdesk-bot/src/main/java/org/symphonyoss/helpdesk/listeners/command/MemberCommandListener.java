@@ -10,11 +10,13 @@ import org.symphonyoss.helpdesk.models.permissions.OffCall;
 
 /**
  * Created by nicktarsillo on 6/20/16.
+ * A extension of the ai command listener.
+ * Initializes all commands a member can command the ai.
  */
-public class MemberResponseListener extends AiCommandListener {
+public class MemberCommandListener extends AiCommandListener {
     private HelpClientListener helpClientListener;
 
-    public MemberResponseListener(SymphonyClient client, HelpClientListener helpClientListener) {
+    public MemberCommandListener(SymphonyClient client, HelpClientListener helpClientListener) {
         super(client);
         this.helpClientListener = helpClientListener;
         init();

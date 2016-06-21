@@ -8,11 +8,12 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.CallChatListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.listeners.command.CallResponseListener;
+import org.symphonyoss.helpdesk.listeners.command.CallCommandListener;
 import org.symphonyoss.helpdesk.listeners.service.CallServiceListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.*;
+import org.symphonyoss.helpdesk.utils.CallCache;
+import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.LinkedList;
 
 /**
  * Created by nicktarsillo on 6/14/16.
+ * A model that represents a call.
  */
 public class Call {
     private final Logger logger = LoggerFactory.getLogger(Call.class);
@@ -29,7 +31,7 @@ public class Call {
     private final HelpClientListener helpClientListener;
 
     private SymphonyClient symClient;
-    private AiCommandListener callResponseListener;
+    private AiCommandListener callCommandListener;
     private CallResponder callResponder;
     private CallChatListener callChatListener;
     private CallServiceListener callServiceListener;
@@ -47,14 +49,27 @@ public class Call {
         constructCall();
     }
 
-    private void constructCall(){
-        callResponseListener = new CallResponseListener(symClient, this);
+    /**
+     * Instantiate the call command listener.
+     * Instantiate the call responder.
+     * Instantiate the call chat listener.
+     * Instantiate the call service listener.
+     * Add the service listener to the sym client.
+     */
+    private void constructCall() {
+        callCommandListener = new CallCommandListener(symClient, this);
         callResponder = new CallResponder(this, symClient);
-        callChatListener = new CallChatListener(this, callResponseListener, symClient);
-        callServiceListener = new CallServiceListener();
+        callChatListener = new CallChatListener(this, callCommandListener, symClient);
+        callServiceListener = new CallServiceListener(this);
         symClient.getChatService().registerListener(callServiceListener);
     }
 
+    /**
+     * Starts the call.
+     * Sets all members and clients on call.
+     * Removes respective listeners from members and clients.
+     * Registers this listener to all chats with clients and members
+     */
     public void initiateCall() {
 
         for (Member member : members) {
@@ -91,6 +106,12 @@ public class Call {
         }
     }
 
+    /**
+     * Allows a single client to enter this chat.
+     * Set client on call.
+     * Cross listeners.
+     * @param client  the client trying to enter the chat
+     */
     public void enter(HelpClient client) {
         clients.add(client);
         client.setOnCall(true);
@@ -112,6 +133,12 @@ public class Call {
             callResponder.sendEnteredChatMessage(m, client);
     }
 
+    /**
+     * Allows a single member to enter this chat.
+     * Set member on call.
+     * Cross listeners.
+     * @param member   the member trying to enter the chat
+     */
     public void enter(Member member) {
         members.add(member);
         member.setOnCall(true);
@@ -132,6 +159,11 @@ public class Call {
                 callResponder.sendEnteredChatMessage(m, member);
     }
 
+    /**
+     * Completely exits the call.
+     * Auto exits all users.
+     * Removes service listener.
+     */
     public void exitCall() {
         for (Member member : new LinkedList<Member>(members))
             exit(member);
@@ -141,6 +173,11 @@ public class Call {
         symClient.getChatService().removeListener(callServiceListener);
     }
 
+    /**
+     * Set client off call.
+     * Cross listeners back.
+     * @param client   the client trying to exit the chat
+     */
     public void exit(HelpClient client) {
 
         Chat chat = Messenger.getChat(client.getUserID(), memberListener.getSymClient());
@@ -168,6 +205,11 @@ public class Call {
         }
     }
 
+    /**
+     * Set member off call.
+     * Cross listeners back.
+     * @param member   the member trying to exit the chat
+     */
     public void exit(Member member) {
 
         Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
@@ -197,14 +239,24 @@ public class Call {
         }
     }
 
+    /**
+     * Removes all call listeners from provided chat.
+     *
+     * @param chat   the chat to remove listeners from
+     */
     public void stopListening(Chat chat) {
         callChatListener.stopListening(chat);
-        callResponseListener.stopListening(chat);
+        callCommandListener.stopListening(chat);
     }
 
+    /**
+     * Registers all call listeners from provided chat.
+     *
+     * @param chat   the chat to register listeners to
+     */
     public void listenOn(Chat chat) {
         callChatListener.listenOn(chat);
-        callResponseListener.listenOn(chat);
+        callCommandListener.listenOn(chat);
     }
 
     public ArrayList<Member> getMembers() {

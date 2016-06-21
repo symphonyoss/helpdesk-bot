@@ -9,7 +9,6 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.listeners.command.CallResponseListener;
 import org.symphonyoss.helpdesk.models.Call;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
@@ -23,6 +22,7 @@ import java.util.HashMap;
 
 /**
  * Created by nicktarsillo on 6/21/16.
+ * A chat listener for calls between members and clients.
  */
 public class CallChatListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(CallChatListener.class);
@@ -31,12 +31,19 @@ public class CallChatListener implements ChatListener {
     private AiCommandListener callResponseListener;
     private SymphonyClient symClient;
 
-    public CallChatListener(Call call, AiCommandListener callResponseListener, SymphonyClient symClient){
+    public CallChatListener(Call call, AiCommandListener callResponseListener, SymphonyClient symClient) {
         this.callResponseListener = callResponseListener;
         this.symClient = symClient;
         this.call = call;
     }
 
+    /**
+     * A method called by the chat listener, when a new message is received.
+     * On new chat message, if the message is not a command, relay the message
+     * between both parties.
+     *
+     * @param message   the received message
+     */
     public void onChatMessage(Message message) {
         if (callResponseListener.isCommand(message)
                 || isPushMessage(message))
@@ -65,21 +72,43 @@ public class CallChatListener implements ChatListener {
         call.setInactivityTime(0);
     }
 
-    public void listenOn(Chat chat){
+    /**
+     * Registers this listener to the chat.
+     * Then set entered to true, based on the stream.
+     * @param chat   the chat to register listeners to
+     */
+    public void listenOn(Chat chat) {
         chat.registerListener(this);
         entered.put(chat.getStream().getId(), true);
     }
 
-    public void stopListening(Chat chat){
+    /**
+     * Remove this listener to the chat.
+     * Then set entered to false, based on the stream.
+     * @param chat   the chat to remove listeners from
+     */
+    public void stopListening(Chat chat) {
         chat.registerListener(this);
-        entered.put(chat.getStream().getId().toString(), false);
+        entered.put(chat.getStream().getId(), false);
     }
 
+    /**
+     * Determine if received message is a push message.
+     * (Push message occurs when a listener is registered)
+     * @param message   the received message
+     * @return   if the message is a push message
+     */
     private boolean isPushMessage(Message message) {
         return (entered.get(message.getStream()) == null
                 || !entered.get(message.getStream()));
     }
 
+    /**
+     * Send the message sent from a member to both parties.
+     * Retain the identity preference of the member.
+     * @param member   the member
+     * @param text   the message sent from the member
+     */
     private void relayMemberMessage(Member member, String text) {
         for (Member m : call.getMembers()) {
             if (member != m) {
@@ -105,6 +134,12 @@ public class CallChatListener implements ChatListener {
         }
     }
 
+    /**
+     * Send a message from the client to both parties.
+     * If the client does not have an email, use id.
+     * @param client   the client
+     * @param text   the message sent from the client
+     */
     private void relayClientMessage(HelpClient client, String text) {
         for (Member m : call.getMembers()) {
             if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))

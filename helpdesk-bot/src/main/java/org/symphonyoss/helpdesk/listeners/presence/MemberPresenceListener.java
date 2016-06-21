@@ -7,6 +7,8 @@ import org.symphonyoss.symphony.pod.model.UserPresence;
 
 /**
  * Created by nicktarsillo on 6/15/16.
+ * A presence listener that checks if a member is busy or not.
+ * If the user is busy, stop sending help requests.
  */
 public class MemberPresenceListener implements PresenceListener {
     public void onUserPresence(UserPresence userPresence) {

@@ -11,11 +11,13 @@ import org.symphonyoss.helpdesk.models.permissions.IsMember;
 
 /**
  * Created by nicktarsillo on 6/20/16.
+ * A extension of the ai command listener.
+ * Initializes the required commands, used inside a call.
  */
-public class CallResponseListener extends AiCommandListener {
+public class CallCommandListener extends AiCommandListener {
     private Call call;
 
-    public CallResponseListener(SymphonyClient symClient, Call call) {
+    public CallCommandListener(SymphonyClient symClient, Call call) {
         super(symClient);
         this.call = call;
         init();

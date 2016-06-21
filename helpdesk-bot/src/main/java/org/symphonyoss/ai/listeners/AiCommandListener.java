@@ -20,12 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- */
-
-/*
- * AiCommandListener.java
- * A class that listens in on aiResponder chat, and determines how to respond
- * appropriately based on all of the active bot actions, and the user's input.
+ * A class that listens in on a chat, and determines if the user's input
+ * matches a command.
  */
 public class AiCommandListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
@@ -42,9 +38,8 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * When aiResponder chat message is received, decode the user message
-     * and compare the user's input to all registered bot response commands.
-     * If aiResponder match is found, respond to the user. If no match is found, send usage.
+     * When a chat message is received, check if it starts with
+     * the command char. If it does, process message.
      * <p>
      * <p>
      *
@@ -72,25 +67,35 @@ public class AiCommandListener implements ChatListener {
             }
         } catch (Exception e) {
             logger.error("Could not parse message {}", message.getMessage(), e);
-            return;
         }
     }
 
+    /**
+     * Check to see if the message matches any of the commands.
+     * If it matches, do actions and received responses.
+     * If it doesn't check if the ai can suggest a command from the unmatched command.
+     * If it can suggest, then suggest the command and save the suggested command as the last command.
+     * If it can't suggest and the sent command does not match run last command, send usage
+     * If it does equal run last command, run the last command
+     * @param mlMessageParser   the parser containing the received input in ML
+     * @param chunks   the received input in text chunks
+     * @param message   the received message
+     */
     private void processMessage(MlMessageParser mlMessageParser, String[] chunks, Message message) {
         boolean responded = false;
         for (AiCommand command : activeCommands)
-            if (command.isCommand(chunks, message) && command.userIsPermitted(message.getFromUserId())) {
+            if (command.isCommand(chunks) && command.userIsPermitted(message.getFromUserId())) {
                 aiResponder.respondWith(command.getResponses(mlMessageParser, message));
                 lastResponse.put(message.getId(), new AiLastCommand(mlMessageParser, command));
                 responded = true;
-            } else if (command.isCommand(chunks, message)) {
+            } else if (command.isCommand(chunks)) {
                 aiResponder.sendNoPermission(message);
                 return;
             }
 
         if (!responded
                 && !equalsRunLastCommand(mlMessageParser, message)
-                && !canGuessCommand(chunks)) {
+                && !canSuggest(chunks)) {
             aiResponder.sendUsage(message, mlMessageParser, activeCommands);
         } else if (!responded
                 && !equalsRunLastCommand(mlMessageParser, message)) {
@@ -103,20 +108,42 @@ public class AiCommandListener implements ChatListener {
         }
     }
 
+    /**
+     * Determines if the given input matches the run last command
+     * @param mlMessageParser   the parser that contains the input in ML
+     * @param message   the received message
+     * @return  if the input matches the run last command
+     */
     private boolean equalsRunLastCommand(MlMessageParser mlMessageParser, Message message) {
         return (mlMessageParser.getText().trim().equalsIgnoreCase(AiConstants.RUN_LAST_COMMAND))
                 && lastResponse.get(message.getFromUserId().toString()) != null;
     }
 
-    private boolean canGuessCommand(String[] chunks) {
+    /**
+     * Determines if the ai can suggest a command based on the input
+     * @param chunks  the text input
+     * @return if the ai can suggest a command
+     */
+    private boolean canSuggest(String[] chunks) {
         return AiSpellParser.canParse(activeCommands, chunks, HelpBotConstants.CORRECTFACTOR);
     }
 
+    /**
+     * Determines if the message was pushed, due to registering a new chat listener
+     * @param message   the message
+     * @return if the message was pushed
+     */
     private boolean isPushMessage(Message message) {
         return (entered.get(message.getStream()) == null
                 || !entered.get(message.getStream()));
     }
 
+    /**
+     * A method that allows other classes to determine if a given message
+     * matches a command in this command listener
+     * @param message   the message
+     * @return if the message is a command
+     */
     public boolean isCommand(Message message) {
         logger.debug("Received message for response.");
         MlMessageParser mlMessageParser;
@@ -127,26 +154,42 @@ public class AiCommandListener implements ChatListener {
 
             String[] chunks = mlMessageParser.getTextChunks();
 
-            if (chunks[0].charAt(0) == AiConstants.COMMAND) {
-                return true;
-            } else
-                return false;
+            return chunks[0].charAt(0) == AiConstants.COMMAND;
         } catch (Exception e) {
             logger.error("Could not parse message {}", message.getMessage(), e);
         }
         return false;
     }
 
+    /**
+     * Registers this listener to a given chat appropriately.
+     * @param chat    The chat to listen on
+     */
     public void listenOn(Chat chat) {
         chat.registerListener(this);
         entered.put(chat.getStream().getId(), true);
     }
 
+    /**
+     * Removes this listener from the provided chat appropriately
+     * @param chat   The chat to listen on
+     */
     public void stopListening(Chat chat) {
         chat.removeListener(this);
         entered.put(chat.getStream().getId(), false);
     }
 
+    /**
+     * Determines if push commands should be ignored or not
+     * @return   if the push command should be ignored
+     */
+    public boolean isPushCommands() {
+        return pushCommands;
+    }
+
+    public void setPushCommands(boolean pushCommands) {
+        this.pushCommands = pushCommands;
+    }
 
     public LinkedList<AiCommand> getActiveCommands() {
         return activeCommands;
@@ -154,14 +197,6 @@ public class AiCommandListener implements ChatListener {
 
     public SymphonyClient getSymClient() {
         return symClient;
-    }
-
-    public boolean isPushCommands() {
-        return pushCommands;
-    }
-
-    public void setPushCommands(boolean pushCommands) {
-        this.pushCommands = pushCommands;
     }
 
     public AiResponder getResponder() {
