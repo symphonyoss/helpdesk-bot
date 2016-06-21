@@ -2,6 +2,7 @@ package org.symphonyoss.helpdesk.models.users;
 
 /**
  * Created by nicktarsillo on 6/17/16.
+ * A model that allows the member class to be serialized and written to file
  */
 public class SerializableMember {
     private String email;
@@ -16,6 +17,9 @@ public class SerializableMember {
         this.hideIdentity = hideIdentity;
     }
 
+    /**
+     * @return   convert back to member
+     */
     public Member toMember() {
         return new Member(email, userID, seeCommands, hideIdentity);
     }

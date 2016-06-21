@@ -7,9 +7,11 @@ import org.symphonyoss.helpdesk.models.actions.OnlineMembersAction;
 
 /**
  * Created by nicktarsillo on 6/20/16.
+ * A extension of the ai command listener.
+ * Initializes the required commands, used inside a help client listener.
  */
-public class HelpClientResponseListener extends AiCommandListener {
-    public HelpClientResponseListener(SymphonyClient symClient) {
+public class HelpClientCommandListener extends AiCommandListener {
+    public HelpClientCommandListener(SymphonyClient symClient) {
         super(symClient);
         init();
     }

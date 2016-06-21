@@ -11,13 +11,8 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- */
-
-/*
- * AiCommand.java
- * A abstract class, that defines a bot actions.
- * Allows developers to easily create command lines, with multiple arguments and
- * prefixes,for each actions, and compare user input with the command line.
+ * A model for ai commands.
+ * Used to compare input and command, and check for a match.
  */
 public class AiCommand {
     private final Logger logger = LoggerFactory.getLogger(AiCommand.class);
@@ -27,7 +22,7 @@ public class AiCommand {
     private String[] prefixRequirements = new String[0];
     private String[] arguments = new String[0];
 
-    private Set<AiAction> actions = new HashSet<AiAction>();
+    private Set<AiAction> actions = new LinkedHashSet<AiAction>();
     private Set<AiPermission> permissions = new HashSet<AiPermission>();
 
     public AiCommand(String command, int numArguments) {
@@ -36,16 +31,15 @@ public class AiCommand {
     }
 
     /**
-     * Checks to see if the user's input fulfills the bot actions command requirements
+     * Checks to see if the user's input fulfills the ai command requirements
      * <p>
      * <p>
      *
-     * @param chunks  the user's input in chunks
-     * @param message the message from the user
-     * @return if the user input fulfills the bot actions command requirements
+     * @param chunks  the user's input in text chunks
+     * @return if the user input fulfills the command requirements
      * </p>
      */
-    public boolean isCommand(String[] chunks, Message message) {
+    public boolean isCommand(String[] chunks) {
         String[] checkCommand = command.split("\\s+");
 
         if ((chunks.length - checkCommand.length) + 1 <= numArguments)
@@ -63,8 +57,8 @@ public class AiCommand {
     }
 
     /**
-     * Creates a usage HTML string, that can be used to instruct users how to use this
-     * bot actions command.
+     * Creates a HTML string, that can be used to instruct users how to use this
+     * command.
      *
      * @return the usage string in HTML
      */
@@ -75,6 +69,11 @@ public class AiCommand {
         return toML + "<br/>";
     }
 
+    /**
+     * Determines if a user is allowed to use this command
+     * @param userID   the user's id
+     * @return  if the user is permited to use this command
+     */
     public boolean userIsPermitted(Long userID) {
         for (AiPermission permission : permissions)
             if (!permission.userHasPermission(userID))
@@ -82,8 +81,16 @@ public class AiCommand {
         return true;
     }
 
-    public Set<AiResponseList> getResponses(MlMessageParser mlMessageParser, Message message) {
-        Set<AiResponseList> responses = new LinkedHashSet<AiResponseList>();
+    /**
+     * Executes all the command's actions.
+     * Receives back all the response sequences from the actions.
+     *
+     * @param mlMessageParser   a parser that contains the input in ML
+     * @param message   the received message
+     * @return a set of responses, given by completing all the commands actions
+     */
+    public Set<AiResponseSequence> getResponses(MlMessageParser mlMessageParser, Message message) {
+        Set<AiResponseSequence> responses = new LinkedHashSet<AiResponseSequence>();
         for (AiAction action : getActions())
             responses.add(action.respond(mlMessageParser, message, this));
         return responses;
@@ -108,11 +115,11 @@ public class AiCommand {
         arguments = resize;
     }
 
+    //Getters and Setters
     public int getNumArguments() {
         return numArguments;
     }
 
-    //Getters and Setters
     public void setNumArguments(int numArguments) {
         this.numArguments = numArguments;
         resizePrefixesArguments();

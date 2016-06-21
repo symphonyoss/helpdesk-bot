@@ -64,6 +64,12 @@
             <version>1.7R4</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

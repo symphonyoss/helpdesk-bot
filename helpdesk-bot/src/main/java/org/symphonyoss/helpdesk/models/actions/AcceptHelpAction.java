@@ -4,7 +4,7 @@ import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
-import org.symphonyoss.ai.models.AiResponseList;
+import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
@@ -20,6 +20,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 6/14/16.
+ * A AiAction that allows a member to accept a help client into a call.
  */
 public class AcceptHelpAction implements AiAction {
     private HelpClientListener helpListener;
@@ -32,8 +33,16 @@ public class AcceptHelpAction implements AiAction {
         this.symClient = symClient;
     }
 
-    public AiResponseList respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
-        AiResponseList aiResponseList = new AiResponseList();
+    /**
+     * Accept a client into a chat, where a member can assist.
+     *
+     * @param mlMessageParser   the parser contains the input in ML
+     * @param message   the received message
+     * @param command   the command that triggered this action
+     * @return   the sequence of responses generated from this action
+     */
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+        AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList sendTo = new UserIdList();
 
         String[] chunks = mlMessageParser.getTextChunks();
@@ -49,7 +58,7 @@ public class AcceptHelpAction implements AiAction {
                 CallCache.newCall(member, HoldCache.pickUpClient(helpClient), commandListener, helpListener, symClient);
             } else {
                 sendTo.add(message.getFromUserId());
-                aiResponseList.addResponse(new AiResponse(email + HelpBotConstants.NOT_FOUND,
+                aiResponseSequence.addResponse(new AiResponse(email + HelpBotConstants.NOT_FOUND,
                         MessageSubmission.FormatEnum.TEXT, sendTo));
             }
         } else {
@@ -57,11 +66,11 @@ public class AcceptHelpAction implements AiAction {
                 CallCache.newCall(member, HoldCache.pickUpNextClient(), commandListener, helpListener, symClient);
             } else {
                 sendTo.add(message.getFromUserId());
-                aiResponseList.addResponse(new AiResponse(HelpBotConstants.NO_USERS,
+                aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.NO_USERS,
                         MessageSubmission.FormatEnum.TEXT, sendTo));
             }
         }
-        return aiResponseList;
+        return aiResponseSequence;
     }
 
     public HelpClientListener getHelpListener() {

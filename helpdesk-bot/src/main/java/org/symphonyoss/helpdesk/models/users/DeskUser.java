@@ -5,6 +5,7 @@ import org.symphonyoss.helpdesk.models.Call;
 
 /**
  * Created by nicktarsillo on 6/16/16.
+ * A interface for a general user of the bot
  */
 public interface DeskUser {
     @JsonIgnore

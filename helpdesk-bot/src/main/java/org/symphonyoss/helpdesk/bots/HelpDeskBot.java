@@ -27,7 +27,7 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.listeners.command.MemberResponseListener;
+import org.symphonyoss.helpdesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.helpdesk.listeners.presence.MemberPresenceListener;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
@@ -40,11 +40,11 @@ import org.symphonyoss.symphony.pod.model.User;
 import java.util.Set;
 
 /**
- * Created by Frank Tarsillo on 5/15/2016.
+ * The main help desk bot class
  */
 public class HelpDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
-    private AiCommandListener memberResponseListener;
+    private AiCommandListener memberCommandListener;
     private HelpClientListener helpClientListener;
     private SymphonyClient symClient;
 
@@ -58,13 +58,20 @@ public class HelpDeskBot implements ChatServiceListener {
         new HelpDeskBot();
     }
 
+    /**
+     * Sets up the bot.
+     * Loads all the members from file into the cache.
+     * Registers chat service.
+     * Instantiates chat listeners.
+     * Starts threads (inactivity).
+     */
     public void setupBot() {
         try {
             MemberCache.loadMembers();
 
             symClient.getChatService().registerListener(this);
             helpClientListener = new HelpClientListener(symClient);
-            memberResponseListener = new MemberResponseListener(symClient, helpClientListener);
+            memberCommandListener = new MemberCommandListener(symClient, helpClientListener);
 
             symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
 
@@ -77,6 +84,9 @@ public class HelpDeskBot implements ChatServiceListener {
         }
     }
 
+    /**
+     * Initializes a connection between the bot and the symphony client.
+     */
     public void initConnection() {
 
 //        -Dkeystore.password=SymphonyIsGreat123
@@ -121,6 +131,12 @@ public class HelpDeskBot implements ChatServiceListener {
 
     }
 
+    /**
+     * A method that is called by the listener when a new chat is created.
+     * On a new chat, determine if the remote user is a member or client.
+     * Register the chat to the appropriate listener.
+     * @param chat   the new chat
+     */
     public void onNewChat(Chat chat) {
         try {
             if (chat != null) {
@@ -129,7 +145,7 @@ public class HelpDeskBot implements ChatServiceListener {
                 if (users != null && users.size() == 1) {
                     User user = users.iterator().next();
                     if (MemberCache.hasMember(user.getId().toString())) {
-                        memberResponseListener.listenOn(chat);
+                        memberCommandListener.listenOn(chat);
                         MemberCache.getMember(user).setOnline(true);
                         Messenger.sendMessage("Joined help desk as member.",
                                 MessageSubmission.FormatEnum.TEXT, chat, symClient);
@@ -146,12 +162,18 @@ public class HelpDeskBot implements ChatServiceListener {
         }
     }
 
+    /**
+     * A method called by the listener when a chat is removed.
+     * On chat remove, determine if the user is a client or member.
+     * Remove the chat from the appropriate listener.
+     * @param chat   the removed chat
+     */
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed chat connection: " + chat.getStream());
         User user = chat.getRemoteUsers().iterator().next();
         if (MemberCache.MEMBERS.containsKey(user.getEmailAddress())
                 && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
-            chat.removeListener(memberResponseListener);
+            chat.removeListener(memberCommandListener);
             MemberCache.getMember(user).setOnline(false);
         } else if (ClientCache.retrieveClient(user).isOnCall()) {
             chat.removeListener(helpClientListener);

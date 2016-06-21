@@ -5,6 +5,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 6/20/16.
+ * A model that represents a single response from the ai.
  */
 public class AiResponse {
     private String message;
@@ -17,6 +18,9 @@ public class AiResponse {
         this.toIDs = userIdList;
     }
 
+    /**
+     * @return   the response message
+     */
     public String getMessage() {
         return message;
     }
@@ -25,6 +29,9 @@ public class AiResponse {
         this.message = message;
     }
 
+    /**
+     * @return   the format of the message
+     */
     public MessageSubmission.FormatEnum getType() {
         return type;
     }
