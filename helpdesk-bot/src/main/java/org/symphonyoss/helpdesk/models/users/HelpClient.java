@@ -1,9 +1,8 @@
 package org.symphonyoss.helpdesk.models.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.symphonyoss.botresponse.enums.MLTypes;
-import org.symphonyoss.helpdesk.enums.DeskUserType;
-import org.symphonyoss.helpdesk.listeners.Call;
+import org.symphonyoss.ai.constants.MLTypes;
+import org.symphonyoss.helpdesk.models.Call;
 
 import java.util.HashSet;
 import java.util.Set;

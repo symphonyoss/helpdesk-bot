@@ -10,35 +10,35 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by nicktarsillo on 6/16/16.
  */
 public class ClientCache {
-    public static final ConcurrentHashMap<String, HelpClient> ALLCLIENTS = new ConcurrentHashMap<String, HelpClient>();
+    public static final ConcurrentHashMap<String, HelpClient> ALL_CLIENTS = new ConcurrentHashMap<String, HelpClient>();
 
     public static HelpClient addClient(User user) {
         HelpClient helpClient = new HelpClient(user.getEmailAddress(), user.getId());
-        ALLCLIENTS.put(user.getId().toString(),
+        ALL_CLIENTS.put(user.getId().toString(),
                 helpClient);
         DeskUserCache.addUser(helpClient);
         return helpClient;
     }
 
     public static HelpClient retrieveClient(Message message) {
-        return ALLCLIENTS.get(message.getFromUserId().toString());
+        return ALL_CLIENTS.get(message.getFromUserId().toString());
     }
 
     public static HelpClient removeClient(User user) {
-        HelpClient client = ALLCLIENTS.remove(user.getId());
+        HelpClient client = ALL_CLIENTS.remove(user.getId());
         DeskUserCache.removeUser(client);
         return client;
     }
 
     public static HelpClient retrieveClient(User user) {
-        return ALLCLIENTS.get(user.getId());
+        return ALL_CLIENTS.get(user.getId());
     }
 
     public static HelpClient retrieveClient(String userID) {
-        return ALLCLIENTS.get(userID);
+        return ALL_CLIENTS.get(userID);
     }
 
     public static boolean hasClient(Long id) {
-        return ALLCLIENTS.containsKey(id.toString());
+        return ALL_CLIENTS.containsKey(id.toString());
     }
 }
