@@ -1,8 +1,7 @@
 package org.symphonyoss.helpdesk.models.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.symphonyoss.helpdesk.enums.DeskUserType;
-import org.symphonyoss.helpdesk.listeners.Call;
+import org.symphonyoss.helpdesk.models.Call;
 
 /**
  * Created by nicktarsillo on 6/16/16.
@@ -27,4 +26,8 @@ public interface DeskUser {
 
     @JsonIgnore
     DeskUserType getUserType();
+
+    enum DeskUserType {
+        HELP_CLIENT, MEMBER
+    }
 }

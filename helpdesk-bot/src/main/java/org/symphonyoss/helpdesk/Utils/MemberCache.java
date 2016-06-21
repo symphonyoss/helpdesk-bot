@@ -67,10 +67,10 @@ public class MemberCache {
         DeskUserCache.addUser(member);
     }
 
-    public static String listMembers(){
+    public static String listMembers() {
         String list = "";
         int index = 1;
-        for (Member member: MEMBERS.values()) {
+        for (Member member : MEMBERS.values()) {
             if (!member.isHideIdentity())
                 list += ", " + member.getEmail();
             else
@@ -78,17 +78,17 @@ public class MemberCache {
             index++;
         }
 
-        if(MEMBERS.size() > 0)
+        if (MEMBERS.size() > 0)
             return list.substring(1);
         else
             return list;
     }
 
-    public static String listOnlineMembers(){
+    public static String listOnlineMembers() {
         String list = "";
         int index = 1;
-        for (Member member: MEMBERS.values()) {
-            if(member.isOnline() && !member.isBusy()) {
+        for (Member member : MEMBERS.values()) {
+            if (member.isOnline() && !member.isBusy()) {
                 if (!member.isHideIdentity())
                     list += ", " + member.getEmail();
                 else
@@ -97,7 +97,7 @@ public class MemberCache {
             index++;
         }
 
-        if(list.length() > 0)
+        if (list.length() > 0)
             return list.substring(1);
         else
             return list;

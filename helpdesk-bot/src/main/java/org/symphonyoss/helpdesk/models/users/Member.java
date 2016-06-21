@@ -1,7 +1,6 @@
 package org.symphonyoss.helpdesk.models.users;
 
-import org.symphonyoss.helpdesk.enums.DeskUserType;
-import org.symphonyoss.helpdesk.listeners.Call;
+import org.symphonyoss.helpdesk.models.Call;
 
 /**
  * Created by nicktarsillo on 6/14/16.

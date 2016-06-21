@@ -20,18 +20,15 @@ package org.symphonyoss.helpdesk.bots;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.botresponse.listeners.BotResponseListener;
+import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.impl.SymphonyBasicClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.listeners.chat.MemberResponseListener;
+import org.symphonyoss.helpdesk.listeners.command.MemberResponseListener;
 import org.symphonyoss.helpdesk.listeners.presence.MemberPresenceListener;
-import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.threads.InactivityThread;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
 import org.symphonyoss.helpdesk.utils.MemberCache;
@@ -40,7 +37,6 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.pod.model.User;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -48,7 +44,7 @@ import java.util.Set;
  */
 public class HelpDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
-    private BotResponseListener memberResponseListener;
+    private AiCommandListener memberResponseListener;
     private HelpClientListener helpClientListener;
     private SymphonyClient symClient;
 
@@ -127,20 +123,22 @@ public class HelpDeskBot implements ChatServiceListener {
 
     public void onNewChat(Chat chat) {
         try {
-            logger.debug("New chat connection: " + chat.getStream());
-            Set<User> users = chat.getRemoteUsers();
-            if (users != null && users.size() == 1) {
-                User user = users.iterator().next();
-                if (MemberCache.hasMember(user.getId().toString())) {
-                    memberResponseListener.listenOn(chat);
-                    MemberCache.getMember(user).setOnline(true);
-                    Messenger.sendMessage("Joined help desk as member.",
-                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
-                } else {
-                    HoldCache.putClientOnHold(ClientCache.addClient(user));
-                    helpClientListener.listenOn(chat);
-                    Messenger.sendMessage("Joined help desk as help client.",
-                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
+            if (chat != null) {
+                logger.debug("New chat connection: " + chat.getStream());
+                Set<User> users = chat.getRemoteUsers();
+                if (users != null && users.size() == 1) {
+                    User user = users.iterator().next();
+                    if (MemberCache.hasMember(user.getId().toString())) {
+                        memberResponseListener.listenOn(chat);
+                        MemberCache.getMember(user).setOnline(true);
+                        Messenger.sendMessage("Joined help desk as member.",
+                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                    } else {
+                        HoldCache.putClientOnHold(ClientCache.addClient(user));
+                        helpClientListener.listenOn(chat);
+                        Messenger.sendMessage("Joined help desk as help client.",
+                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                    }
                 }
             }
         } catch (Exception e) {

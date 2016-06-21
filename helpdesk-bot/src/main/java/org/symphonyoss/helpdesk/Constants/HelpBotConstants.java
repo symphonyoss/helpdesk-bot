@@ -1,6 +1,7 @@
 package org.symphonyoss.helpdesk.constants;
 
-import org.symphonyoss.botresponse.enums.MLTypes;
+
+import org.symphonyoss.ai.constants.MLTypes;
 
 /**
  * Created by nicktarsillo on 6/14/16.

@@ -2,12 +2,13 @@ package org.symphonyoss.helpdesk.listeners.chat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.botresponse.enums.MLTypes;
-import org.symphonyoss.botresponse.listeners.BotResponseListener;
+import org.symphonyoss.ai.constants.MLTypes;
+import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.listeners.command.HelpClientResponseListener;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
@@ -20,8 +21,8 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
  * Created by nicktarsillo on 6/14/16.
  */
 public class HelpClientListener implements ChatListener {
-    private final Logger logger = LoggerFactory.getLogger(BotResponseListener.class);
-    private BotResponseListener helpResponseListener;
+    private final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
+    private AiCommandListener helpResponseListener;
     private SymphonyClient symClient;
 
     public HelpClientListener(SymphonyClient symClient) {
@@ -34,7 +35,7 @@ public class HelpClientListener implements ChatListener {
         if (helpResponseListener.isCommand(message))
             return;
 
-        if(!HoldCache.hasClient(ClientCache.retrieveClient(message)))
+        if (!HoldCache.hasClient(ClientCache.retrieveClient(message)))
             HoldCache.putClientOnHold(ClientCache.retrieveClient(message));
 
         MlMessageParser mlMessageParser;

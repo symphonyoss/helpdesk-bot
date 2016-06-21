@@ -34,14 +34,14 @@ public class HoldCache {
         return null;
     }
 
-    public static String listQueue(){
+    public static String listQueue() {
         String list = "";
-        for (HelpClient client: ONHOLD)
-            if(client.getEmail() != "" && client.getEmail() != null)
+        for (HelpClient client : ONHOLD)
+            if (client.getEmail() != "" && client.getEmail() != null)
                 list += ", " + client.getEmail();
-             else
+            else
                 list += ", " + client.getUserID();
-        if(ONHOLD.size() > 0)
+        if (ONHOLD.size() > 0)
             return list.substring(1);
         else
             return list;
