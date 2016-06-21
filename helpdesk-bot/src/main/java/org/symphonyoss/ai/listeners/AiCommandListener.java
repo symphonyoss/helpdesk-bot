@@ -94,9 +94,9 @@ public class AiCommandListener implements ChatListener {
             aiResponder.sendUsage(message, mlMessageParser, activeCommands);
         } else if (!responded
                 && !equalsRunLastCommand(mlMessageParser, message)) {
-            AiLastCommand guess = AiSpellParser.parse(activeCommands, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
-            aiResponder.sendSuggestionMessage(guess, message);
-            lastResponse.put(message.getFromUserId().toString(), guess);
+            AiLastCommand lastCommand = AiSpellParser.parse(activeCommands, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
+            aiResponder.sendSuggestionMessage(lastCommand, message);
+            lastResponse.put(message.getFromUserId().toString(), lastCommand);
         } else if (!responded) {
             AiLastCommand lastBotResponse = lastResponse.get(message.getFromUserId().toString());
             aiResponder.respondWith(lastBotResponse.getAiCommand().getResponses(lastBotResponse.getMlMessageParser(), message));

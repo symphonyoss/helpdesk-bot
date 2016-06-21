@@ -16,7 +16,7 @@ public class HelpSummaryAction implements AiAction {
         AiResponseList aiResponseList = new AiResponseList();
 
         DeskUser deskUser = DeskUserCache.getDeskUser(message.getFromUserId().toString());
-        deskUser.getCall().getCallResponder().sendHelpSummary(message);
+        deskUser.getCall().getCallResponder().sendHelpSummary(message.getFromUserId());
 
         return aiResponseList;
     }

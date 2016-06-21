@@ -67,7 +67,7 @@ public class CallChatListener implements ChatListener {
 
     public void listenOn(Chat chat){
         chat.registerListener(this);
-        entered.put(chat.getStream().getId().toString(), true);
+        entered.put(chat.getStream().getId(), true);
     }
 
     public void stopListening(Chat chat){
@@ -76,7 +76,8 @@ public class CallChatListener implements ChatListener {
     }
 
     private boolean isPushMessage(Message message) {
-        return !entered.get(message.getStream());
+        return (entered.get(message.getStream()) == null
+                || !entered.get(message.getStream()));
     }
 
     private void relayMemberMessage(Member member, String text) {

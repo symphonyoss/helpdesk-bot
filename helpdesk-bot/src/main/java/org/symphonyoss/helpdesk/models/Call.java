@@ -48,6 +48,7 @@ public class Call {
     }
 
     private void constructCall(){
+        callResponseListener = new CallResponseListener(symClient, this);
         callResponder = new CallResponder(this, symClient);
         callChatListener = new CallChatListener(this, callResponseListener, symClient);
         callServiceListener = new CallServiceListener();
@@ -55,7 +56,6 @@ public class Call {
     }
 
     public void initiateCall() {
-        callResponseListener = new CallResponseListener(symClient, this);
 
         for (Member member : members) {
             member.setOnCall(true);
@@ -84,6 +84,7 @@ public class Call {
                 listenOn(chat);
 
                 callResponder.sendConnectedMessage(member);
+                callResponder.sendHelpSummary(member.getUserID());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -161,16 +162,20 @@ public class Call {
         client.setOnCall(false);
         clients.remove(client);
 
-        if (clients.size() == 0 && members.size() == 0)
+        if (clients.size() == 0 && members.size() == 0) {
             CallCache.endCall(this);
+            symClient.getChatService().registerListener(callServiceListener);
+        }
     }
 
     public void exit(Member member) {
 
         Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
 
+        memberListener.setPushCommands(false);
         stopListening(chat);
         memberListener.listenOn(chat);
+        memberListener.setPushCommands(true);
 
         Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
                 MessageSubmission.FormatEnum.TEXT, member.getUserID(), symClient);
@@ -186,8 +191,10 @@ public class Call {
         member.setOnCall(false);
         members.remove(member);
 
-        if (clients.size() == 0 && members.size() == 0)
+        if (clients.size() == 0 && members.size() == 0) {
             CallCache.endCall(this);
+            symClient.getChatService().registerListener(callServiceListener);
+        }
     }
 
     public void stopListening(Chat chat) {
