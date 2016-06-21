@@ -29,10 +29,10 @@ public class CallResponder {
                 + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
     }
 
-    public void sendHelpSummary(Message message) {
+    public void sendHelpSummary(Long userID) {
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK + MLTypes.BREAK + MLTypes.START_BOLD
                 + HelpBotConstants.HELP_SUMMARY_LABEL + MLTypes.END_BOLD + MLTypes.BREAK + getHelpList()
-                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
+                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, userID, symClient);
     }
 
     public void sendEnteredChatMessage(DeskUser user, HelpClient client) {

@@ -5,6 +5,7 @@ import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.helpdesk.models.Call;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -16,7 +17,7 @@ public class HelpClient implements DeskUser {
     private String email;
     private Long userID;
     private boolean onCall;
-    private Set<String> helpRequests = new HashSet<String>();
+    private Set<String> helpRequests = new LinkedHashSet<String>();
 
     public HelpClient(String email, Long userID) {
         setEmail(email);

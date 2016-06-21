@@ -2,94 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a06c004-c94d-4a84-ac66-1dcd9c63b0dc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AddMemberAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiPermission.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponse.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponseList.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallResponseListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/service/CallServiceListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/ClientQueueAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/HelpClientResponseListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/IsMember.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/JoinChatAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/constants/MLTypes.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/MemberResponseListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/OffCall.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/OnlineMembersAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/RoomInfoAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/ToggleIdentityAction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/ToggleSeeHelpAction.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/botresponse/enums/MLTypes.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/enums/DeskUserType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallResponseListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientResponseListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/MemberResponseListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/AcceptHelpResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/AddMemberResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/ClientQueueResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/HelpSummaryResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/JoinChatResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/OnlineMembersResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/RoomInfoResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/ToggleIdentityResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/ToggleSeeHelpResponse.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/botresponse/constants/BotConstants.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/botresponse/enums/MLTypes.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/botresponse/listeners/BotResponseListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/botresponse/models/BotResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/botresponse/models/LastBotResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/botresponse/utils/BotInterpreter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/enums/DeskUserType.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/AcceptHelpResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/AddMemberResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/ClientQueueResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/ExitResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/HelpSummaryResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/JoinChatResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/OnlineMembersResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/RoomInfoResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/ToggleIdentityResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/responses/ToggleSeeHelpResponse.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/threads/InactivityThread.class" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/botresponse/constants/BotConstants.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/constants/AiConstants.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/botresponse/listeners/BotResponseListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/botresponse/models/BotResponse.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiCommand.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/botresponse/models/LastBotResponse.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiLastCommand.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/botresponse/utils/BotInterpreter.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/utils/AiSpellParser.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/Call.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/responses/ExitResponse.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/ExitAction.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/threads/InactivityThread.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/InactivityThread.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/Call.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/Call.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/CallCache.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/CallCache.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/CallResponseListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/CallResponseListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/users/DeskUser.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/users/DeskUser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/constants/HelpBotConstants.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/constants/HelpBotConstants.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/users/HelpClient.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/users/HelpClient.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/HelpClientResponseListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/HelpClientResponseListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/bots/HelpDeskBot.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/bots/HelpDeskBot.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/users/Member.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/users/Member.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/MemberResponseListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/MemberResponseListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/CallCache.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/CallCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/ClientCache.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/ClientCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/DeskUser.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/DeskUser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/constants/HelpBotConstants.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/constants/HelpBotConstants.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/HelpClient.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/HelpClient.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/HelpDeskBot.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/HelpDeskBot.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/HoldCache.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/HoldCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/Member.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/Member.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/MemberCache.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/MemberCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/helpdesk-bot.iml" afterPath="$PROJECT_DIR$/helpdesk-bot/helpdesk-bot.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/pom.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java" />
     </list>
     <ignored path="helpdesk.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -117,7 +35,7 @@
         <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="105" column="45" selection-start-line="105" selection-start-column="45" selection-end-line="105" selection-end-column="45" />
+              <caret line="101" column="28" selection-start-line="101" selection-start-column="28" selection-end-line="101" selection-end-column="28" />
               <folding>
                 <element signature="e#1190#1201#0" expanded="true" />
                 <element signature="e#1494#1511#0" expanded="true" />
@@ -126,10 +44,48 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HelpClientListener.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CallResponseListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallResponseListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OffCall.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/OffCall.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+              <folding>
+                <element signature="e#299#300#0" expanded="true" />
+                <element signature="e#378#379#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CallChatListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="69" column="34" selection-start-line="69" selection-start-column="34" selection-end-line="69" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1226#1243#0" expanded="true" />
+                <element signature="method#relayMemberMessage#0;class#CallChatListener#0" expanded="false" />
+                <element signature="method#relayClientMessage#0;class#CallChatListener#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HelpClientListener.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.20588236">
+            <state vertical-scroll-proportion="0.0">
               <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -142,100 +98,57 @@
         <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
+              <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1122#1134#0" expanded="true" />
-                <element signature="method#enter#1;class#Call#0" expanded="false" />
-                <element signature="method#exitCall#0;class#Call#0" expanded="false" />
-                <element signature="method#exit#0;class#Call#0" expanded="false" />
-                <element signature="method#stopListening#0;class#Call#0" expanded="false" />
-                <element signature="method#listenOn#0;class#Call#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AiCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiCommand.java">
+      <file leaf-file-name="CallResponder.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="189" column="0" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
-              <folding>
-                <element signature="e#872#882#0" expanded="true" />
-                <element signature="e#941#955#0" expanded="true" />
-                <element signature="e#2914#2930#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RoomInfoAction.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/RoomInfoAction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AiConstants.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/constants/AiConstants.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AiLastCommand.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiLastCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CallChatListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="5" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.030991735">
+              <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1226#1243#0" expanded="true" />
-                <element signature="method#onChatMessage#0;class#CallChatListener#0" expanded="false" />
-                <element signature="method#listenOn#0;class#CallChatListener#0" expanded="false" />
-                <element signature="method#stopListening#0;class#CallChatListener#0" expanded="false" />
-                <element signature="e#2841#2842#0" expanded="true" />
-                <element signature="e#2897#2898#0" expanded="true" />
-                <element signature="method#relayMemberMessage#0;class#CallChatListener#0" expanded="false" />
-                <element signature="method#relayClientMessage#0;class#CallChatListener#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HelpSummaryAction.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java">
+      <file leaf-file-name="Chat.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/symphonyoss/symphony-client/1.0-SNAPSHOT/symphony-client-1.0-SNAPSHOT.jar!/org/symphonyoss/client/model/Chat.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+            <state vertical-scroll-proportion="-17.481482">
+              <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AcceptHelpAction.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.java">
+      <file leaf-file-name="ChatService.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/symphonyoss/symphony-client/1.0-SNAPSHOT/symphony-client-1.0-SNAPSHOT.jar!/org/symphonyoss/client/services/ChatService.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-65.55556">
+              <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IsMember.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/IsMember.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding />
+              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#298#299#0" expanded="true" />
+                <element signature="e#361#362#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -268,7 +181,6 @@
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/botresponse/models/BotResponse.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/constants/MLTypes.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/constants/HelpBotConstants.java" />
-        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/HelpClient.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/utils/BotCommandGuesser.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/BotResponseListener.java" />
@@ -298,20 +210,21 @@
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/MemberResponseListener.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallResponseListener.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/utils/AiSpellParser.java" />
-        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallResponseListener.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/Call.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/ClientCache.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/DeskUser.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponder.java" />
-        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/presence/CallPresenceService.java" />
-        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java" />
-        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/service/CallServiceListener.java" />
-        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/RoomInfoAction.java" />
-        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java" />
         <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/constants/AiConstants.java" />
+        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java" />
+        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" />
+        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java" />
+        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java" />
+        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/HelpClient.java" />
+        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallResponseListener.java" />
+        <option value="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java" />
       </list>
     </option>
   </component>
@@ -384,10 +297,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="122" />
-    <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="735" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -1159,7 +1070,7 @@
   <component name="PropertiesComponent">
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="FullScreen" value="false" />
+    <property name="FullScreen" value="true" />
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="dynamic.classpath" value="false" />
@@ -1541,12 +1452,12 @@
       <workItem from="1466083835928" duration="33287000" />
       <workItem from="1466176260428" duration="1576000" />
       <workItem from="1466178053283" duration="25334000" />
-      <workItem from="1466446017349" duration="19228000" />
+      <workItem from="1466446017349" duration="22158000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="168327000" />
+    <option name="totallyTimeSpent" value="171257000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1558,21 +1469,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="122" y="23" width="1280" height="735" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281493" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281493" sideWeight="0.24313408" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.24313408" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="1.0" sideWeight="0.76332796" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.09289176" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.49676898" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16329704" sideWeight="0.23667206" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29863015" sideWeight="0.23667206" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281493" sideWeight="0.49353796" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33844912" sideWeight="0.49288255" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33844912" sideWeight="0.49288255" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281493" sideWeight="0.49353796" order="1" side_tool="false" content_ui="tabs" />
@@ -1645,21 +1556,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/symphonyoss/symphony-client/1.0-SNAPSHOT/symphony-client-1.0-SNAPSHOT.jar!/org/symphonyoss/client/model/Chat.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/helpdesk-bot.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1761,30 +1657,6 @@
           <folding>
             <element signature="e#699#700#0" expanded="true" />
             <element signature="e#731#732#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/IsMember.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#298#299#0" expanded="true" />
-            <element signature="e#361#362#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/OffCall.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#299#300#0" expanded="true" />
-            <element signature="e#378#379#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1999,45 +1871,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/HelpClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="23" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/DeskUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="class#DeskUserType#0;class#DeskUser#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiPermission.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#662#663#0" expanded="true" />
-            <element signature="e#704#705#0" expanded="true" />
-            <element signature="method#sendNoPermission#0;class#AiResponder#0" expanded="false" />
-            <element signature="method#sendMessage#0;class#AiResponder#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2057,14 +1895,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallResponseListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/HelpDeskBot.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2075,83 +1905,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="75" column="16" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/service/CallServiceListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#819#820#0" expanded="true" />
-            <element signature="e#851#852#0" expanded="true" />
-            <element signature="method#onNewChat#0;class#CallServiceListener#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="5" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1226#1243#0" expanded="true" />
-            <element signature="method#onChatMessage#0;class#CallChatListener#0" expanded="false" />
-            <element signature="method#listenOn#0;class#CallChatListener#0" expanded="false" />
-            <element signature="method#stopListening#0;class#CallChatListener#0" expanded="false" />
-            <element signature="e#2841#2842#0" expanded="true" />
-            <element signature="e#2897#2898#0" expanded="true" />
-            <element signature="method#relayMemberMessage#0;class#CallChatListener#0" expanded="false" />
-            <element signature="method#relayClientMessage#0;class#CallChatListener#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1122#1134#0" expanded="true" />
-            <element signature="method#enter#1;class#Call#0" expanded="false" />
-            <element signature="method#exitCall#0;class#Call#0" expanded="false" />
-            <element signature="method#exit#0;class#Call#0" expanded="false" />
-            <element signature="method#stopListening#0;class#Call#0" expanded="false" />
-            <element signature="method#listenOn#0;class#Call#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/RoomInfoAction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2184,10 +1941,124 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#sendNoPermission#0;class#AiResponder#0" expanded="false" />
+            <element signature="method#sendMessage#0;class#AiResponder#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/DeskUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="class#DeskUserType#0;class#DeskUser#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/HelpSummaryAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/HelpClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#541#549#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/service/CallServiceListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#onNewChat#0;class#CallServiceListener#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallResponseListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/OffCall.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+          <folding>
+            <element signature="e#299#300#0" expanded="true" />
+            <element signature="e#378#379#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/permissions/IsMember.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#298#299#0" expanded="true" />
+            <element signature="e#361#362#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="69" column="34" selection-start-line="69" selection-start-column="34" selection-end-line="69" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1226#1243#0" expanded="true" />
+            <element signature="method#relayMemberMessage#0;class#CallChatListener#0" expanded="false" />
+            <element signature="method#relayClientMessage#0;class#CallChatListener#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="105" column="45" selection-start-line="105" selection-start-column="45" selection-end-line="105" selection-end-column="45" />
+          <caret line="101" column="28" selection-start-line="101" selection-start-column="28" selection-end-line="101" selection-end-column="28" />
           <folding>
             <element signature="e#1190#1201#0" expanded="true" />
             <element signature="e#1494#1511#0" expanded="true" />
@@ -2195,10 +2066,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/symphonyoss/symphony-client/1.0-SNAPSHOT/symphony-client-1.0-SNAPSHOT.jar!/org/symphonyoss/client/services/ChatService.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20588236">
-          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+        <state vertical-scroll-proportion="-65.55556">
+          <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/symphonyoss/symphony-client/1.0-SNAPSHOT/symphony-client-1.0-SNAPSHOT.jar!/org/symphonyoss/client/model/Chat.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.481482">
+          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="146" column="0" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1122#1134#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.030991735">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
