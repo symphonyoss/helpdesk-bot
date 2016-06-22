@@ -1,6 +1,7 @@
+image: common/maven-builder
 
-image: maven:3-jdk-8
-
-default-job:
+build:
+  stage: build
   script:
-    - mvn clean install
+  - mvn clean package -B
+ 
