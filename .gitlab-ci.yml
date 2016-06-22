@@ -3,7 +3,7 @@ image: common/maven-builder
 build:
   stage: build
   script:
-  - mvn clean install -B
+  - mvn clean install -B -U
  
  
  
