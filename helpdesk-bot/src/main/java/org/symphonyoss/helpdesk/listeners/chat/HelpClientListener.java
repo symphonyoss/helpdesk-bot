@@ -9,11 +9,9 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.listeners.command.HelpClientCommandListener;
+import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.ClientCache;
-import org.symphonyoss.helpdesk.utils.HoldCache;
-import org.symphonyoss.helpdesk.utils.MemberCache;
-import org.symphonyoss.helpdesk.utils.Messenger;
+import org.symphonyoss.helpdesk.utils.*;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
@@ -39,37 +37,39 @@ public class HelpClientListener implements ChatListener {
      */
     public void onChatMessage(Message message) {
         logger.debug("Client {} sent help request message.", message.getFromUserId());
-        if (helpResponseListener.isCommand(message))
+        if (message == null
+                || message.getStream() == null
+                || helpResponseListener.isCommand(message)) {
+            logger.warn("Ignored message {}.", message);
             return;
+        }
 
         if (!HoldCache.hasClient(ClientCache.retrieveClient(message)))
             HoldCache.putClientOnHold(ClientCache.retrieveClient(message));
 
         MlMessageParser mlMessageParser;
+
         try {
+
             mlMessageParser = new MlMessageParser(symClient);
             mlMessageParser.parseMessage(message.getMessage());
+
         } catch (Exception e) {
+            logger.error("Could not parse message {}", message.getMessage(), e);
             return;
         }
 
         String[] chunks = mlMessageParser.getTextChunks();
 
-        ClientCache.retrieveClient(message).getHelpRequests().add(mlMessageParser.getText());
+        HelpClient helpClient = ClientCache.retrieveClient(message);
+        if(helpClient != null) {
+            helpClient.getHelpRequests().add(mlMessageParser.getText());
+            relayToMembers(helpClient, message, chunks);
 
-        for (Member member : MemberCache.MEMBERS.values())
-            if (!member.isOnCall() && member.isSeeHelpRequests()) {
-                if (ClientCache.retrieveClient(message).getEmail() != null &&
-                        ClientCache.retrieveClient(message).getEmail().equals("")) {
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + ClientCache.retrieveClient(message).getEmail() +
-                                    ": " + MLTypes.END_BOLD + String.join(" ", chunks) + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
-                } else {
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD + message.getFromUserId() + ": " + MLTypes.END_BOLD + String.join(" ", chunks) + "</messageML>",
-                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
-                }
-            }
+        }else{
+            logger.warn("Ignored message with from id {}. " +
+                    "Client could not be found.", message.getFromUserId());
+        }
     }
 
     /**
@@ -77,8 +77,14 @@ public class HelpClientListener implements ChatListener {
      * @param chat the chat to register this listener on
      */
     public void listenOn(Chat chat) {
-        helpResponseListener.listenOn(chat);
-        chat.registerListener(this);
+        if(chat != null){
+
+            helpResponseListener.listenOn(chat);
+            chat.registerListener(this);
+
+        }else{
+            logChatError(chat, new NullPointerException());
+        }
     }
 
     /**
@@ -86,8 +92,59 @@ public class HelpClientListener implements ChatListener {
      * @param chat the chat to remove this listener from
      */
     public void stopListening(Chat chat) {
-        helpResponseListener.stopListening(chat);
-        chat.removeListener(this);
+        if(chat != null){
+
+            helpResponseListener.stopListening(chat);
+            chat.removeListener(this);
+
+        }else{
+            logChatError(chat, new NullPointerException());
+        }
+    }
+
+    private void relayToMembers(HelpClient helpClient, Message message, String[] chunks){
+
+        for (Member member : MemberCache.MEMBERS.values()) {
+            if (!member.isOnCall() && member.isSeeHelpRequests()) {
+
+                if (helpClient.getEmail() != null &&
+                        helpClient.getEmail().equals("")) {
+
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                    + ClientCache.retrieveClient(message).getEmail() +
+                                    ": " + MLTypes.END_BOLD + String.join(" ", chunks) + MLTypes.END_ML,
+                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
+
+                } else {
+
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                    + message.getFromUserId() + ": " + MLTypes.END_BOLD
+                                    + String.join(" ", chunks) + MLTypes.END_ML,
+                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
+
+                }
+
+            }
+        }
+
+    }
+
+    public void logChatError(Chat chat, Exception e) {
+        if (logger != null) {
+
+            if (chat == null) {
+                logger.error("Ignored method call. Chat was null value.", e);
+
+            } else if (chat.getStream() == null) {
+                logger.error("Could not put stream in push hash. " +
+                        "Chat stream was null value.", e);
+
+            } else if (chat.getStream().getId() == null) {
+                logger.error("Could not put stream in push hash. " +
+                        "Chat stream id was null value.", e);
+            }
+
+        }
     }
 
     public SymphonyClient getSymClient() {
@@ -97,4 +154,7 @@ public class HelpClientListener implements ChatListener {
     public void setSymClient(SymphonyClient symClient) {
         this.symClient = symClient;
     }
+
+
+
 }

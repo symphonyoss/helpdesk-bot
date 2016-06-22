@@ -8,6 +8,7 @@ import org.symphonyoss.helpdesk.models.Call;
  * A interface for a general user of the bot
  */
 public interface DeskUser {
+
     @JsonIgnore
     Call getCall();
 
@@ -31,4 +32,7 @@ public interface DeskUser {
     enum DeskUserType {
         HELP_CLIENT, MEMBER
     }
+
+
+
 }

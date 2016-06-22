@@ -1,5 +1,7 @@
 package org.symphonyoss.helpdesk.models.actions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
@@ -17,7 +19,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  * An AiAction that allows a member to toggle the visibility of his identity.
  */
 public class ToggleIdentityAction implements AiAction {
-
+    private final Logger logger = LoggerFactory.getLogger(ToggleIdentityAction.class);
     /**
      * Find member by message from id.
      * Set identity to the opposite of the user's current identity preference.
@@ -33,19 +35,32 @@ public class ToggleIdentityAction implements AiAction {
         UserIdList userIdList = new UserIdList();
 
         Member member = MemberCache.getMember(message);
-        member.setHideIdentity(!member.isHideIdentity());
-        if (member.isHideIdentity()) {
-            userIdList.add(message.getFromUserId());
-            aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.HIDE_IDENTITY,
-                    MessageSubmission.FormatEnum.TEXT, userIdList));
-        } else {
-            userIdList.add(message.getFromUserId());
-            aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.SHOW_IDENTITY,
-                    MessageSubmission.FormatEnum.TEXT, userIdList));
+        if(member != null) {
+
+            member.setHideIdentity(!member.isHideIdentity());
+            if (member.isHideIdentity()) {
+
+                userIdList.add(message.getFromUserId());
+                aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.HIDE_IDENTITY,
+                        MessageSubmission.FormatEnum.TEXT, userIdList));
+
+            } else {
+
+                userIdList.add(message.getFromUserId());
+                aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.SHOW_IDENTITY,
+                        MessageSubmission.FormatEnum.TEXT, userIdList));
+
+            }
+
+        }else{
+            logger.warn("Member {} could not be found. Ignoring action.", message.getFromUserId());
         }
 
         MemberCache.writeMember(member);
 
         return aiResponseSequence;
     }
+
+
+
 }

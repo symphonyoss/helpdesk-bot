@@ -37,11 +37,15 @@ public class ExitAction implements AiAction {
         Member member = MemberCache.getMember(message);
         HelpClient client = ClientCache.retrieveClient(message);
 
-        if (member != null)
+        if (member != null) {
             call.exit(member);
-        else
+        }else {
             call.exit(client);
+        }
 
         return aiResponseSequence;
     }
+
+
+
 }
