@@ -37,6 +37,7 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.pod.model.User;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -67,6 +68,7 @@ public class HelpDeskBot implements ChatServiceListener {
      */
     public void setupBot() {
         try {
+
             MemberCache.loadMembers();
 
             symClient.getChatService().registerListener(this);
@@ -79,8 +81,14 @@ public class HelpDeskBot implements ChatServiceListener {
             inactivityThread.start();
 
             System.out.println("Help desk bot is alive, and ready to help!");
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            if(logger != null)
+                logger.error(e.toString());
+            else
+                e.printStackTrace();
+
         }
     }
 
@@ -109,7 +117,6 @@ public class HelpDeskBot implements ChatServiceListener {
                     System.getProperty("sessionauth.url"),
                     System.getProperty("keyauth.url"));
 
-
             authClient.setKeystores(
                     System.getProperty("truststore.file"),
                     System.getProperty("truststore.password"),
@@ -126,7 +133,12 @@ public class HelpDeskBot implements ChatServiceListener {
             );
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            if(logger != null)
+                logger.error(e.toString());
+            else
+                e.printStackTrace();
+
         }
 
     }
@@ -138,28 +150,35 @@ public class HelpDeskBot implements ChatServiceListener {
      * @param chat   the new chat
      */
     public void onNewChat(Chat chat) {
-        try {
+
             if (chat != null) {
                 logger.debug("New chat connection: " + chat.getStream());
+
                 Set<User> users = chat.getRemoteUsers();
                 if (users != null && users.size() == 1) {
                     User user = users.iterator().next();
-                    if (MemberCache.hasMember(user.getId().toString())) {
+
+                    if (user != null && MemberCache.hasMember(user.getId().toString())) {
+
                         memberCommandListener.listenOn(chat);
                         MemberCache.getMember(user).setOnline(true);
                         Messenger.sendMessage("Joined help desk as member.",
                                 MessageSubmission.FormatEnum.TEXT, chat, symClient);
-                    } else {
+
+                    } else if(user != null){
+
                         HoldCache.putClientOnHold(ClientCache.addClient(user));
                         helpClientListener.listenOn(chat);
                         Messenger.sendMessage("Joined help desk as help client.",
                                 MessageSubmission.FormatEnum.TEXT, chat, symClient);
+
                     }
+
                 }
+
+            }else if(logger != null){
+                    logger.warn("Incoming new chat received a null value.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -170,14 +189,27 @@ public class HelpDeskBot implements ChatServiceListener {
      */
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed chat connection: " + chat.getStream());
-        User user = chat.getRemoteUsers().iterator().next();
-        if (MemberCache.MEMBERS.containsKey(user.getEmailAddress())
-                && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
-            chat.removeListener(memberCommandListener);
-            MemberCache.getMember(user).setOnline(false);
-        } else if (ClientCache.retrieveClient(user).isOnCall()) {
-            chat.removeListener(helpClientListener);
-            ClientCache.removeClient(user);
+
+        if(chat != null) {
+            Set<User> users = chat.getRemoteUsers();
+            if (users != null && users.size() > 1) {
+                User user = chat.getRemoteUsers().iterator().next();
+
+                if (user != null && MemberCache.MEMBERS.containsKey(user.getEmailAddress())
+                        && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
+
+                    chat.removeListener(memberCommandListener);
+                    MemberCache.getMember(user).setOnline(false);
+
+                } else if (user != null && ClientCache.retrieveClient(user).isOnCall()) {
+
+                    chat.removeListener(helpClientListener);
+                    ClientCache.removeClient(user);
+
+                }
+            }
+        }else if(logger != null) {
+            logger.warn("Incoming new chat received a null value.");
         }
     }
 }

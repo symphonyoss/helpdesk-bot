@@ -23,4 +23,7 @@ public class SerializableMember {
     public Member toMember() {
         return new Member(email, userID, seeCommands, hideIdentity);
     }
+
+
+
 }

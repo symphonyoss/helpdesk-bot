@@ -14,9 +14,11 @@ public class ClientCache {
 
     public static HelpClient addClient(User user) {
         HelpClient helpClient = new HelpClient(user.getEmailAddress(), user.getId());
+
         ALL_CLIENTS.put(user.getId().toString(),
                 helpClient);
         DeskUserCache.addUser(helpClient);
+
         return helpClient;
     }
 
@@ -27,6 +29,7 @@ public class ClientCache {
     public static HelpClient removeClient(User user) {
         HelpClient client = ALL_CLIENTS.remove(user.getId());
         DeskUserCache.removeUser(client);
+
         return client;
     }
 

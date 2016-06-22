@@ -8,7 +8,11 @@ import org.symphonyoss.helpdesk.utils.MemberCache;
  * A permission, that denies access to those who aren't members.
  */
 public class IsMember implements AiPermission {
+
     public boolean userHasPermission(Long userID) {
         return MemberCache.hasMember(userID.toString());
     }
+
+
+
 }

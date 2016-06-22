@@ -19,9 +19,10 @@ public class DeskUserCache {
     }
 
     public static DeskUser getDeskUser(String userID) {
-        if (userID != null)
+        if (userID != null) {
             return ALL_USERS.get(userID);
-        else
+        }else {
             return null;
+        }
     }
 }

@@ -20,6 +20,7 @@ public class MemberCache {
     private static final Logger logger = LoggerFactory.getLogger(MemberCache.class);
 
     public static void loadMembers() {
+
         File[] files = new File(System.getProperty("files.json")).listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return !name.equals(".DS_Store");
@@ -29,40 +30,55 @@ public class MemberCache {
         Gson gson = new Gson();
 
         if (files != null) {
+
+
             for (File file : files) {
+
                 try {
+
                     logger.debug(file.getName());
                     Member member = gson.fromJson(new FileReader(file), SerializableMember.class).toMember();
                     addMember(member);
                     logger.debug("Loaded member {}", member.getUserID());
+
                 } catch (IOException e) {
                     logger.error("Could not load json {} ", file.getName(), e);
                 }
+
             }
+
+
         }
     }
 
     public static void writeMember(Member member) {
+
         try {
+
             Gson gson = new Gson();
             FileWriter jsonFile = new FileWriter(System.getProperty("files.json") + member.getUserID() + ".json");
             String toJson = gson.toJson(member.toSerializable(), SerializableMember.class);
+
             jsonFile.write(toJson);
+
             jsonFile.flush();
             jsonFile.close();
 
         } catch (IOException e) {
             logger.error("Could not write file for hashtag {}", member.getEmail(), e);
         }
+
     }
 
     public static void removeMember(Member member) {
         new File(System.getProperty("files.json") + member.getUserID() + ".json").delete();
+
         DeskUserCache.removeUser(member);
     }
 
     public static void addMember(Member member) {
         MemberCache.writeMember(member);
+
         MemberCache.MEMBERS.put(member.getUserID().toString(), member);
         DeskUserCache.addUser(member);
     }
@@ -88,19 +104,25 @@ public class MemberCache {
         String list = "";
         int index = 1;
         for (Member member : MEMBERS.values()) {
+
             if (member.isOnline() && !member.isBusy()) {
-                if (!member.isHideIdentity())
+
+                if (!member.isHideIdentity()) {
                     list += ", " + member.getEmail();
-                else
+                }else {
                     list += ", Member " + index;
+                }
+
             }
+
             index++;
         }
 
-        if (list.length() > 0)
+        if (list.length() > 0) {
             return list.substring(1);
-        else
+        }else {
             return list;
+        }
     }
 
     public static Member getMember(User user) {

@@ -28,10 +28,12 @@ public class CallResponder {
      * @param message   the received message
      */
     public void sendRoomInfo(Message message) {
+
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK
                 + HelpBotConstants.CLIENTS_LABEL + getClientList()
                 + HelpBotConstants.MEMBERS_LABEL + getMemberList()
                 + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, message, symClient);
+
     }
 
     /**
@@ -39,9 +41,11 @@ public class CallResponder {
      * @param userID   the user id
      */
     public void sendHelpSummary(Long userID) {
+
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK + MLTypes.BREAK + MLTypes.START_BOLD
                 + HelpBotConstants.HELP_SUMMARY_LABEL + MLTypes.END_BOLD + MLTypes.BREAK + getHelpList()
                 + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, userID, symClient);
+
     }
 
     /**
@@ -52,14 +56,21 @@ public class CallResponder {
      * @param client   the client who entered the room
      */
     public void sendEnteredChatMessage(DeskUser user, HelpClient client) {
-        if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+
+        if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase("")) {
+
             Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.HELP_CLIENT_LABEL + MLTypes.START_BOLD +
                     client.getEmail() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
                     , MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
-        else
+
+        }else {
+
             Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.HELP_CLIENT_LABEL + MLTypes.START_BOLD +
                     client.getUserID() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
                     , MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+
+        }
+
     }
 
     /**
@@ -70,14 +81,21 @@ public class CallResponder {
      * @param member   the member who entered the room
      */
     public void sendEnteredChatMessage(DeskUser user, Member member) {
-        if (!member.isHideIdentity())
+
+        if (!member.isHideIdentity()) {
+
             Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.MEMBER_LABEL + MLTypes.START_BOLD +
                             member.getEmail() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT + MLTypes.END_ML,
                     MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
-        else
+
+        }else {
+
             Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD +
                     HelpBotConstants.MEMBER_LABEL + call.getMembers().indexOf(member) + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
                     + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+
+        }
+
     }
 
     /**
@@ -86,10 +104,12 @@ public class CallResponder {
      * @param user   the desk user to send to
      */
     public void sendConnectedMessage(DeskUser user) {
+
         Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.CONNECTED_TO_CALL
                 + HelpBotConstants.CLIENTS_LABEL + getClientList()
                 + HelpBotConstants.MEMBERS_LABEL + getMemberList()
                 + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+
     }
 
     /**
@@ -100,12 +120,19 @@ public class CallResponder {
      * @param client   the client that exited the room
      */
     public void sendExitMessage(DeskUser user, HelpClient client) {
-        if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+
+        if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase("")) {
+
             Messenger.sendMessage(client.getEmail() + HelpBotConstants.LEFT_CALL,
                     MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
-        else
-            Messenger.sendMessage(HelpBotConstants.HELP_CLIENT_LABEL + client.getUserID().toString() + HelpBotConstants.LEFT_CALL,
-                    MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+
+        }else {
+
+            Messenger.sendMessage(HelpBotConstants.HELP_CLIENT_LABEL + client.getUserID().toString()
+                    + HelpBotConstants.LEFT_CALL, MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+
+        }
+
     }
 
     /**
@@ -116,38 +143,60 @@ public class CallResponder {
      * @param member   the member that exited the room
      */
     public void sendExitMessage(DeskUser user, Member member) {
-        if (!member.isHideIdentity())
+
+        if (!member.isHideIdentity()) {
+
             Messenger.sendMessage(member.getEmail() + HelpBotConstants.LEFT_CALL,
                     MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
-        else
-            Messenger.sendMessage(HelpBotConstants.MEMBER_LABEL + call.getMembers().indexOf(member) + HelpBotConstants.LEFT_CALL,
-                    MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+
+        }else {
+
+            Messenger.sendMessage(HelpBotConstants.MEMBER_LABEL + call.getMembers().indexOf(member)
+                    + HelpBotConstants.LEFT_CALL, MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+
+        }
+
     }
-    
+
     private String getClientList() {
         String list = "";
-        for (HelpClient client : call.getClients())
-            if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase(""))
+
+        for (HelpClient client : call.getClients()) {
+
+            if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase("")) {
                 list += "," + client.getEmail();
-            else
+            }else {
                 list += "," + client.getUserID();
+            }
+
+        }
+
         return list.substring(1);
     }
 
     private String getHelpList() {
         String list = "";
-        for (HelpClient client : call.getClients())
+
+        for (HelpClient client : call.getClients()) {
             list += client.getHelpSummary();
+        }
+
         return list;
     }
 
     private String getMemberList() {
         String list = "";
-        for (Member member : call.getMembers())
-            if (!member.isHideIdentity())
+
+        for (Member member : call.getMembers()) {
+
+            if (!member.isHideIdentity()) {
                 list += ", " + member.getEmail();
-            else
+            }else {
                 list += ", " + member.getUserID();
+            }
+
+        }
+
         return list.substring(1);
     }
 }

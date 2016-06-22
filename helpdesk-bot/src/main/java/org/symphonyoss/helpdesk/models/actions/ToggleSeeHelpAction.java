@@ -1,5 +1,7 @@
 package org.symphonyoss.helpdesk.models.actions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
@@ -17,6 +19,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  * An AiAction that allows a member to toggle the visibility of help requests.
  */
 public class ToggleSeeHelpAction implements AiAction {
+    private final Logger logger = LoggerFactory.getLogger(ToggleIdentityAction.class);
 
     /**
      * Find member by message from id.
@@ -33,19 +36,32 @@ public class ToggleSeeHelpAction implements AiAction {
         UserIdList userIdList = new UserIdList();
 
         Member member = MemberCache.getMember(message);
-        member.setSeeHelpRequests(!member.isSeeHelpRequests());
-        if (member.isSeeHelpRequests()) {
-            userIdList.add(message.getFromUserId());
-            aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.SEE_HELP,
-                    MessageSubmission.FormatEnum.TEXT, userIdList));
-        } else {
-            userIdList.add(message.getFromUserId());
-            aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.HIDE_HELP,
-                    MessageSubmission.FormatEnum.TEXT, userIdList));
+        if(member != null) {
+
+            member.setSeeHelpRequests(!member.isSeeHelpRequests());
+            if (member.isSeeHelpRequests()) {
+
+                userIdList.add(message.getFromUserId());
+                aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.SEE_HELP,
+                        MessageSubmission.FormatEnum.TEXT, userIdList));
+
+            } else {
+
+                userIdList.add(message.getFromUserId());
+                aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.HIDE_HELP,
+                        MessageSubmission.FormatEnum.TEXT, userIdList));
+
+            }
+
+        }else{
+            logger.warn("Member {} could not be found. Ignoring action.", message.getFromUserId());
         }
 
         MemberCache.writeMember(member);
 
         return aiResponseSequence;
     }
+
+
+
 }

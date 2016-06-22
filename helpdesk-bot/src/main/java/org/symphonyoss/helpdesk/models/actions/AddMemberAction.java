@@ -1,5 +1,7 @@
 package org.symphonyoss.helpdesk.models.actions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
@@ -23,6 +25,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  * An AiAction that allows a member to add a member to the member cache.
  */
 public class AddMemberAction implements AiAction {
+    private final Logger logger = LoggerFactory.getLogger(AddMemberAction.class);
     private HelpClientListener helpClientListener;
     private AiCommandListener commandListener;
     private SymphonyClient symClient;
@@ -53,9 +56,12 @@ public class AddMemberAction implements AiAction {
         String email = String.join(" ", chunks);
         email = email.substring(email.indexOf(command.getPrefixRequirement(0)) + 1);
 
-        try {
+        try{
             User user = symClient.getUsersClient().getUserFromEmail(email);
-            if (user != null && !MemberCache.hasMember(user.getId().toString())) {
+
+            if (user != null
+                    && user.getId() != null
+                    && !MemberCache.hasMember(user.getId().toString())) {
                 Member member = new Member(email,
                         user.getId());
                 MemberCache.addMember(member);
@@ -74,15 +80,20 @@ public class AddMemberAction implements AiAction {
 
                 Chat chat = symClient.getChatService().getChatByStream(
                         symClient.getStreamsClient().getStream(userIdList).getId());
+
                 helpClientListener.stopListening(chat);
                 commandListener.listenOn(chat);
             } else {
+
                 userIdList.add(message.getFromUserId());
                 responseList.addResponse(new AiResponse(HelpBotConstants.PROMOTION_FAILED, MessageSubmission.FormatEnum.TEXT,
                         userIdList));
+
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+        }catch(Exception e){
+            logger.error("An error occurred when finding an email.", e);
         }
 
         return responseList;
@@ -103,4 +114,7 @@ public class AddMemberAction implements AiAction {
     public void setSymClient(SymphonyClient symClient) {
         this.symClient = symClient;
     }
+
+
+
 }

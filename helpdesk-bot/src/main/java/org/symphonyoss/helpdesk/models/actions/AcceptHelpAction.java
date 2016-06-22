@@ -48,7 +48,9 @@ public class AcceptHelpAction implements AiAction {
         String[] chunks = mlMessageParser.getTextChunks();
 
         Member member = MemberCache.getMember(message);
-        if (chunks.length > command.getCommand().split(" ").length) {
+
+        if (command != null
+                && chunks.length > command.getCommand().split(" ").length) {
             String email = String.join(" ", chunks);
             email = email.substring(email.indexOf(command.getPrefixRequirement(0)) + 1);
 
@@ -56,20 +58,30 @@ public class AcceptHelpAction implements AiAction {
 
             if (helpClient != null) {
                 CallCache.newCall(member, HoldCache.pickUpClient(helpClient), commandListener, helpListener, symClient);
+
             } else {
+
                 sendTo.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(email + HelpBotConstants.NOT_FOUND,
                         MessageSubmission.FormatEnum.TEXT, sendTo));
+
             }
+
         } else {
+
             if (HoldCache.ONHOLD.size() > 0) {
                 CallCache.newCall(member, HoldCache.pickUpNextClient(), commandListener, helpListener, symClient);
+
             } else {
+
                 sendTo.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.NO_USERS,
                         MessageSubmission.FormatEnum.TEXT, sendTo));
+
             }
+
         }
+
         return aiResponseSequence;
     }
 
@@ -88,4 +100,7 @@ public class AcceptHelpAction implements AiAction {
     public void setAiCommandListener(AiCommandListener aiCommandListener) {
         this.commandListener = aiCommandListener;
     }
+
+
+
 }

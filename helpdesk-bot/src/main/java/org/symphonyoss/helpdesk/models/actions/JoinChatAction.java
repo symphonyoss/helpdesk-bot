@@ -1,5 +1,7 @@
 package org.symphonyoss.helpdesk.models.actions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
@@ -21,6 +23,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  * An AiAction that allows a member to join a chat.
  */
 public class JoinChatAction implements AiAction {
+    private final Logger logger = LoggerFactory.getLogger(JoinChatAction.class);
     private SymphonyClient symClient;
 
     public JoinChatAction(SymphonyClient symClient) {
@@ -48,30 +51,48 @@ public class JoinChatAction implements AiAction {
 
         DeskUser requester = DeskUserCache.getDeskUser(message.getFromUserId().toString());
         DeskUser join = null;
+
         try {
+
             User user = symClient.getUsersClient().getUserFromEmail(email);
             if (user != null)
                 join = DeskUserCache.getDeskUser(user.getId().toString());
+
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred when finding an email.", e);
         }
 
+
         if (join != null && join.isOnCall()) {
+
             if (requester.getUserType() == DeskUser.DeskUserType.HELP_CLIENT) {
                 join.getCall().enter(ClientCache.retrieveClient(message));
+
             } else if (requester.getUserType() == DeskUser.DeskUserType.MEMBER) {
                 join.getCall().enter(MemberCache.getMember(message));
+
             }
+
         } else if (join != null) {
+
             userIdList.add(message.getFromUserId());
-            aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.NOT_ON_CALL, MessageSubmission.FormatEnum.TEXT,
+            aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.NOT_ON_CALL,
+                    MessageSubmission.FormatEnum.TEXT,
                     userIdList));
+
         } else {
+
             userIdList.add(message.getFromUserId());
-            aiResponseSequence.addResponse(new AiResponse(email + HelpBotConstants.NOT_FOUND, MessageSubmission.FormatEnum.TEXT,
+            aiResponseSequence.addResponse(new AiResponse(email + HelpBotConstants.NOT_FOUND,
+                    MessageSubmission.FormatEnum.TEXT,
                     userIdList));
+
         }
+
 
         return aiResponseSequence;
     }
+
+
+
 }

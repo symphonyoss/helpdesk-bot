@@ -67,6 +67,11 @@ public class MemberCommandListener extends AiCommandListener {
         queueResponse.addPermission(new IsMember());
         queueResponse.addPermission(new OffCall());
 
+        AiCommand mySettings = new AiCommand("My Settings", 0);
+        mySettings.addAction(new MySettingsAction());
+        mySettings.addPermission(new IsMember());
+        mySettings.addPermission(new OffCall());
+
         getActiveCommands().add(acceptNextHelpClient);
         getActiveCommands().add(acceptHelpClient);
         getActiveCommands().add(toggleHelp);
@@ -75,7 +80,11 @@ public class MemberCommandListener extends AiCommandListener {
         getActiveCommands().add(queueResponse);
         getActiveCommands().add(addMember);
         getActiveCommands().add(joinChat);
+        getActiveCommands().add(mySettings);
 
         setPushCommands(true);
     }
+
+
+
 }

@@ -25,11 +25,11 @@ import java.util.LinkedList;
  */
 public class Call {
     private final Logger logger = LoggerFactory.getLogger(Call.class);
-    private final ArrayList<Member> members = new ArrayList<Member>();
-    private final ArrayList<HelpClient> clients = new ArrayList<HelpClient>();
-    private final AiCommandListener memberListener;
-    private final HelpClientListener helpClientListener;
 
+    private ArrayList<Member> members = new ArrayList<Member>();
+    private ArrayList<HelpClient> clients = new ArrayList<HelpClient>();
+    private AiCommandListener memberListener;
+    private HelpClientListener helpClientListener;
     private SymphonyClient symClient;
     private AiCommandListener callCommandListener;
     private CallResponder callResponder;
@@ -57,10 +57,12 @@ public class Call {
      * Add the service listener to the sym client.
      */
     private void constructCall() {
-        callCommandListener = new CallCommandListener(symClient, this);
         callResponder = new CallResponder(this, symClient);
+
+        callCommandListener = new CallCommandListener(symClient, this);
         callChatListener = new CallChatListener(this, callCommandListener, symClient);
         callServiceListener = new CallServiceListener(this);
+
         symClient.getChatService().registerListener(callServiceListener);
     }
 
@@ -72,6 +74,18 @@ public class Call {
      */
     public void initiateCall() {
 
+        if (helpClientListener == null
+                || memberListener == null
+                || callResponder == null
+                || members == null
+                || clients == null) {
+
+            if (logger != null)
+                logger.error("Call was initiated before being constructed.");
+
+            return;
+        }
+
         for (Member member : members) {
             member.setOnCall(true);
             member.setCall(this);
@@ -82,81 +96,116 @@ public class Call {
             client.setCall(this);
         }
 
-        try {
-            for (HelpClient client : clients) {
-                Chat chat = Messenger.getChat(client.getUserID(), symClient);
 
-                helpClientListener.stopListening(chat);
-                listenOn(chat);
+        for (HelpClient client : clients) {
+            Chat chat = Messenger.getChat(client.getUserID(), symClient);
 
-                callResponder.sendConnectedMessage(client);
-            }
+            helpClientListener.stopListening(chat);
+            listenOn(chat);
 
-            for (Member member : members) {
-                Chat chat = Messenger.getChat(member.getUserID(), symClient);
-
-                memberListener.stopListening(chat);
-                listenOn(chat);
-
-                callResponder.sendConnectedMessage(member);
-                callResponder.sendHelpSummary(member.getUserID());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            callResponder.sendConnectedMessage(client);
         }
+
+        for (Member member : members) {
+            Chat chat = Messenger.getChat(member.getUserID(), symClient);
+
+            memberListener.stopListening(chat);
+            listenOn(chat);
+
+            callResponder.sendConnectedMessage(member);
+            callResponder.sendHelpSummary(member.getUserID());
+        }
+
     }
 
     /**
      * Allows a single client to enter this chat.
      * Set client on call.
      * Cross listeners.
-     * @param client  the client trying to enter the chat
+     *
+     * @param client the client trying to enter the chat
      */
     public void enter(HelpClient client) {
-        clients.add(client);
-        client.setOnCall(true);
-        client.setCall(this);
 
-        Chat chat = Messenger.getChat(client.getUserID(), symClient);
+        if(clients == null)
+            clients = new ArrayList<HelpClient>();
 
-        helpClientListener.stopListening(chat);
-        listenOn(chat);
+        if (client != null) {
 
-        callResponder.sendConnectedMessage(client);
+            clients.add(client);
+            client.setOnCall(true);
+            client.setCall(this);
 
-        for (HelpClient c : clients)
-            if (c != client)
-                callResponder.sendEnteredChatMessage(c, client);
+            Chat chat = Messenger.getChat(client.getUserID(), symClient);
+
+            helpClientListener.stopListening(chat);
+            listenOn(chat);
+
+            callResponder.sendConnectedMessage(client);
+
+            for (HelpClient c : clients) {
+
+                if (c != client) {
+                    callResponder.sendEnteredChatMessage(c, client);
+                }
+
+            }
+
+            for (Member m : members) {
+                callResponder.sendEnteredChatMessage(m, client);
+            }
+
+        } else {
+            if (logger != null)
+                logger.error("Client is null. Cannot enter.");
+        }
 
 
-        for (Member m : members)
-            callResponder.sendEnteredChatMessage(m, client);
     }
 
     /**
      * Allows a single member to enter this chat.
      * Set member on call.
      * Cross listeners.
-     * @param member   the member trying to enter the chat
+     *
+     * @param member the member trying to enter the chat
      */
     public void enter(Member member) {
-        members.add(member);
-        member.setOnCall(true);
-        member.setCall(this);
 
-        Chat chat = Messenger.getChat(member.getUserID(), symClient);
+        if(members == null)
+            members = new ArrayList<Member>();
 
-        helpClientListener.stopListening(chat);
-        listenOn(chat);
+        if (member != null) {
 
-        callResponder.sendConnectedMessage(member);
+            members.add(member);
+            member.setOnCall(true);
+            member.setCall(this);
 
-        for (HelpClient c : clients)
-            callResponder.sendEnteredChatMessage(c, member);
+            Chat chat = Messenger.getChat(member.getUserID(), symClient);
 
-        for (Member m : members)
-            if (m != member)
-                callResponder.sendEnteredChatMessage(m, member);
+            helpClientListener.stopListening(chat);
+            listenOn(chat);
+
+            callResponder.sendConnectedMessage(member);
+
+            for (HelpClient c : clients) {
+                callResponder.sendEnteredChatMessage(c, member);
+            }
+
+            for (Member m : members) {
+
+                if (m != member) {
+                    callResponder.sendEnteredChatMessage(m, member);
+                }
+
+            }
+
+        } else {
+            if (logger != null)
+                logger.error("Client is null. Cannot enter.");
+        }
+
+
     }
 
     /**
@@ -165,98 +214,197 @@ public class Call {
      * Removes service listener.
      */
     public void exitCall() {
-        for (Member member : new LinkedList<Member>(members))
-            exit(member);
-        for (HelpClient client : new LinkedList<HelpClient>(clients))
-            exit(client);
 
-        symClient.getChatService().removeListener(callServiceListener);
+        if(members != null) {
+
+            for (Member member : new LinkedList<Member>(members)) {
+                exit(member);
+            }
+
+        }
+
+        if(clients == null){
+
+            CallCache.removeCall(this);
+            if (symClient != null)
+                symClient.getChatService().removeListener(callServiceListener);
+
+            return;
+        }
+
+        for (HelpClient client : new LinkedList<HelpClient>(clients)) {
+            exit(client);
+        }
+
+        if (symClient != null)
+            symClient.getChatService().removeListener(callServiceListener);
     }
 
     /**
      * Set client off call.
      * Cross listeners back.
-     * @param client   the client trying to exit the chat
+     *
+     * @param client the client trying to exit the chat
      */
     public void exit(HelpClient client) {
 
-        Chat chat = Messenger.getChat(client.getUserID(), memberListener.getSymClient());
+        if (clients.contains(client)) {
 
-        stopListening(chat);
-        helpClientListener.listenOn(chat);
+            Chat chat = Messenger.getChat(client.getUserID(), memberListener.getSymClient());
 
-        Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
-                MessageSubmission.FormatEnum.TEXT, client.getUserID(), symClient);
+            stopListening(chat);
+            helpClientListener.listenOn(chat);
 
-        for (HelpClient c : clients) {
-            if (c != client)
-                callResponder.sendExitMessage(c, client);
+            Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
+                    MessageSubmission.FormatEnum.TEXT, client.getUserID(), symClient);
+
+            for (HelpClient c : clients) {
+
+                if (c != client) {
+                    callResponder.sendExitMessage(c, client);
+                }
+
+            }
+
+            for (Member m : members) {
+                callResponder.sendExitMessage(m, client);
+            }
+
+            client.setOnCall(false);
+            clients.remove(client);
+
+            if (clients.size() == 0 && members.size() == 0) {
+                CallCache.removeCall(this);
+                symClient.getChatService().removeListener(callServiceListener);
+            }
+
+        } else {
+            if (logger != null)
+                logger.error("Client {} is not in the call.", client.getUserID());
         }
 
-        for (Member m : members)
-            callResponder.sendExitMessage(m, client);
-
-        client.setOnCall(false);
-        clients.remove(client);
-
-        if (clients.size() == 0 && members.size() == 0) {
-            CallCache.endCall(this);
-            symClient.getChatService().registerListener(callServiceListener);
-        }
     }
 
     /**
      * Set member off call.
      * Cross listeners back.
-     * @param member   the member trying to exit the chat
+     *
+     * @param member the member trying to exit the chat
      */
     public void exit(Member member) {
 
-        Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
+        if(members == null)
+            return;
 
-        memberListener.setPushCommands(false);
-        stopListening(chat);
-        memberListener.listenOn(chat);
-        memberListener.setPushCommands(true);
+        if (members.contains(member)) {
 
-        Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
-                MessageSubmission.FormatEnum.TEXT, member.getUserID(), symClient);
+            Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
 
-        for (HelpClient c : clients)
-            callResponder.sendExitMessage(c, member);
+            memberListener.setPushCommands(false);
 
-        for (Member m : members)
-            if (m != member)
-                callResponder.sendExitMessage(m, member);
+            stopListening(chat);
+            memberListener.listenOn(chat);
+
+            memberListener.setPushCommands(true);
+
+            Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
+                    MessageSubmission.FormatEnum.TEXT, member.getUserID(), symClient);
+
+            for (HelpClient c : clients) {
+                callResponder.sendExitMessage(c, member);
+            }
+
+            for (Member m : members) {
+
+                if (m != member) {
+                    callResponder.sendExitMessage(m, member);
+                }
+
+            }
 
 
-        member.setOnCall(false);
-        members.remove(member);
+            member.setOnCall(false);
+            members.remove(member);
 
-        if (clients.size() == 0 && members.size() == 0) {
-            CallCache.endCall(this);
-            symClient.getChatService().registerListener(callServiceListener);
+            if (clients.size() == 0 && members.size() == 0) {
+                CallCache.removeCall(this);
+                symClient.getChatService().removeListener(callServiceListener);
+            }
+
+        } else {
+            if (logger != null)
+                logger.error("Member {} is not in the call.", member.getUserID());
         }
+
+
     }
 
     /**
      * Removes all call listeners from provided chat.
      *
-     * @param chat   the chat to remove listeners from
+     * @param chat the chat to remove listeners from
      */
     public void stopListening(Chat chat) {
-        callChatListener.stopListening(chat);
-        callCommandListener.stopListening(chat);
+
+        if (chat != null) {
+
+            if (callChatListener != null && callCommandListener != null) {
+
+                callChatListener.stopListening(chat);
+                callCommandListener.stopListening(chat);
+
+            } else {
+                if (logger != null)
+                    logger.error("Could not listen on chat, because a listener was null.");
+            }
+
+        } else {
+            logChatError(chat, new NullPointerException());
+        }
+
     }
 
     /**
      * Registers all call listeners from provided chat.
      *
-     * @param chat   the chat to register listeners to
+     * @param chat the chat to register listeners to
      */
     public void listenOn(Chat chat) {
-        callChatListener.listenOn(chat);
-        callCommandListener.listenOn(chat);
+
+        if (chat != null) {
+
+            if (callChatListener != null && callCommandListener != null) {
+
+                callChatListener.listenOn(chat);
+                callCommandListener.listenOn(chat);
+
+            } else {
+                if (logger != null)
+                    logger.error("Could not listen on chat, because a listener was null.");
+            }
+
+        } else {
+            logChatError(chat, new NullPointerException());
+        }
+
+    }
+
+    public void logChatError(Chat chat, Exception e) {
+        if (logger != null) {
+
+            if (chat == null) {
+                logger.error("Ignored method call. Chat was null value.", e);
+
+            } else if (chat.getStream() == null) {
+                logger.error("Could not put stream in push hash. " +
+                        "Chat stream was null value.", e);
+
+            } else if (chat.getStream().getId() == null) {
+                logger.error("Could not put stream in push hash. " +
+                        "Chat stream id was null value.", e);
+            }
+
+        }
     }
 
     public ArrayList<Member> getMembers() {
@@ -283,4 +431,11 @@ public class Call {
         this.callResponder = callResponder;
     }
 
+    public SymphonyClient getSymClient() {
+        return symClient;
+    }
+
+    public void setSymClient(SymphonyClient symClient) {
+        this.symClient = symClient;
+    }
 }

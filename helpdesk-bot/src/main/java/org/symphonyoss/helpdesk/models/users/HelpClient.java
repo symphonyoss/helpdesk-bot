@@ -36,15 +36,25 @@ public class HelpClient implements DeskUser {
      */
     public String getHelpSummary() {
         String help;
-        if (email != null && !email.equalsIgnoreCase(""))
+
+
+        if (email != null && !email.equalsIgnoreCase("")) {
+
             help = MLTypes.START_BOLD + "    For " + email + ": "
                     + MLTypes.END_BOLD + MLTypes.BREAK;
-        else
+
+        }else {
+
             help = MLTypes.START_BOLD + "    For " + userID + ": "
                     + MLTypes.END_BOLD + MLTypes.BREAK;
 
-        for (String line : helpRequests)
+        }
+
+
+        for (String line : helpRequests) {
             help += "       " + line + MLTypes.BREAK + MLTypes.BREAK;
+        }
+
         return help;
     }
 
@@ -87,4 +97,7 @@ public class HelpClient implements DeskUser {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
+
 }
