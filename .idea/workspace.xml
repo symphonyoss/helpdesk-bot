@@ -2,28 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a06c004-c94d-4a84-ac66-1dcd9c63b0dc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/config/HelpBotConfig.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/HelpBotSession.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/config/helpbot.properties" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_mockito_mockito_core_1_9_5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_objenesis_objenesis_1_0.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/actions/AddMemberAction.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/actions/AddMemberAction.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/listeners/AiCommandListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/listeners/AiCommandListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/Call.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/Call.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/CallCache.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/CallCache.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/constants/HelpBotConstants.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/constants/HelpBotConstants.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/bots/HelpDeskBot.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/bots/HelpDeskBot.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/command/MemberCommandListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/command/MemberCommandListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AddMemberAction.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AddMemberAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/CallCache.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/CallCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallCommandListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallCommandListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/HelpClientCommandListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/HelpClientCommandListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/HelpDeskBot.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/HelpDeskBot.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/MemberCommandListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/MemberCommandListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/helpdesk-bot-1.0-SNAPSHOT-jar-with-dependencies.jar" afterPath="$PROJECT_DIR$/helpdesk-bot/target/helpdesk-bot-1.0-SNAPSHOT-jar-with-dependencies.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/helpdesk-bot-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/helpdesk-bot/target/helpdesk-bot-1.0-SNAPSHOT.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.bots.HelpDeskBotTest.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.bots.HelpDeskBotTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.listeners.chat.CallChatListenerTest.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.listeners.chat.CallChatListenerTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.listeners.chat.HelpClientListenerTest.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.listeners.chat.HelpClientListenerTest.xml" />
@@ -34,9 +14,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.models.actions.AcceptHelpActionTest.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.models.actions.AcceptHelpActionTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.models.actions.AddMemberActionTest.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.models.actions.AddMemberActionTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.models.actions.JoinChatActionTest.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.models.actions.JoinChatActionTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/helpdesk-bot.iml" afterPath="$PROJECT_DIR$/helpdesk-bot/helpdesk-bot.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.bots.HelpDeskBotTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.bots.HelpDeskBotTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.listeners.chat.CallChatListenerTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.listeners.chat.CallChatListenerTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.listeners.chat.HelpClientListenerTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.listeners.chat.HelpClientListenerTest.txt" />
@@ -44,10 +21,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.listeners.service.CallServiceListenerTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.listeners.service.CallServiceListenerTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.CallResponderTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.CallResponderTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.CallTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.CallTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.actions.AcceptHelpActionTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.actions.AcceptHelpActionTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.actions.AddMemberActionTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.actions.AddMemberActionTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.actions.JoinChatActionTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.models.actions.JoinChatActionTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/pom.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/helpdesk-bot/target/maven-archiver/pom.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="helpdesk.iws" />
@@ -153,21 +129,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="helpbot.properties" pinned="false" current-in-tab="true">
+      <file leaf-file-name="helpbot.properties" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/config/helpbot.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8057851">
+            <state vertical-scroll-proportion="0.0">
               <caret line="26" column="36" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpdesk-bot/pom.xml">
+      <file leaf-file-name=".gitlab-ci.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitlab-ci.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.24793388">
+              <caret line="8" column="2" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -1500,12 +1476,12 @@
       <workItem from="1466178053283" duration="25334000" />
       <workItem from="1466446017349" duration="61520000" />
       <workItem from="1466621501033" duration="8732000" />
-      <workItem from="1466632437904" duration="15454000" />
+      <workItem from="1466632437904" duration="15634000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="234805000" />
+    <option name="totallyTimeSpent" value="234985000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1518,7 +1494,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281493" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1526,7 +1502,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="1.0" sideWeight="0.76332796" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2180937" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2180937" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.49676898" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29863015" sideWeight="0.23667206" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.49353796" order="7" side_tool="false" content_ui="tabs" />
@@ -1597,13 +1573,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/users/DeskUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/models/actions/JoinChatActionTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2081,8 +2050,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helpdesk-bot/src/main/config/helpbot.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8057851">
+        <state vertical-scroll-proportion="0.0">
           <caret line="26" column="36" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitlab-ci.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24793388">
+          <caret line="8" column="2" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
           <folding />
         </state>
       </provider>
