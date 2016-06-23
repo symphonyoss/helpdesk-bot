@@ -4,6 +4,6 @@ build:
   stage: build
   script:
   - mvn clean install -B -U
- 
- 
- 
+  
+  
+  
