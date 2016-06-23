@@ -1,40 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a06c004-c94d-4a84-ac66-1dcd9c63b0dc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/models/CallResponderTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/ErrorHelper.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/models/AiCommand.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/models/AiCommand.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/listeners/AiCommandListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/listeners/AiCommandListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/models/AiResponder.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/models/AiResponder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/utils/AiSpellParser.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/ai/utils/AiSpellParser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/Call.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/Call.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/CallCache.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/CallCache.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/test-classes/org/symphonyoss/helpdesk/listeners/chat/CallChatListenerTest.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/test-classes/org/symphonyoss/helpdesk/listeners/chat/CallChatListenerTest.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/CallResponder.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/models/CallResponder.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/test-classes/org/symphonyoss/helpdesk/models/CallTest.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/test-classes/org/symphonyoss/helpdesk/models/CallTest.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/ClientCache.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/ClientCache.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/bots/HelpDeskBot.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/bots/HelpDeskBot.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/MemberCache$1.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/MemberCache$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/MemberCache.class" afterPath="$PROJECT_DIR$/helpdesk-bot/target/classes/org/symphonyoss/helpdesk/utils/MemberCache.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiCommand.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/listeners/AiCommandListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponder.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/utils/AiSpellParser.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/ai/utils/AiSpellParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListenerTest.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListenerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/CallResponder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/HelpDeskBot.java" afterPath="$PROJECT_DIR$/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/bots/HelpDeskBot.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.bots.HelpDeskBotTest.xml" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/TEST-org.symphonyoss.helpdesk.bots.HelpDeskBotTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="$PROJECT_DIR$/helpdesk-bot/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.bots.HelpDeskBotTest.txt" afterPath="$PROJECT_DIR$/helpdesk-bot/target/surefire-reports/org.symphonyoss.helpdesk.bots.HelpDeskBotTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="3a06c004-c94d-4a84-ac66-1dcd9c63b0dc" name="Default" comment="" />
     <ignored path="helpdesk.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -1342,12 +1309,12 @@
       <workItem from="1466178053283" duration="25334000" />
       <workItem from="1466446017349" duration="61520000" />
       <workItem from="1466621501033" duration="8732000" />
-      <workItem from="1466632437904" duration="1590000" />
+      <workItem from="1466632437904" duration="1654000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="220941000" />
+    <option name="totallyTimeSpent" value="221005000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1360,7 +1327,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281493" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1370,7 +1337,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2180937" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.49676898" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29863015" sideWeight="0.23667206" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29863015" sideWeight="0.23667206" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.49353796" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33844912" sideWeight="0.49288255" order="0" side_tool="false" content_ui="combo" />
