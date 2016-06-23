@@ -9,6 +9,7 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
+import org.symphonyoss.helpdesk.models.HelpBotSession;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.CallCache;
@@ -23,14 +24,10 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  * A AiAction that allows a member to accept a help client into a call.
  */
 public class AcceptHelpAction implements AiAction {
-    private HelpClientListener helpListener;
-    private AiCommandListener commandListener;
-    private SymphonyClient symClient;
+    private HelpBotSession helpBotSession;
 
-    public AcceptHelpAction(HelpClientListener helpListener, AiCommandListener commandListener, SymphonyClient symClient) {
-        this.helpListener = helpListener;
-        this.commandListener = commandListener;
-        this.symClient = symClient;
+    public AcceptHelpAction(HelpBotSession helpBotSession) {
+        this.helpBotSession = helpBotSession;
     }
 
     /**
@@ -57,7 +54,7 @@ public class AcceptHelpAction implements AiAction {
             HelpClient helpClient = HoldCache.findClientCredentialMatch(email);
 
             if (helpClient != null) {
-                CallCache.newCall(member, HoldCache.pickUpClient(helpClient), commandListener, helpListener, symClient);
+                CallCache.newCall(member, HoldCache.pickUpClient(helpClient), helpBotSession);
 
             } else {
 
@@ -70,7 +67,7 @@ public class AcceptHelpAction implements AiAction {
         } else {
 
             if (HoldCache.ONHOLD.size() > 0) {
-                CallCache.newCall(member, HoldCache.pickUpNextClient(), commandListener, helpListener, symClient);
+                CallCache.newCall(member, HoldCache.pickUpNextClient(), helpBotSession);
 
             } else {
 
@@ -83,22 +80,6 @@ public class AcceptHelpAction implements AiAction {
         }
 
         return aiResponseSequence;
-    }
-
-    public HelpClientListener getHelpListener() {
-        return helpListener;
-    }
-
-    public void setHelpListener(HelpClientListener helpListener) {
-        this.helpListener = helpListener;
-    }
-
-    public AiCommandListener getAiCommandListener() {
-        return commandListener;
-    }
-
-    public void setAiCommandListener(AiCommandListener aiCommandListener) {
-        this.commandListener = aiCommandListener;
     }
 
 

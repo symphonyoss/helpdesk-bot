@@ -1,4 +1,5 @@
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponseSequence.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/HelpBotSession.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/MemberCommandListener.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/ToggleSeeHelpAction.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/HoldCache.java
@@ -21,6 +22,7 @@
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/RoomInfoAction.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponder.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/ai/models/AiResponse.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/config/HelpBotConfig.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/ClientQueueAction.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/presence/MemberPresenceListener.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/CallCommandListener.java

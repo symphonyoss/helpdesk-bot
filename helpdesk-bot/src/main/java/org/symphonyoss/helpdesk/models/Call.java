@@ -9,6 +9,7 @@ import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.CallChatListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.listeners.command.CallCommandListener;
+import org.symphonyoss.helpdesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.helpdesk.listeners.service.CallServiceListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
@@ -26,25 +27,26 @@ import java.util.LinkedList;
 public class Call {
     private final Logger logger = LoggerFactory.getLogger(Call.class);
 
-    private ArrayList<Member> members = new ArrayList<Member>();
-    private ArrayList<HelpClient> clients = new ArrayList<HelpClient>();
-    private AiCommandListener memberListener;
+    private MemberCommandListener memberCommandListener;
     private HelpClientListener helpClientListener;
     private SymphonyClient symClient;
+
+    private ArrayList<Member> members = new ArrayList<Member>();
+    private ArrayList<HelpClient> clients = new ArrayList<HelpClient>();
+
     private AiCommandListener callCommandListener;
     private CallResponder callResponder;
     private CallChatListener callChatListener;
     private CallServiceListener callServiceListener;
+
     private float inactivityTime;
 
-    public Call(Member member, HelpClient client,
-                AiCommandListener memberListener, HelpClientListener helpClientListener,
-                SymphonyClient symClient) {
+    public Call(Member member, HelpClient client, HelpBotSession helpBotSession) {
         members.add(member);
         clients.add(client);
-        this.memberListener = memberListener;
-        this.helpClientListener = helpClientListener;
-        this.symClient = symClient;
+        this.memberCommandListener = helpBotSession.getMemberListener();
+        this.helpClientListener = helpBotSession.getHelpClientListener();
+        this.symClient = helpBotSession.getSymphonyClient();
 
         constructCall();
     }
@@ -75,7 +77,7 @@ public class Call {
     public void initiateCall() {
 
         if (helpClientListener == null
-                || memberListener == null
+                || memberCommandListener == null
                 || callResponder == null
                 || members == null
                 || clients == null) {
@@ -109,7 +111,7 @@ public class Call {
         for (Member member : members) {
             Chat chat = Messenger.getChat(member.getUserID(), symClient);
 
-            memberListener.stopListening(chat);
+            memberCommandListener.stopListening(chat);
             listenOn(chat);
 
             callResponder.sendConnectedMessage(member);
@@ -250,7 +252,7 @@ public class Call {
 
         if (clients.contains(client)) {
 
-            Chat chat = Messenger.getChat(client.getUserID(), memberListener.getSymClient());
+            Chat chat = Messenger.getChat(client.getUserID(), memberCommandListener.getSymClient());
 
             stopListening(chat);
             helpClientListener.listenOn(chat);
@@ -298,14 +300,14 @@ public class Call {
 
         if (members.contains(member)) {
 
-            Chat chat = Messenger.getChat(member.getUserID(), memberListener.getSymClient());
+            Chat chat = Messenger.getChat(member.getUserID(), memberCommandListener.getSymClient());
 
-            memberListener.setPushCommands(false);
+            memberCommandListener.setPushCommands(false);
 
             stopListening(chat);
-            memberListener.listenOn(chat);
+            memberCommandListener.listenOn(chat);
 
-            memberListener.setPushCommands(true);
+            memberCommandListener.setPushCommands(true);
 
             Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
                     MessageSubmission.FormatEnum.TEXT, member.getUserID(), symClient);

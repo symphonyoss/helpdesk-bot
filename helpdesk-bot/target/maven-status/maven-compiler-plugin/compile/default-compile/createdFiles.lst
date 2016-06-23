@@ -17,6 +17,7 @@ org/symphonyoss/ai/constants/MLTypes.class
 org/symphonyoss/helpdesk/models/Call.class
 org/symphonyoss/helpdesk/utils/MemberCache$1.class
 org/symphonyoss/ai/utils/AiSpellParser.class
+org/symphonyoss/helpdesk/config/HelpBotConfig.class
 org/symphonyoss/helpdesk/listeners/chat/CallChatListener.class
 org/symphonyoss/helpdesk/utils/Messenger.class
 org/symphonyoss/ai/models/AiPermission.class
@@ -30,6 +31,7 @@ org/symphonyoss/ai/models/AiResponseSequence.class
 org/symphonyoss/ai/listeners/AiCommandListener.class
 org/symphonyoss/helpdesk/utils/ClientCache.class
 org/symphonyoss/ai/constants/AiConstants.class
+org/symphonyoss/helpdesk/models/HelpBotSession.class
 org/symphonyoss/helpdesk/listeners/command/CallCommandListener.class
 org/symphonyoss/helpdesk/models/actions/RoomInfoAction.class
 org/symphonyoss/helpdesk/models/actions/AcceptHelpAction.class

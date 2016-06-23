@@ -7,6 +7,7 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.Call;
+import org.symphonyoss.helpdesk.models.HelpBotSession;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 
@@ -20,9 +21,8 @@ public class CallCache {
     public static final ConcurrentLinkedQueue<Call> ACTIVECALLS = new ConcurrentLinkedQueue<Call>();
     private static final Logger logger = LoggerFactory.getLogger(HoldCache.class);
 
-    public static Call newCall(Member member, HelpClient helpClient, AiCommandListener memberListener, HelpClientListener helpListener, SymphonyClient symphonyClient) {
-
-        Call newCall = new Call(member, helpClient, memberListener, helpListener, symphonyClient);
+    public static Call newCall(Member member, HelpClient helpClient, HelpBotSession helpBotSession){
+        Call newCall = new Call(member, helpClient, helpBotSession);
 
         newCall.initiateCall();
         ACTIVECALLS.add(newCall);
