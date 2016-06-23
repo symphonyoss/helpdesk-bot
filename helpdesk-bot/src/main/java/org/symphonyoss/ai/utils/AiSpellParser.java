@@ -23,21 +23,34 @@ public class AiSpellParser {
      */
     public static boolean canParse(LinkedList<AiCommand> commands, String[] chunks, double closenessFactor) {
         for (AiCommand response : commands) {
-            if (chunks.length < response.getNumArguments())
-                break;
-            int likeness = 0;
-            String[] checkCommand = response.getCommand().split("\\s+");
-            for (int commandIndex = 0; commandIndex < checkCommand.length && commandIndex < chunks.length; commandIndex++)
-                if (isCloseTo(chunks[commandIndex].trim(), checkCommand[commandIndex].trim(), closenessFactor))
-                    likeness++;
 
-            int possibleArguments = chunks.length - likeness;
-            if (possibleArguments < response.getNumArguments())
-                break;
 
-            if (closenessFactor < (((double) likeness) / checkCommand.length))
-                return true;
+            if (chunks.length > response.getNumArguments()) {
+
+                int likeness = 0;
+
+                String[] checkCommand = response.getCommand().split("\\s+");
+                for (int commandIndex = 0; commandIndex < checkCommand.length && commandIndex < chunks.length; commandIndex++) {
+
+                    if (isCloseTo(chunks[commandIndex].trim(), checkCommand[commandIndex].trim(), closenessFactor))
+                        likeness++;
+
+                }
+
+                int possibleArguments = chunks.length - likeness;
+                if (possibleArguments >= response.getNumArguments()) {
+
+                    if (closenessFactor <= (((double) likeness) / checkCommand.length)) {
+                        return true;
+                    }
+
+                }
+
+            }
+
+
         }
+
         return false;
     }
 
@@ -47,38 +60,60 @@ public class AiSpellParser {
      * @param chunks    the text chunks
      * @param symClient   the ai sym client
      * @param closenessFactor   the minimum closeness value needed to be considered a match
-     * @return
+     * @return command suggestion
      */
     public static AiLastCommand parse(LinkedList<AiCommand> commands, String[] chunks, SymphonyClient symClient, double closenessFactor) {
         for (AiCommand response : commands) {
-            if (chunks.length < response.getNumArguments())
-                break;
-            int likeness = 0;
-            String[] checkCommand = response.getCommand().split("\\s+");
-            for (int commandIndex = 0; commandIndex < checkCommand.length && commandIndex < chunks.length; commandIndex++)
-                if (isCloseTo(chunks[commandIndex].trim(), checkCommand[commandIndex].trim(), closenessFactor))
-                    likeness++;
 
-            int possibleArguments = chunks.length - likeness;
-            if (possibleArguments < response.getNumArguments())
-                break;
 
-            if (closenessFactor < (((double) likeness) / checkCommand.length)) {
-                String[] arguments = new String[response.getNumArguments()];
-                for (int index = 0; index < response.getNumArguments(); index++)
-                    arguments[index] = chunks[(chunks.length - 1) - index];
 
-                String fullCommand = response.getCommand() + " ";
-                for (int index = arguments.length - 1; index >= 0; index--)
-                    fullCommand += response.getPrefixRequirement((arguments.length - 1) - index) + arguments[index] + " ";
-                MlMessageParser mlMessageParser = new MlMessageParser(symClient);
-                try {
-                    mlMessageParser.parseMessage(MLTypes.START_ML + fullCommand + MLTypes.END_ML);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (chunks.length >= response.getNumArguments()) {
+
+
+                int likeness = 0;
+
+                String[] checkCommand = response.getCommand().split("\\s+");
+                for (int commandIndex = 0; commandIndex < checkCommand.length && commandIndex < chunks.length; commandIndex++) {
+
+                    if (isCloseTo(chunks[commandIndex].trim(), checkCommand[commandIndex].trim(), closenessFactor))
+                        likeness++;
+
                 }
-                return new AiLastCommand(mlMessageParser, response);
+
+                int possibleArguments = chunks.length - likeness;
+                if (possibleArguments >= response.getNumArguments()) {
+
+                    if (closenessFactor <= (((double) likeness) / checkCommand.length)) {
+                        String[] arguments = new String[response.getNumArguments()];
+
+                        for (int index = 0; index < response.getNumArguments(); index++) {
+                            arguments[index] = chunks[(chunks.length - 1) - index];
+                        }
+
+                        String fullCommand = response.getCommand() + " ";
+                        for (int index = arguments.length - 1; index >= 0; index--) {
+                            fullCommand += response.getPrefixRequirement((arguments.length - 1) - index) + arguments[index] + " ";
+                        }
+
+                        MlMessageParser mlMessageParser = new MlMessageParser(symClient);
+
+                        try {
+
+                            mlMessageParser.parseMessage(MLTypes.START_ML + fullCommand + MLTypes.END_ML);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        return new AiLastCommand(mlMessageParser, response);
+                    }
+
+                }
+
+
             }
+
+
         }
         return null;
     }
@@ -103,8 +138,8 @@ public class AiSpellParser {
             smaller = input1;
         }
 
-        for (int index = 0; index < smaller.length(); index++)
-            if (larger.contains(smaller.substring(index, index + 1)))
+        for (int index = 0; index < larger.length(); index++)
+            if (smaller.contains(larger.substring(index, index + 1)))
                 likeness++;
 
         return closenessFactor < (((double) likeness) / larger.length());

@@ -1,1 +1,10 @@
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListenerTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/listeners/chat/HelpClientListenerTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/listeners/presence/MemberPresenceListenerTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/models/CallResponderTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/models/actions/JoinChatActionTest.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/bots/HelpDeskBotTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/models/actions/AcceptHelpActionTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/models/actions/AddMemberActionTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/models/CallTest.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/test/java/org/symphonyoss/helpdesk/listeners/service/CallServiceListenerTest.java

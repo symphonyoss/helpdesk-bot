@@ -56,6 +56,7 @@ public class HelpDeskBot implements ChatServiceListener {
 
     public static void main(String[] args) {
         System.out.println("HelpDeskBot starting...");
+
         new HelpDeskBot();
     }
 
@@ -135,7 +136,7 @@ public class HelpDeskBot implements ChatServiceListener {
         } catch (Exception e) {
 
             if(logger != null)
-                logger.error(e.toString());
+                logger.error("Init Exception", e);
             else
                 e.printStackTrace();
 

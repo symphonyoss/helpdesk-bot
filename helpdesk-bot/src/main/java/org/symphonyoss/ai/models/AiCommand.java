@@ -42,16 +42,25 @@ public class AiCommand {
     public boolean isCommand(String[] chunks) {
         String[] checkCommand = command.split("\\s+");
 
-        if ((chunks.length - checkCommand.length) + 1 <= numArguments)
+        if ((chunks.length - checkCommand.length) + 1 <= numArguments) {
             return false;
+        }
 
-        for (int commandIndex = 0; commandIndex < checkCommand.length; commandIndex++)
-            if (!chunks[commandIndex].trim().equalsIgnoreCase(checkCommand[commandIndex].trim()))
-                return false;
+        for (int commandIndex = 0; commandIndex < checkCommand.length; commandIndex++) {
 
-        for (int chunkIndex = checkCommand.length; chunkIndex < numArguments + checkCommand.length; chunkIndex++)
-            if (!chunks[chunkIndex].startsWith(prefixRequirements[chunkIndex - checkCommand.length]))
+            if (!chunks[commandIndex].trim().equalsIgnoreCase(checkCommand[commandIndex].trim())) {
                 return false;
+            }
+
+        }
+
+        for (int chunkIndex = checkCommand.length; chunkIndex < numArguments + checkCommand.length; chunkIndex++) {
+
+            if (!chunks[chunkIndex].startsWith(prefixRequirements[chunkIndex - checkCommand.length])){
+                return false;
+             }
+
+        }
 
         return true;
     }
@@ -64,8 +73,11 @@ public class AiCommand {
      */
     public String toMLCommand() {
         String toML = "<b>" + command + "</b> ";
-        for (int index = 0; index < numArguments; index++)
+
+        for (int index = 0; index < numArguments; index++) {
             toML += prefixRequirements[index] + arguments[index];
+        }
+
         return toML + "<br/>";
     }
 
@@ -75,9 +87,14 @@ public class AiCommand {
      * @return  if the user is permited to use this command
      */
     public boolean userIsPermitted(Long userID) {
-        for (AiPermission permission : permissions)
-            if (!permission.userHasPermission(userID))
+        for (AiPermission permission : permissions) {
+
+            if (!permission.userHasPermission(userID)) {
                 return false;
+            }
+
+        }
+
         return true;
     }
 
@@ -91,28 +108,40 @@ public class AiCommand {
      */
     public Set<AiResponseSequence> getResponses(MlMessageParser mlMessageParser, Message message) {
         Set<AiResponseSequence> responses = new LinkedHashSet<AiResponseSequence>();
-        for (AiAction action : getActions())
+
+        for (AiAction action : getActions()) {
             responses.add(action.respond(mlMessageParser, message, this));
+        }
+
         return responses;
     }
 
     //Private methods
     private void resizePrefixesArguments() {
+
         String[] resize = new String[numArguments];
+
         for (int index = 0; index < prefixRequirements.length && index < numArguments; index++) {
+
             resize[index] = prefixRequirements[index];
             if (resize[index] == null)
                 resize[index] = "";
+
         }
+
         prefixRequirements = resize;
 
         resize = new String[numArguments];
         for (int index = 0; index < arguments.length && index < numArguments; index++) {
+
             resize[index] = arguments[index];
             if (resize[index] == null)
                 resize[index] = "";
+
         }
+
         arguments = resize;
+
     }
 
     //Getters and Setters
@@ -121,16 +150,25 @@ public class AiCommand {
     }
 
     public void setNumArguments(int numArguments) {
+
         this.numArguments = numArguments;
         resizePrefixesArguments();
+
     }
 
     public void setPrefixRequirement(int argumentIndex, String requirement) {
+
         if (argumentIndex > numArguments) {
-            logger.debug("Could not add prefix requirement {} , not enough arguments.", requirement);
+
+            if(logger != null)
+                logger.debug("Could not add prefix requirement {}," +
+                    " not enough arguments.", requirement);
+
             return;
         }
+
         prefixRequirements[argumentIndex] = requirement;
+
     }
 
     public void setAllPrefixRequirements(String[] prefixRequirements) {
@@ -138,18 +176,28 @@ public class AiCommand {
     }
 
     public String getPrefixRequirement(int argumentIndex) {
-        if (prefixRequirements.length > argumentIndex)
+
+        if (prefixRequirements.length > argumentIndex) {
             return prefixRequirements[argumentIndex];
-        else
+        }else {
             return null;
+        }
+
     }
 
     public void setArgument(int argumentIndex, String holder) {
+
         if (argumentIndex > numArguments) {
-            logger.debug("Could not add place holder {} , not enough arguments.", holder);
+
+            if(logger != null)
+                 logger.debug("Could not add place holder {}, " +
+                    "not enough arguments.", holder);
+
             return;
         }
+
         arguments[argumentIndex] = holder;
+
     }
 
     public void setAllArguments(String[] placeHolders) {
@@ -157,10 +205,13 @@ public class AiCommand {
     }
 
     public String getArguments(int argumentIndex) {
-        if (arguments.length < argumentIndex)
+
+        if (arguments.length < argumentIndex) {
             return arguments[argumentIndex];
-        else
+        }else {
             return null;
+        }
+
     }
 
     public String getCommand() {

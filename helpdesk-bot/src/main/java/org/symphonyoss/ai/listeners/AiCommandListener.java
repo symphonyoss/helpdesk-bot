@@ -25,8 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AiCommandListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
-    private final LinkedList<AiCommand> activeCommands = new LinkedList<AiCommand>();
-    private final ConcurrentHashMap<String, AiLastCommand> lastResponse = new ConcurrentHashMap<String, AiLastCommand>();
+
+    private LinkedList<AiCommand> activeCommands = new LinkedList<AiCommand>();
+    private ConcurrentHashMap<String, AiLastCommand> lastResponse = new ConcurrentHashMap<String, AiLastCommand>();
     private SymphonyClient symClient;
     private AiResponder aiResponder;
     private boolean pushCommands;
@@ -48,26 +49,41 @@ public class AiCommandListener implements ChatListener {
      */
 
     public void onChatMessage(Message message) {
-        if (isPushMessage(message)
-                && !isPushCommands())
+
+        if (message != null
+                && message.getFromUserId() != null
+                && (isPushMessage(message) && !isPushCommands())) {
+
+            if(logger != null)
+                logger.warn("Received null message. Ignoring.");
+
             return;
+        }
+
         logger.debug("Received message for response.");
+
         MlMessageParser mlMessageParser;
 
         try {
+
             mlMessageParser = new MlMessageParser(symClient);
             mlMessageParser.parseMessage(message.getMessage());
 
             String[] chunks = mlMessageParser.getTextChunks();
 
             if (chunks[0].charAt(0) == AiConstants.COMMAND) {
+
                 mlMessageParser.parseMessage(message.getMessage().replaceFirst(">" + AiConstants.COMMAND, ">"));
                 chunks = mlMessageParser.getTextChunks();
+
                 processMessage(mlMessageParser, chunks, message);
+
             }
+
         } catch (Exception e) {
             logger.error("Could not parse message {}", message.getMessage(), e);
         }
+
     }
 
     /**
@@ -82,29 +98,52 @@ public class AiCommandListener implements ChatListener {
      * @param message   the received message
      */
     private void processMessage(MlMessageParser mlMessageParser, String[] chunks, Message message) {
+
+        if(activeCommands == null || activeCommands.size() == 0) {
+
+            if(logger != null)
+                logger.warn("There are no active commands added to the listener. " +
+                        "Ignoring process.");
+
+            return;
+        }
+
         boolean responded = false;
-        for (AiCommand command : activeCommands)
+        for (AiCommand command : activeCommands) {
+
             if (command.isCommand(chunks) && command.userIsPermitted(message.getFromUserId())) {
+
                 aiResponder.respondWith(command.getResponses(mlMessageParser, message));
                 lastResponse.put(message.getId(), new AiLastCommand(mlMessageParser, command));
+
                 responded = true;
+
             } else if (command.isCommand(chunks)) {
+
                 aiResponder.sendNoPermission(message);
                 return;
+
             }
+
+        }
 
         if (!responded
                 && !equalsRunLastCommand(mlMessageParser, message)
                 && !canSuggest(chunks)) {
             aiResponder.sendUsage(message, mlMessageParser, activeCommands);
+
         } else if (!responded
                 && !equalsRunLastCommand(mlMessageParser, message)) {
             AiLastCommand lastCommand = AiSpellParser.parse(activeCommands, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
+
             aiResponder.sendSuggestionMessage(lastCommand, message);
             lastResponse.put(message.getFromUserId().toString(), lastCommand);
+
         } else if (!responded) {
+
             AiLastCommand lastBotResponse = lastResponse.get(message.getFromUserId().toString());
             aiResponder.respondWith(lastBotResponse.getAiCommand().getResponses(lastBotResponse.getMlMessageParser(), message));
+
         }
     }
 
@@ -115,8 +154,10 @@ public class AiCommandListener implements ChatListener {
      * @return  if the input matches the run last command
      */
     private boolean equalsRunLastCommand(MlMessageParser mlMessageParser, Message message) {
+
         return (mlMessageParser.getText().trim().equalsIgnoreCase(AiConstants.RUN_LAST_COMMAND))
                 && lastResponse.get(message.getFromUserId().toString()) != null;
+
     }
 
     /**
@@ -134,8 +175,10 @@ public class AiCommandListener implements ChatListener {
      * @return if the message was pushed
      */
     private boolean isPushMessage(Message message) {
+
         return (entered.get(message.getStream()) == null
                 || !entered.get(message.getStream()));
+
     }
 
     /**
@@ -145,19 +188,24 @@ public class AiCommandListener implements ChatListener {
      * @return if the message is a command
      */
     public boolean isCommand(Message message) {
+
         logger.debug("Received message for response.");
+
         MlMessageParser mlMessageParser;
 
         try {
+
             mlMessageParser = new MlMessageParser(symClient);
             mlMessageParser.parseMessage(message.getMessage());
 
             String[] chunks = mlMessageParser.getTextChunks();
 
             return chunks[0].charAt(0) == AiConstants.COMMAND;
+
         } catch (Exception e) {
             logger.error("Could not parse message {}", message.getMessage(), e);
         }
+
         return false;
     }
 
@@ -166,8 +214,13 @@ public class AiCommandListener implements ChatListener {
      * @param chat    The chat to listen on
      */
     public void listenOn(Chat chat) {
-        chat.registerListener(this);
-        entered.put(chat.getStream().getId(), true);
+
+        if(chat != null) {
+
+            chat.registerListener(this);
+            entered.put(chat.getStream().getId(), true);
+
+        }
     }
 
     /**
@@ -175,8 +228,40 @@ public class AiCommandListener implements ChatListener {
      * @param chat   The chat to listen on
      */
     public void stopListening(Chat chat) {
-        chat.removeListener(this);
-        entered.put(chat.getStream().getId(), false);
+
+        if(chat != null) {
+
+            chat.removeListener(this);
+
+            if(chat.getStream() != null
+                    && chat.getStream().getId() != null) {
+                entered.put(chat.getStream().getId(), false);
+            }else{
+                logChatError(chat, new NullPointerException());
+            }
+
+        }else{
+            logChatError(chat, new NullPointerException());
+        }
+
+    }
+
+    public void logChatError(Chat chat, Exception e) {
+        if (logger != null) {
+
+            if (chat == null) {
+                logger.error("Ignored method call. Chat was null value.", e);
+
+            } else if (chat.getStream() == null) {
+                logger.error("Could not put stream in push hash. " +
+                        "Chat stream was null value.", e);
+
+            } else if (chat.getStream().getId() == null) {
+                logger.error("Could not put stream in push hash. " +
+                        "Chat stream id was null value.", e);
+            }
+
+        }
     }
 
     /**

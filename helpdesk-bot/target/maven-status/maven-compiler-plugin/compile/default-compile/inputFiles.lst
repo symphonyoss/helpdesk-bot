@@ -36,6 +36,7 @@
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/ai/constants/MLTypes.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/Call.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/command/HelpClientCommandListener.java
+/Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/MySettingsAction.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/utils/ClientCache.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/listeners/chat/CallChatListener.java
 /Users/nicktarsillo/IdeaProjects/symphony-helpdesk-bot/helpdesk-bot/src/main/java/org/symphonyoss/helpdesk/models/actions/AddMemberAction.java

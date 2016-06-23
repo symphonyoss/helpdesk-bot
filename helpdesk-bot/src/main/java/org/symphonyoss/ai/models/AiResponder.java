@@ -31,17 +31,22 @@ public class AiResponder {
      * @param symClient   the ai's sym client
      */
     public void sendMessage(String message, MessageSubmission.FormatEnum type, Long userID, SymphonyClient symClient) {
+
         MessageSubmission userMessage = new MessageSubmission();
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 
         UserIdList list = new UserIdList();
         list.add(userID);
+
         try {
+
             symClient.getMessagesClient().sendMessage(symClient.getStreamsClient().getStream(list), userMessage);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -49,10 +54,17 @@ public class AiResponder {
      * @param responseLists   the set of responses
      */
     public void respondWith(Set<AiResponseSequence> responseLists) {
-        for (AiResponseSequence list : responseLists)
-            for (AiResponse response : list.getAiResponseSet())
-                for (Long userID : response.getToIDs())
+
+        for (AiResponseSequence list : responseLists) {
+            for (AiResponse response : list.getAiResponseSet()) {
+
+                for (Long userID : response.getToIDs()) {
                     sendMessage(response.getMessage(), response.getType(), userID, symClient);
+                }
+
+            }
+        }
+
     }
 
     /**
@@ -62,10 +74,12 @@ public class AiResponder {
      * @param message   the message received from the user
      */
     public void sendSuggestionMessage(AiLastCommand suggestion, Message message) {
+
         sendMessage(MLTypes.START_ML + AiConstants.SUGGEST
                         + MLTypes.START_BOLD + suggestion.getMlMessageParser().getText()
                         + MLTypes.END_BOLD + AiConstants.USE_SUGGESTION + MLTypes.END_ML,
                 MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), symClient);
+
     }
 
     /**
@@ -76,19 +90,26 @@ public class AiResponder {
      * @param activeCommands   the active set of commands within the ai command listener
      */
     public void sendUsage(Message message, MlMessageParser mlMessageParser, LinkedList<AiCommand> activeCommands) {
+
         MessageSubmission aMessage = new MessageSubmission();
         aMessage.setFormat(MessageSubmission.FormatEnum.MESSAGEML);
 
         String usage = MLTypes.START_ML + mlMessageParser.getText() + AiConstants.NOT_INTERPRETABLE
                 + MLTypes.BREAK + MLTypes.START_BOLD
                 + AiConstants.USAGE + MLTypes.END_BOLD + MLTypes.BREAK;
-        for (AiCommand command : activeCommands)
-            if (command.userIsPermitted(message.getFromUserId()))
+
+        for (AiCommand command : activeCommands) {
+
+            if (command.userIsPermitted(message.getFromUserId())) {
                 usage += command.toMLCommand();
+            }
+
+        }
 
         usage += MLTypes.END_ML;
 
         sendMessage(usage, MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), symClient);
+
     }
 
     /**
@@ -97,8 +118,10 @@ public class AiResponder {
      * @param message   the message reveived back from the user
      */
     public void sendNoPermission(Message message) {
+
         Messenger.sendMessage(AiConstants.NO_PERMISSION,
                 MessageSubmission.FormatEnum.TEXT, message, symClient);
+
     }
 
     public SymphonyClient getSymClient() {
