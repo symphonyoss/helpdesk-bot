@@ -12,6 +12,8 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
+import org.symphonyoss.helpdesk.listeners.command.MemberCommandListener;
+import org.symphonyoss.helpdesk.models.HelpBotSession;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.MemberCache;
@@ -26,14 +28,15 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  */
 public class AddMemberAction implements AiAction {
     private final Logger logger = LoggerFactory.getLogger(AddMemberAction.class);
+
     private HelpClientListener helpClientListener;
-    private AiCommandListener commandListener;
+    private MemberCommandListener memberCommandListener;
     private SymphonyClient symClient;
 
-    public AddMemberAction(HelpClientListener helpClientListener, AiCommandListener aiCommandListener, SymphonyClient symClient) {
-        this.helpClientListener = helpClientListener;
-        this.commandListener = aiCommandListener;
-        this.symClient = symClient;
+    public AddMemberAction(HelpBotSession helpBotSession) {
+        this.helpClientListener = helpBotSession.getHelpClientListener();
+        this.memberCommandListener = helpBotSession.getMemberListener();
+        this.symClient = helpBotSession.getSymphonyClient();
     }
 
     /**
@@ -82,7 +85,7 @@ public class AddMemberAction implements AiAction {
                         symClient.getStreamsClient().getStream(userIdList).getId());
 
                 helpClientListener.stopListening(chat);
-                commandListener.listenOn(chat);
+                memberCommandListener.listenOn(chat);
             } else {
 
                 userIdList.add(message.getFromUserId());
@@ -97,22 +100,6 @@ public class AddMemberAction implements AiAction {
         }
 
         return responseList;
-    }
-
-    public AiCommandListener getCommandListener() {
-        return commandListener;
-    }
-
-    public void setCommandListener(AiCommandListener commandListener) {
-        this.commandListener = commandListener;
-    }
-
-    public SymphonyClient getSymClient() {
-        return symClient;
-    }
-
-    public void setSymClient(SymphonyClient symClient) {
-        this.symClient = symClient;
     }
 
 

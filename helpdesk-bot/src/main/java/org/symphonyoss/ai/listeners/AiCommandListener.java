@@ -26,9 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AiCommandListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
 
+    protected SymphonyClient symClient;
+
     private LinkedList<AiCommand> activeCommands = new LinkedList<AiCommand>();
     private ConcurrentHashMap<String, AiLastCommand> lastResponse = new ConcurrentHashMap<String, AiLastCommand>();
-    private SymphonyClient symClient;
     private AiResponder aiResponder;
     private boolean pushCommands;
     private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();

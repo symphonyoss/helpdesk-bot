@@ -26,9 +26,12 @@ import org.symphonyoss.client.impl.SymphonyBasicClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
+import org.symphonyoss.helpdesk.config.HelpBotConfig;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.helpdesk.listeners.presence.MemberPresenceListener;
+import org.symphonyoss.helpdesk.models.HelpBotSession;
+import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
 import org.symphonyoss.helpdesk.utils.MemberCache;
@@ -36,6 +39,8 @@ import org.symphonyoss.helpdesk.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.pod.model.User;
+
+import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,11 +50,12 @@ import java.util.Set;
  */
 public class HelpDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
-    private AiCommandListener memberCommandListener;
+    private MemberCommandListener memberCommandListener;
     private HelpClientListener helpClientListener;
     private SymphonyClient symClient;
 
     public HelpDeskBot() {
+        logger.info("Init for help desk user {}", Config.getString(HelpBotConfig.BOT_USER));
         initConnection();
         setupBot();
     }
@@ -72,9 +78,19 @@ public class HelpDeskBot implements ChatServiceListener {
 
             MemberCache.loadMembers();
 
+            addAdmin();
+
+            HelpBotSession helpBotSession = new HelpBotSession();
+
             symClient.getChatService().registerListener(this);
+            helpBotSession.setSymphonyClient(symClient);
+
             helpClientListener = new HelpClientListener(symClient);
-            memberCommandListener = new MemberCommandListener(symClient, helpClientListener);
+            helpBotSession.setHelpClientListener(helpClientListener);
+
+            memberCommandListener = new MemberCommandListener(helpBotSession);
+            helpBotSession.setMemberListener(memberCommandListener);
+
 
             symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());
 
@@ -91,6 +107,29 @@ public class HelpDeskBot implements ChatServiceListener {
                 e.printStackTrace();
 
         }
+    }
+
+    private void addAdmin() {
+
+        User user = null;
+
+        try {
+
+            user = symClient.getUsersClient().getUserFromEmail(System.getProperty(HelpBotConfig.ADMIN_USER));
+
+            if(MemberCache.getMember(user) == null) {
+
+                Member member = new Member(user.getEmailAddress(), user.getId());
+
+                MemberCache.addMember(member);
+                MemberCache.writeMember(member);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -112,14 +151,14 @@ public class HelpDeskBot implements ChatServiceListener {
 
             symClient = new SymphonyBasicClient();
 
-            logger.debug("{} {}", System.getProperty("sessionauth.url"),
+            logger.debug("{} {}", System.getProperty(HelpBotConfig.SESSIONAUTH_URL),
                     System.getProperty("keyauth.url"));
             AuthorizationClient authClient = new AuthorizationClient(
                     System.getProperty("sessionauth.url"),
                     System.getProperty("keyauth.url"));
 
             authClient.setKeystores(
-                    System.getProperty("truststore.file"),
+                    System.getProperty(HelpBotConfig.TRUSTSTORE_FILE),
                     System.getProperty("truststore.password"),
                     System.getProperty("certs.dir") + System.getProperty("bot.user") + ".p12",
                     System.getProperty("keystore.password"));
