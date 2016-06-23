@@ -36,13 +36,14 @@ public class HelpClientListener implements ChatListener {
      * @param message   the received message
      */
     public void onChatMessage(Message message) {
-        logger.debug("Client {} sent help request message.", message.getFromUserId());
         if (message == null
                 || message.getStream() == null
                 || helpResponseListener.isCommand(message)) {
-            logger.warn("Ignored message {}.", message);
+            if(logger != null)
+                logger.warn("Ignored message {}.", message);
             return;
         }
+        logger.debug("Client {} sent help request message.", message.getFromUserId());
 
         if (!HoldCache.hasClient(ClientCache.retrieveClient(message)))
             HoldCache.putClientOnHold(ClientCache.retrieveClient(message));

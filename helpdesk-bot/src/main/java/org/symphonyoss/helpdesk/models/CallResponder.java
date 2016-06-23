@@ -1,5 +1,7 @@
 package org.symphonyoss.helpdesk.models;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
@@ -15,6 +17,7 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
  * A model that allows a call to relay a message to both parties (Member and Client).
  */
 public class CallResponder {
+    private final Logger logger = LoggerFactory.getLogger(Call.class);
     private Call call;
     private SymphonyClient symClient;
 
@@ -28,6 +31,14 @@ public class CallResponder {
      * @param message   the received message
      */
     public void sendRoomInfo(Message message) {
+        if(message == null
+                || message.getFromUserId() == null){
+
+            if(logger != null)
+                logger.error("Cannot send null message {}.", message);
+
+            return;
+        }
 
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK
                 + HelpBotConstants.CLIENTS_LABEL + getClientList()
@@ -41,6 +52,13 @@ public class CallResponder {
      * @param userID   the user id
      */
     public void sendHelpSummary(Long userID) {
+        if(userID == null){
+
+            if(logger != null)
+                logger.error("Cannot send null userId {}.", userID);
+
+            return;
+        }
 
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK + MLTypes.BREAK + MLTypes.START_BOLD
                 + HelpBotConstants.HELP_SUMMARY_LABEL + MLTypes.END_BOLD + MLTypes.BREAK + getHelpList()
@@ -66,8 +84,8 @@ public class CallResponder {
         }else {
 
             Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.HELP_CLIENT_LABEL + MLTypes.START_BOLD +
-                    client.getUserID() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
-                    , MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+                    client.getUserID() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT,
+                    MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
 
         }
 
@@ -104,6 +122,13 @@ public class CallResponder {
      * @param user   the desk user to send to
      */
     public void sendConnectedMessage(DeskUser user) {
+        if(user == null){
+
+            if(logger != null)
+                logger.error("Cannot send null user connected message {}.", user);
+
+            return;
+        }
 
         Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.CONNECTED_TO_CALL
                 + HelpBotConstants.CLIENTS_LABEL + getClientList()

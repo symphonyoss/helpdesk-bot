@@ -20,6 +20,7 @@ public class CallChatListenerTest {
     public void testOnChatMessage() throws Exception {
         Mockito.doCallRealMethod().when(listener).onChatMessage(new Message());
         Mockito.doCallRealMethod().when(listener).onChatMessage(null);
+        Message message = new Message();
 
         try {
             listener.onChatMessage(null);
@@ -27,7 +28,6 @@ public class CallChatListenerTest {
             fail("On chat message null test failed.");
         }
 
-        Message message = new Message();
         try {
             listener.onChatMessage(message);
         }catch(Exception e){
