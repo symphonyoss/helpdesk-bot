@@ -3,15 +3,15 @@ package org.symphonyoss.helpdesk.utils;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.symphonyoss.helpdesk.config.HelpBotConfig;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.models.users.SerializableMember;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.pod.model.User;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
+import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 /**
  * Created by nicktarsillo on 6/14/16.
  */
@@ -53,6 +53,9 @@ public class MemberCache {
 
     public static void writeMember(Member member) {
 
+        if(member == null)
+            return;
+
         try {
 
             Gson gson = new Gson();
@@ -68,6 +71,41 @@ public class MemberCache {
             logger.error("Could not write file for hashtag {}", member.getEmail(), e);
         }
 
+    }
+
+    public static Member[] getBestMembers(final String helpRequest){
+        ArrayList<Member> orderMembers = new ArrayList<Member>(MEMBERS.values());
+
+        Collections.sort(orderMembers, new Comparator<Member>() {
+
+            public int compare(Member member1, Member member2) {
+                if(member1.countTagMatches(helpRequest) > member2.countTagMatches(helpRequest)){
+                    return -1;
+                }else if(member1.countTagMatches(helpRequest) < member2.countTagMatches(helpRequest)){
+                    return 1;
+                }else {
+                    return 0;
+                }
+            }
+
+        });
+
+        int sendTo = 0;
+        if(orderMembers.get(0).countTagMatches(helpRequest) == 0) {
+
+            sendTo = (int) (orderMembers.size()
+                    * Double.parseDouble(Config.getString(HelpBotConfig.BEST_PERCENTAGE))) + 1;
+
+        }else {
+            sendTo = orderMembers.size();
+        }
+
+        Member[] best = new Member[sendTo];
+        for(int index = 0; index < sendTo; index++) {
+            best[index] = orderMembers.get(index);
+        }
+
+        return best;
     }
 
     public static void removeMember(Member member) {

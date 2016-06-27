@@ -31,10 +31,11 @@ public class HelpBotConstants {
     public static final String CLIENT_QUEUE_LABEL = MLTypes.START_BOLD + "Client Queue: " + MLTypes.END_BOLD;
     public static final String NOT_ON_CALL = "The specified user is not in a call.";
     public static final String MEMBERS_ONLINE = MLTypes.START_BOLD + "Online members: " + MLTypes.END_BOLD;
-    public static final String SHOW_IDENTITY = "Your identity wsill now be shown.";
+    public static final String SHOW_IDENTITY = "Your identity will now be shown.";
     public static final String HIDE_IDENTITY = "Your identity will now be hidden.";
     public static final String SEE_HELP = "You will now see help request messages.";
     public static final String HIDE_HELP = "You will no longer see help requests.";
     public static final String SEE_HELP_LABEL = "   See Help: ";
     public static final String HIDE_IDENTITY_LABEL = "   Hide Identity: ";
+    public static final String TAGS_LABEL = "   Tags: ";
 }

@@ -33,7 +33,7 @@ public class CallCommandListener extends AiCommandListener {
         AiCommand sendInfo = new AiCommand(Config.getString(HelpBotConfig.ROOM_INFO), 0);
         sendInfo.addAction(new RoomInfoAction());
 
-        AiCommand sendSummary = new AiCommand(HelpBotConfig.HELP_SUMMARY, 0);
+        AiCommand sendSummary = new AiCommand(Config.getString(HelpBotConfig.HELP_SUMMARY), 0);
         sendSummary.addAction(new HelpSummaryAction());
         sendSummary.addPermission(new IsMember());
 

@@ -89,7 +89,6 @@ public class HelpDeskBot implements ChatServiceListener {
             helpBotSession.setHelpClientListener(helpClientListener);
 
             memberCommandListener = new MemberCommandListener(helpBotSession);
-            helpBotSession.setMemberListener(memberCommandListener);
 
 
             symClient.getPresenceService().registerPresenceListener(new MemberPresenceListener());

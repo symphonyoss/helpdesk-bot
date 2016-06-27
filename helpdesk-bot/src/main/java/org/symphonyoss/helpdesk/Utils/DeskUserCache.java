@@ -15,7 +15,7 @@ public class DeskUserCache {
     }
 
     public static void removeUser(DeskUser user) {
-        ALL_USERS.put(user.getUserID().toString(), user);
+        ALL_USERS.remove(user.getUserID().toString());
     }
 
     public static DeskUser getDeskUser(String userID) {

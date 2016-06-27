@@ -23,6 +23,7 @@ public class MemberCommandListener extends AiCommandListener {
 
     public MemberCommandListener(HelpBotSession helpBotSession) {
         super(helpBotSession.getSymphonyClient());
+        helpBotSession.setMemberListener(this);
         this.helpBotSession = helpBotSession;
         init();
     }
@@ -65,6 +66,24 @@ public class MemberCommandListener extends AiCommandListener {
         joinChat.addPermission(new IsMember());
         joinChat.addPermission(new OffCall());
 
+        AiCommand setTags = new AiCommand(Config.getString(HelpBotConfig.SET_TAGS), 1);
+        setTags.setArgument(0, "Tags(ex. Password Reset)");
+        setTags.addAction(new SetTagsAction());
+        setTags.addPermission(new IsMember());
+        setTags.addPermission(new OffCall());
+
+        AiCommand addTags = new AiCommand(Config.getString(HelpBotConfig.ADD_TAGS), 1);
+        addTags.setArgument(0, "Tags");
+        addTags.addAction(new AddTagsAction());
+        addTags.addPermission(new IsMember());
+        addTags.addPermission(new OffCall());
+
+        AiCommand removeTags = new AiCommand(Config.getString(HelpBotConfig.REMOVE_TAGS), 1);
+        removeTags.setArgument(0, "Tags");
+        removeTags.addAction(new RemoveTagsAction());
+        removeTags.addPermission(new IsMember());
+        removeTags.addPermission(new OffCall());
+
         AiCommand onlineMembers = new AiCommand(Config.getString(HelpBotConfig.ONLINE_MEMBERS), 0);
         onlineMembers.addAction(new OnlineMembersAction());
 
@@ -82,10 +101,13 @@ public class MemberCommandListener extends AiCommandListener {
         getActiveCommands().add(acceptHelpClient);
         getActiveCommands().add(toggleHelp);
         getActiveCommands().add(toggleIdentity);
-        getActiveCommands().add(onlineMembers);
-        getActiveCommands().add(queueResponse);
         getActiveCommands().add(addMember);
         getActiveCommands().add(joinChat);
+        getActiveCommands().add(setTags);
+        getActiveCommands().add(addTags);
+        getActiveCommands().add(removeTags);
+        getActiveCommands().add(onlineMembers);
+        getActiveCommands().add(queueResponse);
         getActiveCommands().add(mySettings);
 
         setPushCommands(true);

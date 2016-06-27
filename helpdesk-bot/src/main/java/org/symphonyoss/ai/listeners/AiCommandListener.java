@@ -51,9 +51,9 @@ public class AiCommandListener implements ChatListener {
 
     public void onChatMessage(Message message) {
 
-        if (message != null
-                && message.getFromUserId() != null
-                && (isPushMessage(message) && !isPushCommands())) {
+        if (message == null
+                || message.getFromUserId() == null
+                || (isPushMessage(message) && !isPushCommands())) {
 
             if(logger != null)
                 logger.warn("Received null message. Ignoring.");
@@ -219,7 +219,7 @@ public class AiCommandListener implements ChatListener {
         if(chat != null) {
 
             chat.registerListener(this);
-            entered.put(chat.getStream().getId(), true);
+            entered.put(chat.getStream().getId().toString(), true);
 
         }
     }
@@ -236,7 +236,7 @@ public class AiCommandListener implements ChatListener {
 
             if(chat.getStream() != null
                     && chat.getStream().getId() != null) {
-                entered.put(chat.getStream().getId(), false);
+                entered.put(chat.getStream().getId().toString(), false);
             }else{
                 logChatError(chat, new NullPointerException());
             }

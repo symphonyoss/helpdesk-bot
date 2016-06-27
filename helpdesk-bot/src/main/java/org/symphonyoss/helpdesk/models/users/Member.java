@@ -2,6 +2,9 @@ package org.symphonyoss.helpdesk.models.users;
 
 import org.symphonyoss.helpdesk.models.Call;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * Created by nicktarsillo on 6/14/16.
  * A model that represents a member.
@@ -10,6 +13,7 @@ public class Member implements DeskUser {
     private Call call;
     private String email;
     private Long userID;
+    private Set<String> tags = new LinkedHashSet<String>();
     private boolean onCall;
     private boolean seeHelpRequests = true;
     private boolean busy;
@@ -21,11 +25,12 @@ public class Member implements DeskUser {
         setUserID(userID);
     }
 
-    public Member(String email, Long userID, boolean seeHelpRequests, boolean hideIdentity) {
+    public Member(String email, Long userID, boolean seeHelpRequests, boolean hideIdentity, Set<String> tags) {
         setEmail(email);
         setUserID(userID);
         this.seeHelpRequests = seeHelpRequests;
         this.hideIdentity = hideIdentity;
+        this.tags = tags;
     }
 
     /**
@@ -33,6 +38,22 @@ public class Member implements DeskUser {
      */
     public DeskUserType getUserType() {
         return DeskUserType.MEMBER;
+    }
+
+    /**
+     * Used to get the number of tags that matched with the specified string
+     * @param match
+     * @return   the number of tags that matched with the specified string
+     */
+    public int countTagMatches(String match){
+        int count = 0;
+
+        for(String tag: getTags()){
+            if(match.contains(tag))
+                count++;
+        }
+
+        return count;
     }
 
     public Long getUserID() {
@@ -107,7 +128,7 @@ public class Member implements DeskUser {
     }
 
     public SerializableMember toSerializable() {
-        return new SerializableMember(email, userID, seeHelpRequests, hideIdentity);
+        return new SerializableMember(email, userID, seeHelpRequests, hideIdentity, tags);
     }
 
     public boolean isOnline() {
@@ -119,5 +140,11 @@ public class Member implements DeskUser {
     }
 
 
+    public Set<String> getTags() {
+        return tags;
+    }
 
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
 }

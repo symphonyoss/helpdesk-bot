@@ -13,6 +13,9 @@ public class ClientCache {
     public static final ConcurrentHashMap<String, HelpClient> ALL_CLIENTS = new ConcurrentHashMap<String, HelpClient>();
 
     public static HelpClient addClient(User user) {
+        if(user == null)
+            return null;
+
         HelpClient helpClient = new HelpClient(user.getEmailAddress(), user.getId());
 
         ALL_CLIENTS.put(user.getId().toString(),
@@ -27,14 +30,15 @@ public class ClientCache {
     }
 
     public static HelpClient removeClient(User user) {
-        HelpClient client = ALL_CLIENTS.remove(user.getId());
+        HelpClient client = retrieveClient(user);
+        ALL_CLIENTS.remove(user.getId().toString());
         DeskUserCache.removeUser(client);
 
         return client;
     }
 
     public static HelpClient retrieveClient(User user) {
-        return ALL_CLIENTS.get(user.getId());
+        return ALL_CLIENTS.get(user.getId().toString());
     }
 
     public static HelpClient retrieveClient(String userID) {
@@ -42,6 +46,9 @@ public class ClientCache {
     }
 
     public static boolean hasClient(Long id) {
+        if(id == null)
+            return false;
+
         return ALL_CLIENTS.containsKey(id.toString());
     }
 }
