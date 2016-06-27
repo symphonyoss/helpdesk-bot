@@ -28,6 +28,12 @@ public final class HelpBotConfig {
     public final static String HELP_SUMMARY = "helpbot.command.helpsummary";
     public final static String ROOM_INFO = "helpbot.command.roominfo";
     public final static String EXIT = "helpbot.command.exit";
+    public final static String SET_TAGS = "helpbot.command.settags";
+    public final static String ADD_TAGS = "helpbot.command.addtags";
+
+    public static final String BEST_PERCENTAGE = "helpbot.setting.bestpercentage";
+
+    public final static String REMOVE_TAGS = "helpbot.command.removetags";
     public final static String KEYSTORE_PASSWORD = "keystore.password";
     public final static String TRUSTSTORE_PASSWORD = "truststore.password";
     public final static String SESSIONAUTH_URL = "sessionauth.url";

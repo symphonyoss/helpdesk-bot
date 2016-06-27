@@ -105,11 +105,11 @@ public class HelpClientListener implements ChatListener {
 
     private void relayToMembers(HelpClient helpClient, Message message, String[] chunks){
 
-        for (Member member : MemberCache.MEMBERS.values()) {
+        for (Member member : MemberCache.getBestMembers(String.join(" ", chunks))) {
             if (!member.isOnCall() && member.isSeeHelpRequests()) {
 
                 if (helpClient.getEmail() != null &&
-                        helpClient.getEmail().equals("")) {
+                        !helpClient.getEmail().equals("")) {
 
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + ClientCache.retrieveClient(message).getEmail() +

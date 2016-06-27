@@ -13,6 +13,8 @@ import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
+import java.util.Arrays;
+
 /**
  * Created by nicktarsillo on 6/22/16.
  */
@@ -28,6 +30,7 @@ public class MySettingsAction implements AiAction {
         MLTypes.START_BOLD + member.getEmail() + ": " + MLTypes.END_BOLD
                 + MLTypes.BREAK + HelpBotConstants.SEE_HELP_LABEL + member.isSeeHelpRequests()
                 + MLTypes.BREAK + HelpBotConstants.HIDE_IDENTITY_LABEL + member.isHideIdentity()
+                + MLTypes.BREAK + HelpBotConstants.TAGS_LABEL + Arrays.toString(member.getTags().toArray())
                 + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, userIdList));
 
         return aiResponseSequence;

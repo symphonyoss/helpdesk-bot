@@ -19,9 +19,19 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class CallCache {
     public static final ConcurrentLinkedQueue<Call> ACTIVECALLS = new ConcurrentLinkedQueue<Call>();
-    private static final Logger logger = LoggerFactory.getLogger(HoldCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(CallCache.class);
 
     public static Call newCall(Member member, HelpClient helpClient, HelpBotSession helpBotSession){
+        if(member == null
+                || helpClient == null
+                || helpBotSession == null) {
+
+            if(logger != null)
+                logger.error("Could not create new call. NullPointer!");
+
+            return null;
+        }
+
         Call newCall = new Call(member, helpClient, helpBotSession);
 
         newCall.initiateCall();
@@ -32,6 +42,9 @@ public class CallCache {
     }
 
     public static void endCall(Call call) {
+
+        if(call == null)
+            return;
 
         ACTIVECALLS.remove(call);
         call.exitCall();

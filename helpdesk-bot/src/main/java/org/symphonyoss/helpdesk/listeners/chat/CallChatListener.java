@@ -182,7 +182,7 @@ public class CallChatListener implements ChatListener {
                 }else {
 
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + HelpBotConstants.MEMBER_LABEL + call.getMembers().indexOf(member)
+                                    + HelpBotConstants.MEMBER_LABEL + (call.getMembers().indexOf(member) + 1)
                                     + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), symClient);
                 }
@@ -201,7 +201,7 @@ public class CallChatListener implements ChatListener {
             }else {
 
                 Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                + HelpBotConstants.MEMBER_LABEL + call.getMembers().indexOf(member)
+                                + HelpBotConstants.MEMBER_LABEL + (call.getMembers().indexOf(member) + 1)
                                 + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
                         MessageSubmission.FormatEnum.MESSAGEML, client.getEmail(), symClient);
 

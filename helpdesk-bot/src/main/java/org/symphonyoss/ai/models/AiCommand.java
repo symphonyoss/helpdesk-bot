@@ -19,7 +19,7 @@ public class AiCommand {
 
     private String command;
     private int numArguments;
-    private String[] prefixRequirements = new String[0];
+    private String[] prefixRequirements = {""};
     private String[] arguments = new String[0];
 
     private Set<AiAction> actions = new LinkedHashSet<AiAction>();

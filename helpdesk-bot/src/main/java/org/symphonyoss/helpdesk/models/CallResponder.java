@@ -109,7 +109,7 @@ public class CallResponder {
         }else {
 
             Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD +
-                    HelpBotConstants.MEMBER_LABEL + call.getMembers().indexOf(member) + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
+                    HelpBotConstants.MEMBER_LABEL + (call.getMembers().indexOf(member) + 1) + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
                     + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
 
         }
@@ -176,7 +176,7 @@ public class CallResponder {
 
         }else {
 
-            Messenger.sendMessage(HelpBotConstants.MEMBER_LABEL + call.getMembers().indexOf(member)
+            Messenger.sendMessage(HelpBotConstants.MEMBER_LABEL + (call.getMembers().indexOf(member) + 1)
                     + HelpBotConstants.LEFT_CALL, MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
 
         }
@@ -217,7 +217,7 @@ public class CallResponder {
             if (!member.isHideIdentity()) {
                 list += ", " + member.getEmail();
             }else {
-                list += ", " + member.getUserID();
+                list += ", " + HelpBotConstants.MEMBER_LABEL + (call.getMembers().indexOf(member) + 1);
             }
 
         }

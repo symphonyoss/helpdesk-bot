@@ -65,12 +65,13 @@ public class AddMemberAction implements AiAction {
             if (user != null
                     && user.getId() != null
                     && !MemberCache.hasMember(user.getId().toString())) {
-                Member member = new Member(email,
-                        user.getId());
-                MemberCache.addMember(member);
 
                 if (ClientCache.hasClient(user.getId()))
                     ClientCache.removeClient(user);
+
+                Member member = new Member(email,
+                        user.getId());
+                MemberCache.addMember(member);
 
                 userIdList.add(message.getFromUserId());
                 responseList.addResponse(new AiResponse(HelpBotConstants.PROMOTED_USER + email
@@ -84,8 +85,10 @@ public class AddMemberAction implements AiAction {
                 Chat chat = symClient.getChatService().getChatByStream(
                         symClient.getStreamsClient().getStream(userIdList).getId());
 
-                helpClientListener.stopListening(chat);
-                memberCommandListener.listenOn(chat);
+                if(chat != null) {
+                    helpClientListener.stopListening(chat);
+                    memberCommandListener.listenOn(chat);
+                }
             } else {
 
                 userIdList.add(message.getFromUserId());
