@@ -2,16 +2,18 @@ package org.symphonyoss.helpdesk.listeners.command;
 
 import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.ai.models.AiCommand;
-import org.symphonyoss.client.SymphonyClient;
+import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.helpdesk.config.HelpBotConfig;
-import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.models.HelpBotSession;
 import org.symphonyoss.helpdesk.models.actions.*;
+import org.symphonyoss.helpdesk.models.calls.Call;
 import org.symphonyoss.helpdesk.models.permissions.IsMember;
 import org.symphonyoss.helpdesk.models.permissions.OffCall;
-import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
+import org.symphonyoss.helpdesk.utils.CallCache;
+import org.symphonyoss.helpdesk.utils.DeskUserCache;
+import org.symphonyoss.symphony.pod.model.User;
 
-import javax.security.auth.login.Configuration;
+import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 
 /**
  * Created by nicktarsillo on 6/20/16.
@@ -20,11 +22,13 @@ import javax.security.auth.login.Configuration;
  */
 public class MemberCommandListener extends AiCommandListener {
     private HelpBotSession helpBotSession;
+    private Call call;
 
     public MemberCommandListener(HelpBotSession helpBotSession) {
         super(helpBotSession.getSymphonyClient());
         helpBotSession.setMemberListener(this);
         this.helpBotSession = helpBotSession;
+        call = CallCache.newCall(symClient, false);
         init();
     }
 
@@ -113,6 +117,31 @@ public class MemberCommandListener extends AiCommandListener {
         setPushCommands(true);
     }
 
+    @Override
+    public void listenOn(Chat chat){
+        super.listenOn(chat);
 
+        if(chat != null) {
 
+            User user = chat.getRemoteUsers().iterator().next();
+
+            call.enter(DeskUserCache.getDeskUser(user.getId().toString()));
+
+        }
+
+    }
+
+    @Override
+    public void stopListening(Chat chat){
+        super.stopListening(chat);
+
+        if(chat != null) {
+
+            User user = chat.getRemoteUsers().iterator().next();
+
+            call.exit(DeskUserCache.getDeskUser(user.getId().toString()));
+
+        }
+
+    }
 }

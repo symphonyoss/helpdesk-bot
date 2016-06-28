@@ -2,8 +2,8 @@ package org.symphonyoss.helpdesk.models;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.symphonyoss.helpdesk.models.users.DeskUser;
-import org.symphonyoss.helpdesk.models.users.HelpClient;
+import org.symphonyoss.helpdesk.models.calls.CallResponder;
+import org.symphonyoss.helpdesk.models.calls.HelpCallResponder;
 import org.symphonyoss.symphony.agent.model.Message;
 
 import static org.junit.Assert.*;
@@ -13,11 +13,11 @@ import static org.mockito.Mockito.mock;
  * Created by nicktarsillo on 6/22/16.
  */
 public class CallResponderTest {
-    static CallResponder callResponder = mock(CallResponder.class);
+    static HelpCallResponder callResponder = mock(HelpCallResponder.class);
 
     @Test
     public void testSendRoomInfo() throws Exception {
-        Mockito.doCallRealMethod().when(callResponder).sendRoomInfo(new Message());
+        Mockito.doCallRealMethod().when(callResponder).sendRoomInfo(new Long(0));
         Mockito.doCallRealMethod().when(callResponder).sendRoomInfo(null);
 
         try{
@@ -27,7 +27,7 @@ public class CallResponderTest {
         }
 
         try{
-            callResponder.sendRoomInfo(new Message());
+            callResponder.sendRoomInfo(new Long(0));
         }catch(Exception e){
             fail("send room info failed");
         }

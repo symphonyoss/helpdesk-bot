@@ -2,7 +2,7 @@ package org.symphonyoss.helpdesk.models;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.models.calls.Call;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 

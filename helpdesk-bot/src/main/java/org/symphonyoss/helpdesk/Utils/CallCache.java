@@ -2,12 +2,12 @@ package org.symphonyoss.helpdesk.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
-import org.symphonyoss.helpdesk.models.Call;
+import org.symphonyoss.helpdesk.listeners.command.CallCommandListener;
+import org.symphonyoss.helpdesk.models.calls.Call;
 import org.symphonyoss.helpdesk.models.HelpBotSession;
+import org.symphonyoss.helpdesk.models.calls.HelpCall;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 
@@ -32,7 +32,25 @@ public class CallCache {
             return null;
         }
 
-        Call newCall = new Call(member, helpClient, helpBotSession);
+        Call newCall = new HelpCall(member, helpClient,helpBotSession);
+
+        newCall.initiateCall();
+        ACTIVECALLS.add(newCall);
+
+        return newCall;
+
+    }
+
+    public static Call newCall(SymphonyClient symClient, boolean isPrivate){
+        if(symClient == null) {
+
+            if(logger != null)
+                logger.error("Could not create new call. NullPointer!");
+
+            return null;
+        }
+
+        Call newCall = new Call(symClient, isPrivate);
 
         newCall.initiateCall();
         ACTIVECALLS.add(newCall);

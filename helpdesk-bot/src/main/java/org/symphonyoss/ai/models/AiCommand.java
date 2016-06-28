@@ -72,7 +72,7 @@ public class AiCommand {
      * @return the usage string in HTML
      */
     public String toMLCommand() {
-        String toML = "<b>" + command + "</b> ";
+        String toML = "    <b>" + command + "</b> ";
 
         for (int index = 0; index < numArguments; index++) {
             toML += prefixRequirements[index] + arguments[index];

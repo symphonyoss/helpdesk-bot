@@ -1,21 +1,22 @@
-package org.symphonyoss.helpdesk.models;
+package org.symphonyoss.helpdesk.models.calls;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.ai.listeners.AiCommandListener;
-import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.chat.CallChatListener;
+import org.symphonyoss.helpdesk.listeners.chat.HelpCallChatListener;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.helpdesk.listeners.command.CallCommandListener;
 import org.symphonyoss.helpdesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.helpdesk.listeners.service.CallServiceListener;
+import org.symphonyoss.helpdesk.models.HelpBotSession;
+import org.symphonyoss.helpdesk.models.users.DeskUser;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
-import org.symphonyoss.helpdesk.utils.CallCache;
+import org.symphonyoss.helpdesk.utils.ClientCache;
+import org.symphonyoss.helpdesk.utils.DeskUserCache;
+import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.helpdesk.utils.Messenger;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,31 +25,31 @@ import java.util.LinkedList;
  * Created by nicktarsillo on 6/14/16.
  * A model that represents a call.
  */
-public class Call {
-    private final Logger logger = LoggerFactory.getLogger(Call.class);
+public class HelpCall extends Call {
+    private final Logger logger = LoggerFactory.getLogger(HelpCall.class);
 
     private MemberCommandListener memberCommandListener;
     private HelpClientListener helpClientListener;
-    private SymphonyClient symClient;
+    private CallCommandListener callCommandListener;
 
     private ArrayList<Member> members = new ArrayList<Member>();
     private ArrayList<HelpClient> clients = new ArrayList<HelpClient>();
 
-    private AiCommandListener callCommandListener;
-    private CallResponder callResponder;
-    private CallChatListener callChatListener;
-    private CallServiceListener callServiceListener;
+    private HelpCallResponder helpCallResponder;
 
     private float inactivityTime;
 
-    public Call(Member member, HelpClient client, HelpBotSession helpBotSession) {
+    public HelpCall(Member member, HelpClient client, HelpBotSession helpBotSession) {
+        super(helpBotSession.getSymphonyClient(), true);
+
         members.add(member);
         clients.add(client);
+        deskUsers.add(member);
+        deskUsers.add(client);
+
+        this.helpCallResponder = new HelpCallResponder(this, symClient);
         this.memberCommandListener = helpBotSession.getMemberListener();
         this.helpClientListener = helpBotSession.getHelpClientListener();
-        this.symClient = helpBotSession.getSymphonyClient();
-
-        constructCall();
     }
 
     /**
@@ -58,11 +59,12 @@ public class Call {
      * Instantiate the call service listener.
      * Add the service listener to the sym client.
      */
-    private void constructCall() {
+    @Override
+    protected void constructCall() {
         callResponder = new CallResponder(this, symClient);
 
         callCommandListener = new CallCommandListener(symClient, this);
-        callChatListener = new CallChatListener(this, callCommandListener, symClient);
+        callChatListener = new HelpCallChatListener(this, callCommandListener, symClient);
         callServiceListener = new CallServiceListener(this);
 
         symClient.getChatService().registerListener(callServiceListener);
@@ -74,11 +76,12 @@ public class Call {
      * Removes respective listeners from members and clients.
      * Registers this listener to all chats with clients and members
      */
+    @Override
     public void initiateCall() {
-
+        super.initiateCall();
         if (helpClientListener == null
                 || memberCommandListener == null
-                || callResponder == null
+                || helpCallResponder == null
                 || members == null
                 || clients == null) {
 
@@ -88,36 +91,34 @@ public class Call {
             return;
         }
 
-        for (Member member : members) {
-            member.setOnCall(true);
-            member.setCall(this);
-        }
-
-        for (HelpClient client : clients) {
-            client.setOnCall(true);
-            client.setCall(this);
-        }
-
 
         for (HelpClient client : clients) {
             Chat chat = Messenger.getChat(client.getUserID(), symClient);
 
-            helpClientListener.stopListening(chat);
-            listenOn(chat);
+            helpCallResponder.sendRoomInfo(client.getUserID());
 
-            callResponder.sendConnectedMessage(client);
+            helpClientListener.stopListening(chat);
         }
 
         for (Member member : members) {
             Chat chat = Messenger.getChat(member.getUserID(), symClient);
 
             memberCommandListener.stopListening(chat);
-            listenOn(chat);
 
-            callResponder.sendConnectedMessage(member);
-            callResponder.sendHelpSummary(member.getUserID());
+            helpCallResponder.sendRoomInfo(member.getUserID());
+
+            helpCallResponder.sendHelpSummary(member.getUserID());
         }
 
+    }
+
+    @Override
+    public void enter(DeskUser deskUser){
+        if(deskUser.getUserType() == DeskUser.DeskUserType.MEMBER){
+            enter(MemberCache.getMember(deskUser.getUserID().toString()));
+        }else if(deskUser.getUserType() == DeskUser.DeskUserType.HELP_CLIENT){
+            enter(ClientCache.retrieveClient(deskUser.getUserID().toString()));
+        }
     }
 
     /**
@@ -128,33 +129,28 @@ public class Call {
      * @param client the client trying to enter the chat
      */
     public void enter(HelpClient client) {
-
+        super.enter(client);
         if(clients == null)
             clients = new ArrayList<HelpClient>();
 
         if (client != null) {
 
             clients.add(client);
-            client.setOnCall(true);
-            client.setCall(this);
 
             Chat chat = Messenger.getChat(client.getUserID(), symClient);
 
             helpClientListener.stopListening(chat);
-            listenOn(chat);
-
-            callResponder.sendConnectedMessage(client);
 
             for (HelpClient c : clients) {
 
                 if (c != client) {
-                    callResponder.sendEnteredChatMessage(c, client);
+                    helpCallResponder.sendEnteredChatMessage(c, client);
                 }
 
             }
 
             for (Member m : members) {
-                callResponder.sendEnteredChatMessage(m, client);
+                helpCallResponder.sendEnteredChatMessage(m, client);
             }
 
         } else {
@@ -173,6 +169,7 @@ public class Call {
      * @param member the member trying to enter the chat
      */
     public void enter(Member member) {
+        super.enter(member);
 
         if(members == null)
             members = new ArrayList<Member>();
@@ -180,24 +177,19 @@ public class Call {
         if (member != null) {
 
             members.add(member);
-            member.setOnCall(true);
-            member.setCall(this);
 
             Chat chat = Messenger.getChat(member.getUserID(), symClient);
 
             helpClientListener.stopListening(chat);
-            listenOn(chat);
-
-            callResponder.sendConnectedMessage(member);
 
             for (HelpClient c : clients) {
-                callResponder.sendEnteredChatMessage(c, member);
+                helpCallResponder.sendEnteredChatMessage(c, member);
             }
 
             for (Member m : members) {
 
                 if (m != member) {
-                    callResponder.sendEnteredChatMessage(m, member);
+                    helpCallResponder.sendEnteredChatMessage(m, member);
                 }
 
             }
@@ -215,7 +207,9 @@ public class Call {
      * Auto exits all users.
      * Removes service listener.
      */
+    @Override
     public void exitCall() {
+        super.exitCall();
 
         if(members != null) {
 
@@ -225,21 +219,27 @@ public class Call {
 
         }
 
-        if(clients == null){
+        if(clients != null) {
 
-            CallCache.removeCall(this);
-            if (symClient != null)
-                symClient.getChatService().removeListener(callServiceListener);
+            for (HelpClient client : new LinkedList<HelpClient>(clients)) {
+                exit(client);
+            }
 
-            return;
         }
 
-        for (HelpClient client : new LinkedList<HelpClient>(clients)) {
-            exit(client);
-        }
+    }
 
-        if (symClient != null)
-            symClient.getChatService().removeListener(callServiceListener);
+    @Override
+    public void exit(DeskUser deskUser){
+        if(deskUser.getUserType() == DeskUser.DeskUserType.MEMBER){
+
+            exit(MemberCache.getMember(deskUser.getUserID().toString()));
+
+        }else if(deskUser.getUserType() == DeskUser.DeskUserType.HELP_CLIENT){
+
+            exit(ClientCache.retrieveClient(deskUser.getUserID().toString()));
+
+        }
     }
 
     /**
@@ -249,36 +249,27 @@ public class Call {
      * @param client the client trying to exit the chat
      */
     public void exit(HelpClient client) {
+        super.exit(client);
 
         if (clients.contains(client)) {
 
             Chat chat = Messenger.getChat(client.getUserID(), memberCommandListener.getSymClient());
 
-            stopListening(chat);
             helpClientListener.listenOn(chat);
-
-            Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
-                    MessageSubmission.FormatEnum.TEXT, client.getUserID(), symClient);
 
             for (HelpClient c : clients) {
 
                 if (c != client) {
-                    callResponder.sendExitMessage(c, client);
+                    helpCallResponder.sendExitMessage(c, client);
                 }
 
             }
 
             for (Member m : members) {
-                callResponder.sendExitMessage(m, client);
+                helpCallResponder.sendExitMessage(m, client);
             }
 
-            client.setOnCall(false);
             clients.remove(client);
-
-            if (clients.size() == 0 && members.size() == 0) {
-                CallCache.removeCall(this);
-                symClient.getChatService().removeListener(callServiceListener);
-            }
 
         } else {
             if (logger != null)
@@ -294,7 +285,7 @@ public class Call {
      * @param member the member trying to exit the chat
      */
     public void exit(Member member) {
-
+        super.exit(member);
         if(members == null)
             return;
 
@@ -304,34 +295,23 @@ public class Call {
 
             memberCommandListener.setPushCommands(false);
 
-            stopListening(chat);
             memberCommandListener.listenOn(chat);
 
             memberCommandListener.setPushCommands(true);
 
-            Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
-                    MessageSubmission.FormatEnum.TEXT, member.getUserID(), symClient);
-
             for (HelpClient c : clients) {
-                callResponder.sendExitMessage(c, member);
+                helpCallResponder.sendExitMessage(c, member);
             }
 
             for (Member m : members) {
 
                 if (m != member) {
-                    callResponder.sendExitMessage(m, member);
+                    helpCallResponder.sendExitMessage(m, member);
                 }
 
             }
 
-
-            member.setOnCall(false);
             members.remove(member);
-
-            if (clients.size() == 0 && members.size() == 0) {
-                CallCache.removeCall(this);
-                symClient.getChatService().removeListener(callServiceListener);
-            }
 
         } else {
             if (logger != null)
@@ -346,13 +326,13 @@ public class Call {
      *
      * @param chat the chat to remove listeners from
      */
+    @Override
     public void stopListening(Chat chat) {
-
+        super.stopListening(chat);
         if (chat != null) {
 
             if (callChatListener != null && callCommandListener != null) {
 
-                callChatListener.stopListening(chat);
                 callCommandListener.stopListening(chat);
 
             } else {
@@ -371,13 +351,13 @@ public class Call {
      *
      * @param chat the chat to register listeners to
      */
+    @Override
     public void listenOn(Chat chat) {
-
+        super.listenOn(chat);
         if (chat != null) {
 
             if (callChatListener != null && callCommandListener != null) {
 
-                callChatListener.listenOn(chat);
                 callCommandListener.listenOn(chat);
 
             } else {
@@ -389,6 +369,10 @@ public class Call {
             logChatError(chat, new NullPointerException());
         }
 
+    }
+
+    public CallTypes getCallType(){
+        return CallTypes.HELP_CALL;
     }
 
     public void logChatError(Chat chat, Exception e) {
@@ -425,19 +409,12 @@ public class Call {
         this.inactivityTime = inactivityTime;
     }
 
-    public CallResponder getCallResponder() {
-        return callResponder;
+
+    public HelpCallResponder getHelpCallResponder() {
+        return helpCallResponder;
     }
 
-    public void setCallResponder(CallResponder callResponder) {
-        this.callResponder = callResponder;
-    }
-
-    public SymphonyClient getSymClient() {
-        return symClient;
-    }
-
-    public void setSymClient(SymphonyClient symClient) {
-        this.symClient = symClient;
+    public void setHelpCallResponder(HelpCallResponder helpCallResponder) {
+        this.helpCallResponder = helpCallResponder;
     }
 }

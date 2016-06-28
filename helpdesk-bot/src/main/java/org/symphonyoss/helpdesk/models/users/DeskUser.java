@@ -1,7 +1,7 @@
 package org.symphonyoss.helpdesk.models.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.symphonyoss.helpdesk.models.Call;
+import org.symphonyoss.helpdesk.models.calls.Call;
 
 /**
  * Created by nicktarsillo on 6/16/16.

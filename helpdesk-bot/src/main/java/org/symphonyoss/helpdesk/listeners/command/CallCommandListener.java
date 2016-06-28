@@ -4,11 +4,11 @@ import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.helpdesk.config.HelpBotConfig;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.models.Call;
+import org.symphonyoss.helpdesk.models.calls.Call;
 import org.symphonyoss.helpdesk.models.actions.ExitAction;
 import org.symphonyoss.helpdesk.models.actions.HelpSummaryAction;
 import org.symphonyoss.helpdesk.models.actions.RoomInfoAction;
+import org.symphonyoss.helpdesk.models.permissions.IsHelpCall;
 import org.symphonyoss.helpdesk.models.permissions.IsMember;
 import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 
@@ -32,10 +32,12 @@ public class CallCommandListener extends AiCommandListener {
 
         AiCommand sendInfo = new AiCommand(Config.getString(HelpBotConfig.ROOM_INFO), 0);
         sendInfo.addAction(new RoomInfoAction());
+        sendInfo.addPermission(new IsHelpCall());
 
         AiCommand sendSummary = new AiCommand(Config.getString(HelpBotConfig.HELP_SUMMARY), 0);
         sendSummary.addAction(new HelpSummaryAction());
         sendSummary.addPermission(new IsMember());
+        sendSummary.addPermission(new IsHelpCall());
 
         getActiveCommands().add(sendInfo);
         getActiveCommands().add(sendSummary);

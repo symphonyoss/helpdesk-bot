@@ -109,7 +109,6 @@ public class AiCommandListener implements ChatListener {
             return;
         }
 
-        boolean responded = false;
         for (AiCommand command : activeCommands) {
 
             if (command.isCommand(chunks) && command.userIsPermitted(message.getFromUserId())) {
@@ -117,7 +116,7 @@ public class AiCommandListener implements ChatListener {
                 aiResponder.respondWith(command.getResponses(mlMessageParser, message));
                 lastResponse.put(message.getId(), new AiLastCommand(mlMessageParser, command));
 
-                responded = true;
+                return;
 
             } else if (command.isCommand(chunks)) {
 
@@ -128,19 +127,17 @@ public class AiCommandListener implements ChatListener {
 
         }
 
-        if (!responded
-                && !equalsRunLastCommand(mlMessageParser, message)
+        if (!equalsRunLastCommand(mlMessageParser, message)
                 && !canSuggest(chunks)) {
             aiResponder.sendUsage(message, mlMessageParser, activeCommands);
 
-        } else if (!responded
-                && !equalsRunLastCommand(mlMessageParser, message)) {
+        } else if (!equalsRunLastCommand(mlMessageParser, message)) {
             AiLastCommand lastCommand = AiSpellParser.parse(activeCommands, chunks, symClient, HelpBotConstants.CORRECTFACTOR);
 
             aiResponder.sendSuggestionMessage(lastCommand, message);
             lastResponse.put(message.getFromUserId().toString(), lastCommand);
 
-        } else if (!responded) {
+        } else{
 
             AiLastCommand lastBotResponse = lastResponse.get(message.getFromUserId().toString());
             aiResponder.respondWith(lastBotResponse.getAiCommand().getResponses(lastBotResponse.getMlMessageParser(), message));

@@ -4,6 +4,7 @@ import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.models.calls.HelpCall;
 import org.symphonyoss.helpdesk.models.users.DeskUser;
 import org.symphonyoss.helpdesk.utils.DeskUserCache;
 import org.symphonyoss.symphony.agent.model.Message;
@@ -29,7 +30,7 @@ public class RoomInfoAction implements AiAction {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
 
         DeskUser deskUser = DeskUserCache.getDeskUser(message.getFromUserId().toString());
-        deskUser.getCall().getCallResponder().sendRoomInfo(message);
+        ((HelpCall) deskUser.getCall()).getHelpCallResponder().sendRoomInfo(message.getFromUserId());
 
         return aiResponseSequence;
     }

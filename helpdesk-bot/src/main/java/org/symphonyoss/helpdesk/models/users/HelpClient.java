@@ -2,7 +2,7 @@ package org.symphonyoss.helpdesk.models.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.symphonyoss.ai.constants.MLTypes;
-import org.symphonyoss.helpdesk.models.Call;
+import org.symphonyoss.helpdesk.models.calls.Call;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
