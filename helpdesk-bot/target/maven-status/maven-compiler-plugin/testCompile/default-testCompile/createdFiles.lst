@@ -12,3 +12,4 @@ org/symphonyoss/helpdesk/listeners/chat/CallChatListenerTest.class
 org/symphonyoss/helpdesk/models/CallResponderTest.class
 org/symphonyoss/helpdesk/models/actions/JoinChatActionTest.class
 org/symphonyoss/helpdesk/utils/ClientCacheTest.class
+org/symphonyoss/ai/listeners/AiCommandListenerTest.class
