@@ -121,6 +121,20 @@ public class MemberCache {
         DeskUserCache.addUser(member);
     }
 
+    public static Set<Member> getOnlineMembers(){
+        Set<Member> members = new HashSet<Member>();
+        for (Member member : MEMBERS.values()) {
+
+            if (member.isOnline() && !member.isBusy()) {
+
+                members.add(member);
+
+            }
+        }
+
+        return members;
+    }
+
     public static String listMembers() {
         String list = "";
         int index = 1;
