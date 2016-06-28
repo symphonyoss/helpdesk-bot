@@ -8,11 +8,8 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.constants.HelpBotConstants;
-import org.symphonyoss.helpdesk.models.Call;
+import org.symphonyoss.helpdesk.models.calls.Call;
 import org.symphonyoss.helpdesk.models.users.DeskUser;
-import org.symphonyoss.helpdesk.models.users.HelpClient;
-import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.*;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
@@ -27,12 +24,12 @@ public class CallChatListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(CallChatListener.class);
     private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();
     private Call call;
-    private AiCommandListener callResponseListener;
+    private AiCommandListener callCommandListener;
     private SymphonyClient symClient;
 
-    public CallChatListener(Call call, AiCommandListener callResponseListener, SymphonyClient symClient) {
-        this.callResponseListener = callResponseListener;
+    public CallChatListener(Call call, AiCommandListener callCommandListener, SymphonyClient symClient) {
         this.symClient = symClient;
+        this.callCommandListener = callCommandListener;
         this.call = call;
     }
 
@@ -46,7 +43,7 @@ public class CallChatListener implements ChatListener {
     public void onChatMessage(Message message) {
         if (message == null
                 || message.getStream() == null
-                || callResponseListener.isCommand(message)
+                || (callCommandListener != null && callCommandListener.isCommand(message))
                 || isPushMessage(message)) {
 
             if(logger != null)
@@ -79,12 +76,7 @@ public class CallChatListener implements ChatListener {
 
         if (deskUser != null) {
 
-            if(deskUser.getUserType() == DeskUser.DeskUserType.MEMBER) {
-                relayMemberMessage(MemberCache.getMember(message), text);
-
-            }else if(deskUser.getUserType() == DeskUser.DeskUserType.HELP_CLIENT) {
-                relayClientMessage(ClientCache.retrieveClient(message), text);
-            }
+            relayMessage(deskUser, text);
 
         }else{
 
@@ -111,7 +103,7 @@ public class CallChatListener implements ChatListener {
 
             if(chat.getStream() != null
                     && chat.getStream().getId() != null)
-             entered.put(chat.getStream().getId(), true);
+             entered.put(chat.getStream().getId().toString(), true);
 
             else{
                 logChatError(chat, new NullPointerException());
@@ -137,7 +129,7 @@ public class CallChatListener implements ChatListener {
 
             if(chat.getStream() != null
                     && chat.getStream().getId() != null)
-                entered.put(chat.getStream().getId(), false);
+                entered.put(chat.getStream().getId().toString(), false);
 
             else{
                 logChatError(chat, new NullPointerException());
@@ -165,95 +157,31 @@ public class CallChatListener implements ChatListener {
      * Send the message sent from a member to both parties.
      * Retain the identity preference of the member.
      *
-     * @param member the member
+     * @param deskUser the desk user
      * @param text   the message sent from the member
      */
-    private void relayMemberMessage(Member member, String text) {
+    private void relayMessage(DeskUser deskUser, String text) {
 
-        for (Member m : call.getMembers()) {
+        for (DeskUser d : call.getDeskUsers()) {
 
-            if (member != m) {
-                if (!member.isHideIdentity()) {
-
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + member.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), symClient);
-
-                }else {
-
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + HelpBotConstants.MEMBER_LABEL + (call.getMembers().indexOf(member) + 1)
-                                    + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), symClient);
-                }
-            }
-
-        }
-
-        for (HelpClient client : call.getClients()) {
-
-            if (!member.isHideIdentity()) {
-
-                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                + member.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, client.getEmail(), symClient);
-
-            }else {
-
-                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                + HelpBotConstants.MEMBER_LABEL + (call.getMembers().indexOf(member) + 1)
-                                + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, client.getEmail(), symClient);
-
+            if (d != deskUser) {
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + constructRelayMessage(deskUser, text) +  MLTypes.END_ML,
+                            MessageSubmission.FormatEnum.MESSAGEML, d.getUserID(), symClient);
             }
 
         }
     }
 
-    /**
-     * Send a message from the client to both parties.
-     * If the client does not have an email, use id.
-     *
-     * @param client the client
-     * @param text   the message sent from the client
-     */
-    private void relayClientMessage(HelpClient client, String text) {
+    protected String constructRelayMessage(DeskUser deskUser, String text){
+        if(deskUser.getEmail() != null) {
 
-        for (Member m : call.getMembers()) {
+            return MLTypes.START_BOLD.toString()
+                    + deskUser.getEmail() + ": " + MLTypes.END_BOLD + text;
 
-            if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase("")) {
+        }else {
 
-                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                + client.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), symClient);
-
-            }else {
-
-                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                + client.getUserID() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, m.getEmail(), symClient);
-
-            }
-
-        }
-
-        for (HelpClient c : call.getClients()) {
-
-            if (c != client) {
-                if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase("")) {
-
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + client.getEmail() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, c.getEmail(), symClient);
-
-                }else {
-
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
-                                    + client.getUserID() + ": " + MLTypes.END_BOLD + text + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, c.getEmail(), symClient);
-
-                }
-            }
+            return MLTypes.START_BOLD.toString()
+                    + deskUser.getUserID() + ": " + MLTypes.END_BOLD + text;
 
         }
     }
@@ -277,5 +205,7 @@ public class CallChatListener implements ChatListener {
     }
 
 
-
+    public void setCallCommandListener(AiCommandListener callCommandListener) {
+        this.callCommandListener = callCommandListener;
+    }
 }

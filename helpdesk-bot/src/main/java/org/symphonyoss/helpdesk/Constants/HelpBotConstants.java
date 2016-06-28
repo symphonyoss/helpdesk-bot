@@ -12,7 +12,7 @@ public class HelpBotConstants {
     public static final double CORRECTFACTOR = 0.6;
 
     //Text
-    public static final String CONNECTED_TO_CALL = "Connected to help chat.";
+    public static final String CONNECTED_TO_CALL = "Connected to call.";
     public static final String CLIENTS_LABEL = MLTypes.BREAK.toString() + MLTypes.START_BOLD + "Clients in room: " + MLTypes.END_BOLD;
     public static final String MEMBERS_LABEL = MLTypes.BREAK.toString() + MLTypes.START_BOLD + "Members in room: " + MLTypes.END_BOLD;
     public static final String HELP_SUMMARY_LABEL = MLTypes.BREAK.toString() + MLTypes.START_BOLD + "Help Summary: " + MLTypes.END_BOLD + MLTypes.BREAK;

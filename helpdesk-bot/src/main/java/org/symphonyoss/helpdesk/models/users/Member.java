@@ -1,6 +1,6 @@
 package org.symphonyoss.helpdesk.models.users;
 
-import org.symphonyoss.helpdesk.models.Call;
+import org.symphonyoss.helpdesk.models.calls.Call;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

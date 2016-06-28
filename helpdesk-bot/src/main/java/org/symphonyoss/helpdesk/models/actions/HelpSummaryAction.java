@@ -4,6 +4,8 @@ import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.helpdesk.models.calls.HelpCall;
+import org.symphonyoss.helpdesk.models.calls.HelpCallResponder;
 import org.symphonyoss.helpdesk.models.users.DeskUser;
 import org.symphonyoss.helpdesk.utils.DeskUserCache;
 import org.symphonyoss.symphony.agent.model.Message;
@@ -27,7 +29,7 @@ public class HelpSummaryAction implements AiAction {
 
         DeskUser deskUser = DeskUserCache.getDeskUser(message.getFromUserId().toString());
         if(deskUser != null) {
-            deskUser.getCall().getCallResponder().sendHelpSummary(message.getFromUserId());
+            ((HelpCall)deskUser.getCall()).getHelpCallResponder().sendHelpSummary(message.getFromUserId());
         }
 
         return aiResponseSequence;
