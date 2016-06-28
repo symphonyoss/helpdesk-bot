@@ -246,3 +246,5 @@ org.apache.commons.configuration.ConfigurationException: Cannot locate configura
 2016-06-23 17:42:52 ERROR HoldCache:30 - Could not create new call. NullPointer!
 2016-06-24 08:13:48 ERROR HoldCache:30 - Could not create new call. NullPointer!
 2016-06-24 08:13:57 ERROR HoldCache:30 - Could not create new call. NullPointer!
+2016-06-28 14:00:35 ERROR CallCache:30 - Could not create new call. NullPointer!
+2016-06-28 14:02:15 ERROR CallCache:30 - Could not create new call. NullPointer!

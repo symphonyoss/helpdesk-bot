@@ -124,7 +124,8 @@ public class HelpCallResponder extends CallResponder {
      * @param userID   the user id
      */
     public void sendRoomInfo(Long userID) {
-        if(userID == null){
+        if(userID == null
+            || symClient == null){
 
             if(logger != null)
                 logger.error("Cannot send null message {}.", userID);
