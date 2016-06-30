@@ -22,4 +22,12 @@ hs_err_pid*
 /.idea/uiDesigner.xml
 .idea/
 logs/
-
+/helpdesk.iml
+proxy-desk/proxy-desk.iml
+web-desk/bot.user3.p12
+web-desk/bot.user50.p12
+web-desk/helpbot.log
+web-desk/helpbot.properties
+web-desk/src/
+web-desk/web-desk.iml
+/proxy-desk/helpdesk-bot.iml
