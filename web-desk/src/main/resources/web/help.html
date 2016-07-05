@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<!--
+  ~
+  ~
+  ~ Copyright 2016 The Symphony Software Foundation
+  ~
+  ~ Licensed to The Symphony Software Foundation (SSF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  ~
+  -->
+
+<html>
+  <head>
+    <title>HelpBOT Admin</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <!-- Bootstrap core CSS -->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" media="screen">
+ 
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+ 	<div class="container-fluid">
+	 	<div class="row">
+		 	 <div class="col-md-12"> 
+			 	<h1>Live Help</h1>
+	 		 </div>
+	 	</div>
+	 	<div class="row">
+		 	<div class="col-md-12"> 
+	 	 
+ 	 
+ 	 
+<form class="form-horizontal" action="/help/" method="POST" >
+  <div class="control-group">
+    <label class="control-label" for="name">Name</label>
+    <div class="controls">
+      <input type="text" class="input-xxlarge"name="name"  id="name" placeholder="Name">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="email">Email</label>
+    <div class="controls">
+      <input type="text" class="input-xxlarge"  name="email"  id="email" placeholder="Email">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="topic">Email</label>
+    <div class="controls">
+      <textarea rows=5 name="topic"  id="topic" placeholder="Help Topic"></textarea>
+    </div>
+  </div>
+  
+  <div class="control-group">
+      <button type="submit" class="btn">Request Help</button>
+  </div>
+</form>
+
+	 	  	</div>
+		</div>
+	</div>
+
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+ 
+
+  </body>
+</html>
+
+
+
+
+
+
+
