@@ -38,7 +38,7 @@ import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A extension of the ai command listener.
+ * A extension of the org.symphonyoss.ai command listener.
  * Initializes the required commands, used inside a call.
  */
 public class CallCommandListener extends AiCommandListener {

@@ -37,7 +37,7 @@ public class CommandLine {
 	boolean sslTrustAllHosts = false;
 
 	@Parameter(names = "-c", description = "Configuration File. Defaults to \"./helpbot.properties\"", required = false)
-	File configFile = new File("helpbot.properties");
+	File configFile = new File("./web-desk/helpbot.properties");
 
 	@DynamicParameter(names = "-P", description = "Property Overrides")
 	Map<String, Object> propertyOverrides = new HashMap<>();

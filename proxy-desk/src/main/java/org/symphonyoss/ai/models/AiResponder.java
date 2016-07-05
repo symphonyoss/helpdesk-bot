@@ -28,7 +28,7 @@ import org.symphonyoss.ai.constants.AiConstants;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.helpdesk.utils.Messenger;
+import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.UserIdList;
@@ -38,7 +38,7 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A part of the ai with the main purpose of responding back to a user
+ * A part of the org.symphonyoss.ai with the main purpose of responding back to a user
  */
 public class AiResponder {
     private SymphonyClient symClient;
@@ -52,7 +52,7 @@ public class AiResponder {
      * @param message   the message received from the user
      * @param type   the type of message to send
      * @param userID   the id of the user
-     * @param symClient   the ai's sym client
+     * @param symClient   the org.symphonyoss.ai's sym client
      */
     public void sendMessage(String message, MessageSubmission.FormatEnum type, Long userID, SymphonyClient symClient) {
 
@@ -111,7 +111,7 @@ public class AiResponder {
      *
      * @param message   the message received from the user
      * @param mlMessageParser   a parser that contains the input in ML
-     * @param activeCommands   the active set of commands within the ai command listener
+     * @param activeCommands   the active set of commands within the org.symphonyoss.ai command listener
      */
     public void sendUsage(Message message, MlMessageParser mlMessageParser, LinkedList<AiCommand> activeCommands) {
 

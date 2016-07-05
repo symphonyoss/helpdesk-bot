@@ -114,7 +114,7 @@ public class AiCommandListener implements ChatListener {
     /**
      * Check to see if the message matches any of the commands.
      * If it matches, do actions and received responses.
-     * If it doesn't check if the ai can suggest a command from the unmatched command.
+     * If it doesn't check if the org.symphonyoss.ai can suggest a command from the unmatched command.
      * If it can suggest, then suggest the command and save the suggested command as the last command.
      * If it can't suggest and the sent command does not match run last command, send usage
      * If it does equal run last command, run the last command
@@ -183,9 +183,9 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Determines if the ai can suggest a command based on the input
+     * Determines if the org.symphonyoss.ai can suggest a command based on the input
      * @param chunks  the text input
-     * @return if the ai can suggest a command
+     * @return if the org.symphonyoss.ai can suggest a command
      */
     private boolean canSuggest(String[] chunks) {
         return AiSpellParser.canParse(activeCommands, chunks, HelpBotConstants.CORRECTFACTOR);

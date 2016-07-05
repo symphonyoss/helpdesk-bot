@@ -22,7 +22,7 @@
  *
  */
 
-package org.symphonyoss.helpdesk.utils;
+package org.symphonyoss.ai.utils;
 
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;

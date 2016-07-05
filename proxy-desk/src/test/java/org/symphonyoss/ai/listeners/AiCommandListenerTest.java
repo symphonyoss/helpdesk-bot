@@ -42,7 +42,7 @@ public class AiCommandListenerTest {
         try{
             commandListener.onChatMessage(null);
         }catch(Exception e){
-            fail("On chat ai test has failed.");
+            fail("On chat org.symphonyoss.ai test has failed.");
         }
     }
 }

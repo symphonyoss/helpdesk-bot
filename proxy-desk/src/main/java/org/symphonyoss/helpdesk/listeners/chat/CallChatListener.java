@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.listeners.AiCommandListener;
+import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
@@ -189,7 +190,7 @@ public class CallChatListener implements ChatListener {
         for (DeskUser d : call.getDeskUsers()) {
 
             if (d != deskUser) {
-                    Messenger.sendMessage(MLTypes.START_ML.toString() + constructRelayMessage(deskUser, text) +  MLTypes.END_ML,
+                    Messenger.sendMessage(MLTypes.START_ML.toString() + constructRelayMessage(deskUser, text) + MLTypes.END_ML,
                             MessageSubmission.FormatEnum.MESSAGEML, d.getUserID(), symClient);
             }
 

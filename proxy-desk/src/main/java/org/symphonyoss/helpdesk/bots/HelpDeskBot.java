@@ -25,7 +25,6 @@ package org.symphonyoss.helpdesk.bots;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.impl.SymphonyBasicClient;
 import org.symphonyoss.client.model.Chat;
@@ -40,14 +39,13 @@ import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
 import org.symphonyoss.helpdesk.utils.MemberCache;
-import org.symphonyoss.helpdesk.utils.Messenger;
+import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.pod.model.User;
 
 import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**

@@ -38,6 +38,7 @@
 
     <modules>
         <module>proxy-desk</module>
+        <module>room-desk</module>
         <module>web-desk</module>
     </modules>
 

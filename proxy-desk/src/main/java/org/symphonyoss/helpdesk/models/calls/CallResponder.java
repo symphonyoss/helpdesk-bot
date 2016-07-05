@@ -31,7 +31,7 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.helpdesk.constants.HelpBotConstants;
 import org.symphonyoss.helpdesk.listeners.command.CallCommandListener;
 import org.symphonyoss.helpdesk.models.users.DeskUser;
-import org.symphonyoss.helpdesk.utils.Messenger;
+import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
 /**

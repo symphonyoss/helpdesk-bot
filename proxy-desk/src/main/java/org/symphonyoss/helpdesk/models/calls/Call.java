@@ -29,11 +29,10 @@ import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.helpdesk.listeners.chat.CallChatListener;
-import org.symphonyoss.helpdesk.listeners.command.CallCommandListener;
 import org.symphonyoss.helpdesk.listeners.service.CallServiceListener;
 import org.symphonyoss.helpdesk.models.users.DeskUser;
 import org.symphonyoss.helpdesk.utils.CallCache;
-import org.symphonyoss.helpdesk.utils.Messenger;
+import org.symphonyoss.ai.utils.Messenger;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
