@@ -50,12 +50,28 @@ import java.util.Set;
 
 /**
  * The main help desk bot class
+ * REQUIRED VM Arguments or System Properties:
+ *
+ *        -Dsessionauth.url=https://pod_fqdn:port/sessionauth
+ *        -Dkeyauth.url=https://pod_fqdn:port/keyauth
+ *        -Dsymphony.agent.pod.url=https://agent_fqdn:port/pod
+ *        -Dsymphony.agent.agent.url=https://agent_fqdn:port/agent
+ *        -Dcerts.dir=/dev/certs/
+ *        -Dkeystore.password=(Pass)
+ *        -Dtruststore.file=/dev/certs/server.truststore
+ *        -Dtruststore.password=(Pass)
+ *        -Dbot.user=hashtag.bot
+ *        -Dbot.domain=@markit.com
+ *
+ *
  */
 public class HelpDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
     private MemberCommandListener memberCommandListener;
     private HelpClientListener helpClientListener;
     private SymphonyClient symClient;
+
+
 
     public HelpDeskBot() {
         logger.info("Init for help desk user {}", Config.getString(HelpBotConfig.BOT_USER));
@@ -103,7 +119,7 @@ public class HelpDeskBot implements ChatServiceListener {
 
         } catch (Exception e) {
 
-            if(logger != null)
+            if (logger != null)
                 logger.error(e.toString());
             else
                 e.printStackTrace();
@@ -119,7 +135,7 @@ public class HelpDeskBot implements ChatServiceListener {
 
             user = symClient.getUsersClient().getUserFromEmail(System.getProperty(HelpBotConfig.ADMIN_USER));
 
-            if(MemberCache.getMember(user) == null) {
+            if (MemberCache.getMember(user) == null) {
 
                 Member member = new Member(user.getEmailAddress(), user.getId());
 
@@ -139,15 +155,6 @@ public class HelpDeskBot implements ChatServiceListener {
      */
     public void initConnection() {
 
-//        -Dkeystore.password=SymphonyIsGreat123
-//        -Dtruststore.password=SymphonyIsGreat123
-//        -Dsessionauth.url=https://localhost.symphony.com:844/sessionauth
-//        -Dkeyauth.url=https://localhost.symphony.com:8444/keyauth
-//        -Dsymphony.agent.pod.url=https://symagent.mdevlab.com:8446/pod
-//        -Dsymphony.agent.agent.url=https://symagent.mdevlab.com:8446/agent
-//        -Dcerts.dir=/dev/certs/
-//        -Dtruststore.file=/dev/certs/server.truststore
-//        -Dbot.user=hashtag.bot
 
         try {
 
@@ -176,7 +183,7 @@ public class HelpDeskBot implements ChatServiceListener {
 
         } catch (Exception e) {
 
-            if(logger != null)
+            if (logger != null)
                 logger.error("Init Exception", e);
             else
                 e.printStackTrace();
@@ -189,50 +196,52 @@ public class HelpDeskBot implements ChatServiceListener {
      * A method that is called by the listener when a new chat is created.
      * On a new chat, determine if the remote user is a member or client.
      * Register the chat to the appropriate listener.
-     * @param chat   the new chat
+     *
+     * @param chat the new chat
      */
     public void onNewChat(Chat chat) {
 
-            if (chat != null) {
-                logger.debug("New chat connection: " + chat.getStream());
+        if (chat != null) {
+            logger.debug("New chat connection: " + chat.getStream());
 
-                Set<User> users = chat.getRemoteUsers();
-                if (users != null && users.size() == 1) {
-                    User user = users.iterator().next();
+            Set<User> users = chat.getRemoteUsers();
+            if (users != null && users.size() == 1) {
+                User user = users.iterator().next();
 
-                    if (user != null && MemberCache.hasMember(user.getId().toString())) {
+                if (user != null && MemberCache.hasMember(user.getId().toString())) {
 
-                        memberCommandListener.listenOn(chat);
-                        MemberCache.getMember(user).setOnline(true);
-                        Messenger.sendMessage("Joined help desk as member.",
-                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                    memberCommandListener.listenOn(chat);
+                    MemberCache.getMember(user).setOnline(true);
+                    Messenger.sendMessage("Joined help desk as member.",
+                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
 
-                    } else if(user != null){
+                } else if (user != null) {
 
-                        HoldCache.putClientOnHold(ClientCache.addClient(user));
-                        helpClientListener.listenOn(chat);
-                        Messenger.sendMessage("Joined help desk as help client.",
-                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
-
-                    }
+                    HoldCache.putClientOnHold(ClientCache.addClient(user));
+                    helpClientListener.listenOn(chat);
+                    Messenger.sendMessage("Joined help desk as help client.",
+                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
 
                 }
 
-            }else if(logger != null){
-                    logger.warn("Incoming new chat received a null value.");
             }
+
+        } else if (logger != null) {
+            logger.warn("Incoming new chat received a null value.");
+        }
     }
 
     /**
      * A method called by the listener when a chat is removed.
      * On chat remove, determine if the user is a client or member.
      * Remove the chat from the appropriate listener.
-     * @param chat   the removed chat
+     *
+     * @param chat the removed chat
      */
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed chat connection: " + chat.getStream());
 
-        if(chat != null) {
+        if (chat != null) {
             Set<User> users = chat.getRemoteUsers();
             if (users != null && users.size() > 1) {
                 User user = chat.getRemoteUsers().iterator().next();
@@ -250,7 +259,7 @@ public class HelpDeskBot implements ChatServiceListener {
 
                 }
             }
-        }else if(logger != null) {
+        } else if (logger != null) {
             logger.warn("Incoming new chat received a null value.");
         }
     }
