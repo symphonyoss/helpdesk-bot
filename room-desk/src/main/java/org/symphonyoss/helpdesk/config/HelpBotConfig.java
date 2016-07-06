@@ -34,9 +34,6 @@ import org.slf4j.LoggerFactory;
 public final class HelpBotConfig {
 
     public static final Configuration Config;
-    private final static Logger logger = LoggerFactory.getLogger(HelpBotConfig.class);
-
-
     //Properties
     public final static String CONFIG_DIR = "helpbot.config.dir";
     public final static String CONFIG_FILE = "helpbot.properties";
@@ -59,10 +56,9 @@ public final class HelpBotConfig {
     public final static String TRUSTSTORE_FILE = "truststore.file";
     public final static String BOT_USER = "bot.user";
     public final static String FILES_JSON = "files.json";
+    public final static String FILES_TRANSCRIPT = "files.transcript";
     public final static String ADMIN_USER = "admin.user";
     public final static String MEMBER_CHAT_STREAM = "member.chat.stream";
-
-
     //Env
     public final static String KEYSTORE_PASSWORD_ENV = "KEYSTORE_PASSWORD";
     public final static String TRUSTSTORE_PASSWORD_ENV = "TRUSTSTORE_PASSWORD";
@@ -74,9 +70,10 @@ public final class HelpBotConfig {
     public final static String TRUSTSTORE_FILE_ENV = "TRUSTSTORE_FILE";
     public final static String BOT_USER_ENV = "BOT_USER";
     public final static String FILES_JSON_ENV = "FILES_JSON";
+    public final static String FILES_TRANSCRIPT_ENV = "FILES_TRANSCRIPT";
     public final static String ADMIN_USER_ENV = "ADMIN_USER";
     public final static String MEMBER_CHAT_STREAM_ENV = "MEMBER_CHAT";
-
+    private final static Logger logger = LoggerFactory.getLogger(HelpBotConfig.class);
 
     static {
 
@@ -228,6 +225,17 @@ public final class HelpBotConfig {
                 System.setProperty(FILES_JSON, System.getenv(FILES_JSON_ENV));
             } else {
                 System.setProperty(FILES_JSON, Config.getString(FILES_JSON));
+            }
+
+        }
+
+
+        if (System.getProperty(FILES_TRANSCRIPT) == null) {
+
+            if (System.getenv(FILES_TRANSCRIPT_ENV) != null) {
+                System.setProperty(FILES_TRANSCRIPT, System.getenv(FILES_TRANSCRIPT_ENV));
+            } else {
+                System.setProperty(FILES_TRANSCRIPT, Config.getString(FILES_TRANSCRIPT));
             }
 
         }

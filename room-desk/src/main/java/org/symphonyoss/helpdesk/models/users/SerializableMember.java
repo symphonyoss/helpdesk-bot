@@ -24,9 +24,6 @@
 
 package org.symphonyoss.helpdesk.models.users;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * Created by nicktarsillo on 6/17/16.
  * A model that allows the member class to be serialized and written to file
@@ -41,12 +38,11 @@ public class SerializableMember {
     }
 
     /**
-     * @return   convert back to member
+     * @return convert back to member
      */
     public Member toMember() {
         return new Member(email, userID);
     }
-
 
 
 }

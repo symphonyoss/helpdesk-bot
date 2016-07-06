@@ -43,7 +43,7 @@ public class AiResponse {
     }
 
     /**
-     * @return   the response message
+     * @return the response message
      */
     public String getMessage() {
         return message;
@@ -54,7 +54,7 @@ public class AiResponse {
     }
 
     /**
-     * @return   the format of the message
+     * @return the format of the message
      */
     public MessageSubmission.FormatEnum getType() {
         return type;

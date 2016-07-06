@@ -32,7 +32,6 @@ import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.models.calls.HelpCall;
 import org.symphonyoss.helpdesk.models.users.DeskUser;
 import org.symphonyoss.helpdesk.utils.DeskUserCache;
-import org.symphonyoss.symphony.agent.model.ImportedMessage;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.UserIdList;
@@ -46,10 +45,10 @@ public class HelpSummaryAction implements AiAction {
     /**
      * Send back the summary of help requested from all the clients in the room.
      *
-     * @param mlMessageParser   the parser contains the input in ML
-     * @param message   the received message
-     * @param command   the command that triggered this action
-     * @return   the sequence of responses generated from this action
+     * @param mlMessageParser the parser contains the input in ML
+     * @param message         the received message
+     * @param command         the command that triggered this action
+     * @return the sequence of responses generated from this action
      */
     public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
@@ -57,12 +56,12 @@ public class HelpSummaryAction implements AiAction {
         userIdList.add(message.getFromUserId());
 
         DeskUser deskUser = DeskUserCache.getDeskUser(message.getFromUserId().toString());
-        if(deskUser != null) {
+        if (deskUser != null) {
 
             aiResponseSequence.addResponse(new AiResponse(((HelpCall) deskUser.getCall()).getHelpSummary(),
                     MessageSubmission.FormatEnum.MESSAGEML, userIdList));
 
-        }else{
+        } else {
 
             aiResponseSequence.addResponse(new AiResponse("ERROR: DESK USER NOT FOUND. PLEASE CONTACT AND ADMIN.",
                     MessageSubmission.FormatEnum.TEXT, userIdList));
@@ -71,7 +70,6 @@ public class HelpSummaryAction implements AiAction {
 
         return aiResponseSequence;
     }
-
 
 
 }

@@ -69,10 +69,10 @@ public class AddMemberAction implements AiAction {
      * Create new member, remove old client.
      * Add to cache, write to file.
      *
-     * @param mlMessageParser   the parser contains the input in ML
-     * @param message   the received message
-     * @param command   the command that triggered this action
-     * @return   the sequence of responses generated from this action
+     * @param mlMessageParser the parser contains the input in ML
+     * @param message         the received message
+     * @param command         the command that triggered this action
+     * @return the sequence of responses generated from this action
      */
     public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
         AiResponseSequence responseList = new AiResponseSequence();
@@ -82,7 +82,7 @@ public class AddMemberAction implements AiAction {
         String email = String.join(" ", chunks);
         email = email.substring(email.indexOf(command.getPrefixRequirement(0)) + 1);
 
-        try{
+        try {
             User user = symClient.getUsersClient().getUserFromEmail(email);
 
             if (user != null
@@ -108,7 +108,7 @@ public class AddMemberAction implements AiAction {
                 Chat chat = symClient.getChatService().getChatByStream(
                         symClient.getStreamsClient().getStream(userIdList).getId());
 
-                if(chat != null) {
+                if (chat != null) {
                     helpClientListener.stopListening(chat);
                     memberCommandListener.listenOn(chat);
                 }
@@ -121,13 +121,12 @@ public class AddMemberAction implements AiAction {
             }
 
 
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("An error occurred when finding an email.", e);
         }
 
         return responseList;
     }
-
 
 
 }

@@ -157,7 +157,7 @@
                         </platforms>
                         <programs>
                             <program>
-                                <mainClass>org.symphonyoss.helpdesk.bots.HelpDeskBot</mainClass>
+                                <mainClass>org.symphonyoss.helpdesk.bots.RoomDeskBot</mainClass>
                                 <id>HelpDeskBot</id>
                                 <!-- Only generate windows bat script for this application -->
                                 <platforms>

@@ -25,6 +25,7 @@
 package org.symphonyoss.helpdesk.utils;
 
 import org.symphonyoss.helpdesk.models.users.DeskUser;
+import org.symphonyoss.symphony.pod.model.User;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,8 +46,12 @@ public class DeskUserCache {
     public static DeskUser getDeskUser(String userID) {
         if (userID != null) {
             return ALL_USERS.get(userID);
-        }else {
+        } else {
             return null;
         }
+    }
+
+    public static boolean hasUser(User user) {
+        return ALL_USERS.containsKey(user.getId());
     }
 }

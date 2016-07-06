@@ -29,8 +29,6 @@ import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.models.calls.Call;
-import org.symphonyoss.helpdesk.models.users.DeskUser;
-import org.symphonyoss.helpdesk.utils.DeskUserCache;
 import org.symphonyoss.symphony.agent.model.Message;
 
 /**
@@ -48,10 +46,10 @@ public class ExitAction implements AiAction {
      * Find user by from message id.
      * Exit the call.
      *
-     * @param mlMessageParser   the parser contains the input in ML
-     * @param message   the received message
-     * @param command   the command that triggered this action
-     * @return   the sequence of responses generated from this action
+     * @param mlMessageParser the parser contains the input in ML
+     * @param message         the received message
+     * @param command         the command that triggered this action
+     * @return the sequence of responses generated from this action
      */
     public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
@@ -60,7 +58,6 @@ public class ExitAction implements AiAction {
 
         return aiResponseSequence;
     }
-
 
 
 }

@@ -26,6 +26,7 @@ package org.symphonyoss.helpdesk.models;
 
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
+import org.symphonyoss.helpdesk.listeners.chat.TranscriptListener;
 import org.symphonyoss.helpdesk.listeners.command.MemberCommandListener;
 
 /**
@@ -35,10 +36,12 @@ public class HelpBotSession {
     private SymphonyClient symphonyClient;
     private HelpClientListener helpClientListener;
     private MemberCommandListener memberListener;
+    private TranscriptListener transcriptListener;
 
-    public HelpBotSession(){}
+    public HelpBotSession() {
+    }
 
-    public HelpBotSession(SymphonyClient symphonyClient, HelpClientListener helpClientListener, MemberCommandListener memberCommandListener){
+    public HelpBotSession(SymphonyClient symphonyClient, HelpClientListener helpClientListener, MemberCommandListener memberCommandListener) {
         this.symphonyClient = symphonyClient;
         this.helpClientListener = helpClientListener;
         this.memberListener = memberCommandListener;
@@ -66,5 +69,13 @@ public class HelpBotSession {
 
     public void setMemberListener(MemberCommandListener memberListener) {
         this.memberListener = memberListener;
+    }
+
+    public TranscriptListener getTranscriptListener() {
+        return transcriptListener;
+    }
+
+    public void setTranscriptListener(TranscriptListener transcriptListener) {
+        this.transcriptListener = transcriptListener;
     }
 }

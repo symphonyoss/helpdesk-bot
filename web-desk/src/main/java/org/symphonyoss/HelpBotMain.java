@@ -29,8 +29,11 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import org.symphonyoss.cim.CIMImpl;
-import org.symphonyoss.sapi.ServiceAPI;
+import org.symphonyoss.client.SymphonyClient;
+import org.symphonyoss.client.impl.SymphonyBasicClient;
+import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.session.HelpSession;
+import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.util.SSLUtil;
 import org.symphonyoss.web.HelpBotWebServer;
 import org.symphonyoss.web.HelpSessionListener;
@@ -39,7 +42,8 @@ import io.vertx.core.MultiMap;
 
 public class HelpBotMain {
 
-	public static final Logger log = LoggerFactory.getLogger(HelpBotMain.class);
+	public static final Logger logger = LoggerFactory.getLogger(HelpBotMain.class);
+	private SymphonyClient symClient;
 
 	public static void main(String[] args) throws Exception {
 
@@ -52,12 +56,12 @@ public class HelpBotMain {
 			return;
 		}
 
-		log.info("Starting HelpBot Server...");
+		logger.info("Starting HelpBot Server...");
 
 		HelpBotConfig config = HelpBotConfig.init(command.configFile);
 		// disableSSLCertCheck();
 		if (command.sslTrustAllHosts) {
-			log.warn("********* Removing SSL Server Certification Validation **********");
+			logger.warn("********* Removing SSL Server Certification Validation **********");
 			SSLUtil.setupSSL();
 		}
 
@@ -66,7 +70,7 @@ public class HelpBotMain {
 
 	public HelpBotMain(HelpBotConfig config) {
 		// Symphony Service API Wrapper.
-		ServiceAPI serviceAPI = new ServiceAPI(config.getPodUrl(), config.getAgentUrl(), config);
+		setupBot();
 
 		// This is the integration point with CIM.
 		AgentSelector agentSelector = new CIMImpl();
@@ -79,7 +83,7 @@ public class HelpBotMain {
 				// http://host/help
 				// This can customized in the help front page.
 				MultiMap helpRequest = session.getHelpRequest();
-				log.info("Help Session Initiated. Requesting Agent Assignment. " + helpRequest);
+				logger.info("Help Session Initiated. Requesting Agent Assignment. " + helpRequest);
 
 				// The Agent Selector is where BLK will notify CIM of the help
 				// request, and wait for an agent to accept the request.
@@ -105,8 +109,44 @@ public class HelpBotMain {
 		// Start the web server. The webserver will host the chat assets for the
 		// helpee UI, as
 		// well as an WS endpoint supporting the chat interaction with helpbot.
-		new HelpBotWebServer(config, serviceAPI, hsl);
-		log.info("Started HelpBot Server on port: " + config.getPort());
+		new HelpBotWebServer(config, symClient, hsl);
+		logger.info("Started HelpBot Server on port: " + config.getPort());
 	}
 
+
+	private void setupBot(){
+		try {
+
+			symClient = new SymphonyBasicClient();
+
+			logger.debug("{} {}", System.getProperty(HelpBotConfig.SESSIONAUTH_URL),
+					System.getProperty("keyauth.url"));
+			AuthorizationClient authClient = new AuthorizationClient(
+					System.getProperty("sessionauth.url"),
+					System.getProperty("keyauth.url"));
+
+			authClient.setKeystores(
+					System.getProperty(HelpBotConfig.TRUSTSTORE_FILE),
+					System.getProperty("truststore.password"),
+					System.getProperty("certs.dir") + System.getProperty("bot.user") + ".p12",
+					System.getProperty("keystore.password"));
+
+			SymAuth symAuth = authClient.authenticate();
+
+			symClient.init(
+					symAuth,
+					System.getProperty("bot.user") + "@markit.com",
+					System.getProperty("symphony.agent.agent.url"),
+					System.getProperty("symphony.agent.pod.url")
+			);
+
+		} catch (Exception e) {
+
+			if(logger != null)
+				logger.error("Init Exception", e);
+			else
+				e.printStackTrace();
+
+		}
+	}
 }

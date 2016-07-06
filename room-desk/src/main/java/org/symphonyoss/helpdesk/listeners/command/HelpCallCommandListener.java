@@ -63,13 +63,13 @@ public class HelpCallCommandListener extends AiCommandListener {
         sendSummary.addPermission(new IsHelpCall());
 
         AiCommand exit = new AiCommand(Config.getString(HelpBotConfig.EXIT), 0);
-        sendInfo.addAction(new ExitAction(call));
-        sendInfo.addPermission(new IsHelpCall());
+        exit.addAction(new ExitAction(call));
+        exit.addPermission(new IsHelpCall());
 
         getActiveCommands().add(sendInfo);
         getActiveCommands().add(sendSummary);
+        getActiveCommands().add(exit);
     }
-
 
 
 }

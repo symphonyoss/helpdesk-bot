@@ -36,13 +36,10 @@ import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.helpdesk.config.HelpBotConfig;
 import org.symphonyoss.helpdesk.listeners.command.HelpClientCommandListener;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
-import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
-import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 
 /**
  * Created by nicktarsillo on 6/14/16.
@@ -60,15 +57,16 @@ public class HelpClientListener implements ChatListener {
 
     /**
      * A method called from the chat listener, when a new chat message is received.
-     * If the received message is not a command, relay the message to the onlines, off call
+     * If the received message is not a command, relay the message to the members, off call
      * members.
-     * @param message   the received message
+     *
+     * @param message the received message
      */
     public void onChatMessage(Message message) {
         if (message == null
                 || message.getStream() == null
                 || helpResponseListener.isCommand(message)) {
-            if(logger != null)
+            if (logger != null)
                 logger.warn("Ignored message {}.", message);
             return;
         }
@@ -92,11 +90,11 @@ public class HelpClientListener implements ChatListener {
         String[] chunks = mlMessageParser.getTextChunks();
 
         HelpClient helpClient = ClientCache.retrieveClient(message);
-        if(helpClient != null) {
+        if (helpClient != null) {
             helpClient.getHelpRequests().add(mlMessageParser.getText());
             relayToMembers(helpClient, message);
 
-        }else{
+        } else {
             logger.warn("Ignored message with from id {}. " +
                     "Client could not be found.", message.getFromUserId());
         }
@@ -104,38 +102,41 @@ public class HelpClientListener implements ChatListener {
 
     /**
      * Register this listener to the chat appropriately
+     *
      * @param chat the chat to register this listener on
      */
     public void listenOn(Chat chat) {
-        if(chat != null){
+        if (chat != null) {
 
             helpResponseListener.listenOn(chat);
             chat.registerListener(this);
 
-        }else{
+        } else {
             logChatError(chat, new NullPointerException());
         }
     }
 
     /**
      * Remove this listener from the chat appropriately
+     *
      * @param chat the chat to remove this listener from
      */
     public void stopListening(Chat chat) {
-        if(chat != null){
+        if (chat != null) {
 
             helpResponseListener.stopListening(chat);
             chat.removeListener(this);
 
-        }else{
+        } else {
             logChatError(chat, new NullPointerException());
         }
     }
 
-    private void relayToMembers(HelpClient helpClient, Message message){
+    private void relayToMembers(HelpClient helpClient, Message message) {
         Chat chat = symClient.getChatService().getChatByStream(System.getProperty(HelpBotConfig.MEMBER_CHAT_STREAM));
 
-        Messenger.sendMessage(message.getMessage(), MessageSubmission.FormatEnum.MESSAGEML, chat, symClient);
+        Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD + helpClient.getEmail() + MLTypes.END_BOLD + ": " + message.getMessage().substring(MLTypes.START_ML.toString().length()),
+                MessageSubmission.FormatEnum.MESSAGEML, chat, symClient);
 
     }
 
@@ -164,7 +165,6 @@ public class HelpClientListener implements ChatListener {
     public void setSymClient(SymphonyClient symClient) {
         this.symClient = symClient;
     }
-
 
 
 }

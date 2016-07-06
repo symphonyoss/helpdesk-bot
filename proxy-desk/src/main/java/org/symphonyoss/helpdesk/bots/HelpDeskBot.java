@@ -249,12 +249,12 @@ public class HelpDeskBot implements ChatServiceListener {
                 if (user != null && MemberCache.MEMBERS.containsKey(user.getEmailAddress())
                         && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
 
-                    chat.removeListener(memberCommandListener);
+                    memberCommandListener.stopListening(chat);
                     MemberCache.getMember(user).setOnline(false);
 
                 } else if (user != null && ClientCache.retrieveClient(user).isOnCall()) {
 
-                    chat.removeListener(helpClientListener);
+                    helpClientListener.stopListening(chat);
                     ClientCache.removeClient(user);
 
                 }

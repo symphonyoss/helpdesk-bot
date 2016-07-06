@@ -38,10 +38,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.symphonyoss.HelpBotConfig;
-import org.symphonyoss.symphony.authenticator.invoker.ApiException;
+import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.sapi.AsyncCallback;
 import org.symphonyoss.sapi.ErrorCallback;
-import org.symphonyoss.sapi.ServiceAPI;
 import org.symphonyoss.sapi.StreamListener;
 import org.symphonyoss.sapi.SymphonyMessage;
 import org.symphonyoss.web.Message;
@@ -60,7 +59,7 @@ public class HelpSessionImpl implements HelpSession {
 
 	private static Logger logger = LoggerFactory.getLogger(HelpSessionImpl.class);
 
-	private ServiceAPI sapi;
+	private SymphonyClient symClient;
 
 	private Map<Long, String> aliasMap = new HashMap<>();
 	private String roomId;
@@ -73,16 +72,16 @@ public class HelpSessionImpl implements HelpSession {
 
 	private String terminationString;
 
-	public static HelpSession init(SockJSSocket sockJSSocket, MultiMap helpRequest, ServiceAPI sapi, String username,
+	public static HelpSession init(SockJSSocket sockJSSocket, MultiMap helpRequest, SymphonyClient symClient, String username,
 								   AsyncCallback<HelpSession> readyCallback, ErrorCallback errorCallback) {
-		return new HelpSessionImpl(sockJSSocket, helpRequest, sapi, username, readyCallback, errorCallback);
+		return new HelpSessionImpl(sockJSSocket, helpRequest, symClient, username, readyCallback, errorCallback);
 	}
 
-	private HelpSessionImpl(SockJSSocket sockJSSocket, MultiMap helpRequest, ServiceAPI sapi, String username,
+	private HelpSessionImpl(SockJSSocket sockJSSocket, MultiMap helpRequest, SymphonyClient symClient, String username,
 			AsyncCallback<HelpSession> readyCallback, ErrorCallback errorCallback) {
 		this.helpRequest = helpRequest;
 		this.helpeeName = username;
-		this.sapi = sapi;
+		this.symClient = symClient;
 		this.sockJSSocket = sockJSSocket;
 		this.terminationString = "/close";
 		String roomName = HelpBotConfig.HB_ROOM_PREFIX + UUID.randomUUID().toString();
@@ -94,11 +93,11 @@ public class HelpSessionImpl implements HelpSession {
 		StreamListener symphonyMessageListener = (m) -> handleMessageFromSymphony(m);
 		// Do this asynchronously
 		CompletableFuture.runAsync(
-				() -> createRoom(sapi, roomName, symphonyMessageListener, readyCallback, errorCallback), executor);
+				() -> createRoom(symClient, roomName, symphonyMessageListener, readyCallback, errorCallback), executor);
 	}
 
 	private void handleMessageFromSymphony(SymphonyMessage m) {
-		if (m.getFrom() == sapi.getSymphonyUserId()) {
+		if (m.getFrom() == symClient.getLocalUser().getId()) {
 			// This message came from us, so ignore it!
 			return;
 		}
@@ -121,13 +120,13 @@ public class HelpSessionImpl implements HelpSession {
 		return m.getMessage().replaceAll("</messageML>", "").replaceAll("<messageML>", "");
 	}
 
-	private boolean createRoom(ServiceAPI sapi, String roomName, final StreamListener symphonyMessageListener,
+	private boolean createRoom(SymphonyClient symClient, String roomName, final StreamListener symphonyMessageListener,
 			AsyncCallback<HelpSession> readyCallback, ErrorCallback errorCallback) {
 		try {
 			// Save the Symphony Room Id
-			roomId = sapi.createRoom(roomName);
+			roomId = symClient.createRoom(roomName);
 			// "subscribe" to messages in this room
-			sapi.addStreamListener(roomId, symphonyMessageListener);
+
 			// The session is ready now, tell the caller of "init"
 			readyCallback.callback(HelpSessionImpl.this);
 			// Send a welcome message to the WS
@@ -155,7 +154,7 @@ public class HelpSessionImpl implements HelpSession {
 		});
 
 		sockJSSocket.exceptionHandler(c -> {
-			sapi.sendMessage(roomId,
+			symClient.sendMessage(roomId,
 					"There was a problem with the connection to [" + helpeeName + "] " + c.getMessage());
 		});
 	}
@@ -180,12 +179,12 @@ public class HelpSessionImpl implements HelpSession {
 		boolean owner = true;
 		try {
 			logger.info("adding agent to room: " + agentEmailAddress);
-			Long symUserId = sapi.lookupUserByEmail(agentEmailAddress);
+			Long symUserId = symClient.lookupUserByEmail(agentEmailAddress);
 			if (symUserId == null) {
 				throw new RuntimeException("Unable to find Agent by email address");
 			}
 			aliasMap.put(symUserId, alias);
-			sapi.addMemberToRoom(roomId, symUserId, owner);
+			symClient.addMemberToRoom(roomId, symUserId, owner);
 		} catch (org.symphonyoss.symphony.pod.invoker.ApiException e) {
 			throw new RuntimeException(e);
 		}
@@ -197,7 +196,7 @@ public class HelpSessionImpl implements HelpSession {
 		// Line feeds cause a problem, need to remove them.
 		String cleanMsg = message.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
 		String formattedMessage = "<messageML>" + cleanMsg + "</messageML>";
-		sapi.sendMessage(roomId, formattedMessage);
+		symClient.sendMessage(roomId, formattedMessage);
 	}
 
 	@Override

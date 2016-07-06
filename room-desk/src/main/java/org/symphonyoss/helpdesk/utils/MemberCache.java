@@ -27,16 +27,16 @@ package org.symphonyoss.helpdesk.utils;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.helpdesk.config.HelpBotConfig;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.models.users.SerializableMember;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.pod.model.User;
 
 import java.io.*;
-import java.util.*;
-
-import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/14/16.
@@ -79,7 +79,7 @@ public class MemberCache {
 
     public static void writeMember(Member member) {
 
-        if(member == null)
+        if (member == null)
             return;
 
         try {
@@ -112,7 +112,7 @@ public class MemberCache {
         DeskUserCache.addUser(member);
     }
 
-    public static Set<Member> getOnlineMembers(){
+    public static Set<Member> getOnlineMembers() {
         Set<Member> members = new HashSet<Member>();
         for (Member member : MEMBERS.values()) {
 
@@ -131,7 +131,7 @@ public class MemberCache {
         int index = 1;
         for (Member member : MEMBERS.values()) {
 
-                list += ", " + member.getEmail();
+            list += ", " + member.getEmail();
 
             index++;
         }
@@ -149,7 +149,7 @@ public class MemberCache {
 
             if (member.isOnline() && !member.isBusy()) {
 
-                    list += ", " + member.getEmail();
+                list += ", " + member.getEmail();
 
             }
 
@@ -158,7 +158,7 @@ public class MemberCache {
 
         if (list.length() > 0) {
             return list.substring(1);
-        }else {
+        } else {
             return list;
         }
     }

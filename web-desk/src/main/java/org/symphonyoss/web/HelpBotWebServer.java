@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.symphonyoss.HelpBotConfig;
-import org.symphonyoss.sapi.ServiceAPI;
+import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.session.HelpSessionImpl;
 
 import io.vertx.core.AbstractVerticle;
@@ -54,12 +54,12 @@ public class HelpBotWebServer {
 
 	private static Logger logger = LoggerFactory.getLogger(HelpBotWebServer.class);
 
-	private ServiceAPI serviceAPI;
+	private SymphonyClient symClient;
 	private HelpBotConfig config;
 
-	public HelpBotWebServer(HelpBotConfig config, ServiceAPI serviceAPI, HelpSessionListener hsl) {
+	public HelpBotWebServer(HelpBotConfig config, SymphonyClient symClient, HelpSessionListener hsl) {
 		Vertx vertx = Vertx.vertx();
-		this.serviceAPI = serviceAPI;
+		this.symClient = symClient;
 		RestVert restVert = new RestVert(hsl);
 		this.config = config;
 		vertx.deployVerticle(restVert);
@@ -166,7 +166,7 @@ public class HelpBotWebServer {
 					name = "Unknown";
 				}
 
-				HelpSessionImpl.init(sockJSSocket, sessionData, serviceAPI, name,
+				HelpSessionImpl.init(sockJSSocket, sessionData, symClient, name,
 						createdSession -> l.onHelpSessionInit(createdSession), (message, throwable) -> {
 					throwable.printStackTrace();
 					sockJSSocket.close();

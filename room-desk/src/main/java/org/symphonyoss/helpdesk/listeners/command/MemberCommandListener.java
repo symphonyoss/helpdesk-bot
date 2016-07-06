@@ -26,16 +26,14 @@ package org.symphonyoss.helpdesk.listeners.command;
 
 import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.ai.models.AiCommand;
-import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.helpdesk.config.HelpBotConfig;
 import org.symphonyoss.helpdesk.models.HelpBotSession;
-import org.symphonyoss.helpdesk.models.actions.*;
-import org.symphonyoss.helpdesk.models.calls.Call;
+import org.symphonyoss.helpdesk.models.actions.AcceptHelpAction;
+import org.symphonyoss.helpdesk.models.actions.AddMemberAction;
+import org.symphonyoss.helpdesk.models.actions.ClientQueueAction;
+import org.symphonyoss.helpdesk.models.actions.OnlineMembersAction;
 import org.symphonyoss.helpdesk.models.permissions.IsMember;
 import org.symphonyoss.helpdesk.models.permissions.OffCall;
-import org.symphonyoss.helpdesk.utils.CallCache;
-import org.symphonyoss.helpdesk.utils.DeskUserCache;
-import org.symphonyoss.symphony.pod.model.User;
 
 import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 

@@ -26,14 +26,12 @@ package org.symphonyoss.helpdesk.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.helpdesk.models.HelpBotSession;
 import org.symphonyoss.helpdesk.models.calls.Call;
 import org.symphonyoss.helpdesk.models.calls.HelpCall;
 import org.symphonyoss.helpdesk.models.users.HelpClient;
 import org.symphonyoss.helpdesk.models.users.Member;
 
-import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -65,7 +63,7 @@ public class CallCache {
 
     public static void endCall(Call call) {
 
-        if(call == null)
+        if (call == null)
             return;
 
         ACTIVECALLS.remove(call);
@@ -73,7 +71,7 @@ public class CallCache {
 
     }
 
-    public static void removeCall(Call call){
+    public static void removeCall(Call call) {
 
         ACTIVECALLS.remove(call);
 

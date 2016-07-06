@@ -48,10 +48,10 @@ public class RoomInfoAction implements AiAction {
      * Includes all members in room.
      * Retain member identity preference.
      *
-     * @param mlMessageParser   the parser contains the input in ML
-     * @param message   the received message
-     * @param command   the command that triggered this action
-     * @return   the sequence of responses generated from this action
+     * @param mlMessageParser the parser contains the input in ML
+     * @param message         the received message
+     * @param command         the command that triggered this action
+     * @return the sequence of responses generated from this action
      */
     public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
@@ -59,12 +59,12 @@ public class RoomInfoAction implements AiAction {
         userIdList.add(message.getFromUserId());
 
         DeskUser deskUser = DeskUserCache.getDeskUser(message.getFromUserId().toString());
-        if(deskUser != null) {
+        if (deskUser != null) {
 
             aiResponseSequence.addResponse(new AiResponse(((HelpCall) deskUser.getCall()).getRoomInfo(),
                     MessageSubmission.FormatEnum.MESSAGEML, userIdList));
 
-        }else{
+        } else {
 
             aiResponseSequence.addResponse(new AiResponse("ERROR: DESK USER NOT FOUND. PLEASE CONTACT AND ADMIN.",
                     MessageSubmission.FormatEnum.TEXT, userIdList));

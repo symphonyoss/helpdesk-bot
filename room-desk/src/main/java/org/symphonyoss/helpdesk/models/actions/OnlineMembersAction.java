@@ -46,10 +46,10 @@ public class OnlineMembersAction implements AiAction {
      * Send back a message with all the online members.
      * Retain members identity preference.
      *
-     * @param mlMessageParser   the parser contains the input in ML
-     * @param message   the received message
-     * @param command   the command that triggered this action
-     * @return   the sequence of responses generated from this action
+     * @param mlMessageParser the parser contains the input in ML
+     * @param message         the received message
+     * @param command         the command that triggered this action
+     * @return the sequence of responses generated from this action
      */
     public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();

@@ -26,9 +26,6 @@ package org.symphonyoss.helpdesk.models.users;
 
 import org.symphonyoss.helpdesk.models.calls.Call;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * Created by nicktarsillo on 6/14/16.
  * A model that represents a member.
@@ -47,7 +44,7 @@ public class Member implements DeskUser {
     }
 
     /**
-     * @return   the type of user (Member)
+     * @return the type of user (Member)
      */
     public DeskUserType getUserType() {
         return DeskUserType.MEMBER;
@@ -70,7 +67,7 @@ public class Member implements DeskUser {
     }
 
     /**
-     * @return   if the user is in a call
+     * @return if the user is in a call
      */
     public boolean isOnCall() {
         return onCall;
@@ -85,14 +82,14 @@ public class Member implements DeskUser {
     }
 
     /**
-     * @param busy   if the user is busy
+     * @param busy if the user is busy
      */
     public void setBusy(boolean busy) {
         this.busy = busy;
     }
 
     /**
-     * @return   the call the user is currently in
+     * @return the call the user is currently in
      */
     public Call getCall() {
         return call;
@@ -110,7 +107,7 @@ public class Member implements DeskUser {
         this.online = online;
     }
 
-    public SerializableMember toSerializable(){
+    public SerializableMember toSerializable() {
         return new SerializableMember(email, userID);
     }
 

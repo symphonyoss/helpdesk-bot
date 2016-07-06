@@ -38,5 +38,4 @@ public class IsMember implements AiPermission {
     }
 
 
-
 }

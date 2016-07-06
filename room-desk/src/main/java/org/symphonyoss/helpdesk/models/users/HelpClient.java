@@ -49,14 +49,14 @@ public class HelpClient implements DeskUser {
     }
 
     /**
-     * @return   the type of user (Help Client)
+     * @return the type of user (Help Client)
      */
     public DeskUserType getUserType() {
         return DeskUserType.HELP_CLIENT;
     }
 
     /**
-     * @return   a summary of all the clients help requests
+     * @return a summary of all the clients help requests
      */
     public String getHelpSummary() {
         String help;
@@ -67,7 +67,7 @@ public class HelpClient implements DeskUser {
             help = MLTypes.START_BOLD + "    For " + email + ": "
                     + MLTypes.END_BOLD + MLTypes.BREAK;
 
-        }else {
+        } else {
 
             help = MLTypes.START_BOLD + "    For " + userID + ": "
                     + MLTypes.END_BOLD + MLTypes.BREAK;
@@ -121,7 +121,6 @@ public class HelpClient implements DeskUser {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
 
 }

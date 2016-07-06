@@ -24,6 +24,7 @@
 
 package org.symphonyoss.helpdesk.models.actions;
 
+import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
@@ -58,10 +59,10 @@ public class AcceptHelpAction implements AiAction {
     /**
      * Accept a client into a chat, where a member can assist.
      *
-     * @param mlMessageParser   the parser contains the input in ML
-     * @param message   the received message
-     * @param command   the command that triggered this action
-     * @return   the sequence of responses generated from this action
+     * @param mlMessageParser the parser contains the input in ML
+     * @param message         the received message
+     * @param command         the command that triggered this action
+     * @return the sequence of responses generated from this action
      */
     public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
@@ -82,9 +83,11 @@ public class AcceptHelpAction implements AiAction {
                 CallCache.newCall(member, HoldCache.pickUpClient(helpClient), helpBotSession);
 
                 Chat chat = helpBotSession.getSymphonyClient().getChatService().getChatByStream(System.getProperty(HelpBotConfig.MEMBER_CHAT_STREAM));
-                Messenger.sendMessage(DeskUserCache.getDeskUser(message.getFromUserId().toString()).getEmail() +
-                                HelpBotConstants.CALL_NOTIFY + helpClient.getEmail(), MessageSubmission.FormatEnum.TEXT,
-                        chat, helpBotSession.getSymphonyClient());
+                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                + DeskUserCache.getDeskUser(message.getFromUserId().toString()).getEmail() + MLTypes.END_BOLD
+                                + HelpBotConstants.CALL_NOTIFY + MLTypes.START_BOLD
+                                + helpClient.getEmail() + MLTypes.END_BOLD + MLTypes.END_ML,
+                        MessageSubmission.FormatEnum.MESSAGEML, chat, helpBotSession.getSymphonyClient());
 
             } else {
 
@@ -102,9 +105,11 @@ public class AcceptHelpAction implements AiAction {
                 CallCache.newCall(member, client, helpBotSession);
 
                 Chat chat = helpBotSession.getSymphonyClient().getChatService().getChatByStream(System.getProperty(HelpBotConfig.MEMBER_CHAT_STREAM));
-                Messenger.sendMessage(DeskUserCache.getDeskUser(message.getFromUserId().toString()).getEmail() +
-                    HelpBotConstants.CALL_NOTIFY + client.getEmail(), MessageSubmission.FormatEnum.TEXT,
-                        chat, helpBotSession.getSymphonyClient());
+                Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
+                                + DeskUserCache.getDeskUser(message.getFromUserId().toString()).getEmail() + MLTypes.END_BOLD
+                                + HelpBotConstants.CALL_NOTIFY + MLTypes.START_BOLD
+                                + client.getEmail() + MLTypes.END_BOLD + MLTypes.END_ML,
+                        MessageSubmission.FormatEnum.MESSAGEML, chat, helpBotSession.getSymphonyClient());
             } else {
 
                 sendTo.add(message.getFromUserId());
@@ -117,7 +122,6 @@ public class AcceptHelpAction implements AiAction {
 
         return aiResponseSequence;
     }
-
 
 
 }

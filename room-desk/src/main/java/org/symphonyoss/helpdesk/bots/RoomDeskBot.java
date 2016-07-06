@@ -33,16 +33,20 @@ import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
 import org.symphonyoss.helpdesk.config.HelpBotConfig;
 import org.symphonyoss.helpdesk.listeners.chat.HelpClientListener;
+import org.symphonyoss.helpdesk.listeners.chat.TranscriptListener;
 import org.symphonyoss.helpdesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.helpdesk.models.HelpBotSession;
 import org.symphonyoss.helpdesk.models.users.Member;
 import org.symphonyoss.helpdesk.utils.ClientCache;
+import org.symphonyoss.helpdesk.utils.DeskUserCache;
 import org.symphonyoss.helpdesk.utils.HoldCache;
 import org.symphonyoss.helpdesk.utils.MemberCache;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
+import org.symphonyoss.symphony.pod.model.Stream;
 import org.symphonyoss.symphony.pod.model.User;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
@@ -50,22 +54,27 @@ import static org.symphonyoss.helpdesk.config.HelpBotConfig.Config;
 /**
  * The main help desk bot class
  */
-public class HelpDeskBot implements ChatServiceListener {
-    private final Logger logger = LoggerFactory.getLogger(HelpDeskBot.class);
+public class RoomDeskBot implements ChatServiceListener {
+    private final Logger logger = LoggerFactory.getLogger(RoomDeskBot.class);
     private MemberCommandListener memberCommandListener;
     private HelpClientListener helpClientListener;
+    private TranscriptListener transcriptListener;
     private SymphonyClient symClient;
 
-    public HelpDeskBot() {
+    public RoomDeskBot() {
         logger.info("Init for help desk user {}", Config.getString(HelpBotConfig.BOT_USER));
         initConnection();
         setupBot();
+        setupChat();
+
+        logger.debug(System.getProperty(HelpBotConfig.MEMBER_CHAT_STREAM));
+
     }
 
     public static void main(String[] args) {
-        System.out.println("HelpDeskBot starting...");
+        System.out.println("RoomDeskBot starting...");
 
-        new HelpDeskBot();
+        new RoomDeskBot();
     }
 
     /**
@@ -84,6 +93,9 @@ public class HelpDeskBot implements ChatServiceListener {
 
             HelpBotSession helpBotSession = new HelpBotSession();
 
+            transcriptListener = new TranscriptListener(symClient);
+            helpBotSession.setTranscriptListener(transcriptListener);
+
             symClient.getChatService().registerListener(this);
             helpBotSession.setSymphonyClient(symClient);
 
@@ -96,12 +108,28 @@ public class HelpDeskBot implements ChatServiceListener {
 
         } catch (Exception e) {
 
-            if(logger != null)
+            if (logger != null)
                 logger.error(e.toString());
             else
                 e.printStackTrace();
 
         }
+    }
+
+    private void setupChat() {
+
+        Chat chat = new Chat();
+        Stream stream = new Stream();
+        stream.setId(System.getProperty(HelpBotConfig.MEMBER_CHAT_STREAM));
+        chat.setStream(stream);
+
+        chat.setRemoteUsers(new HashSet<User>());
+
+        Messenger.sendMessage("Ready to help!",
+                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+
+        chat.registerListener(transcriptListener);
+        symClient.getChatService().addChat(chat);
     }
 
     private void addAdmin() {
@@ -112,7 +140,7 @@ public class HelpDeskBot implements ChatServiceListener {
 
             user = symClient.getUsersClient().getUserFromEmail(System.getProperty(HelpBotConfig.ADMIN_USER));
 
-            if(MemberCache.getMember(user) == null) {
+            if (MemberCache.getMember(user) == null) {
 
                 Member member = new Member(user.getEmailAddress(), user.getId());
 
@@ -169,7 +197,7 @@ public class HelpDeskBot implements ChatServiceListener {
 
         } catch (Exception e) {
 
-            if(logger != null)
+            if (logger != null)
                 logger.error("Init Exception", e);
             else
                 e.printStackTrace();
@@ -182,68 +210,73 @@ public class HelpDeskBot implements ChatServiceListener {
      * A method that is called by the listener when a new chat is created.
      * On a new chat, determine if the remote user is a member or client.
      * Register the chat to the appropriate listener.
-     * @param chat   the new chat
+     *
+     * @param chat the new chat
      */
     public void onNewChat(Chat chat) {
 
-            if (chat != null) {
-                logger.debug("New chat connection: " + chat.getStream());
+        if (chat != null) {
+            logger.debug("New chat connection: " + chat.getStream());
 
-                Set<User> users = chat.getRemoteUsers();
-                if (users != null && users.size() == 1) {
-                    User user = users.iterator().next();
-
-                    if (user != null && MemberCache.hasMember(user.getId().toString())) {
+            Set<User> users = chat.getRemoteUsers();
+            if (users != null && users.size() == 1) {
+                User user = users.iterator().next();
+                if (user != null && !DeskUserCache.hasUser(user)) {
+                    if (MemberCache.hasMember(user.getId().toString())) {
 
                         memberCommandListener.listenOn(chat);
+                        chat.registerListener(transcriptListener);
                         MemberCache.getMember(user).setOnline(true);
                         Messenger.sendMessage("Joined help desk as member.",
                                 MessageSubmission.FormatEnum.TEXT, chat, symClient);
 
-                    } else if(user != null){
+                    } else {
 
                         HoldCache.putClientOnHold(ClientCache.addClient(user));
                         helpClientListener.listenOn(chat);
+                        chat.registerListener(transcriptListener);
                         Messenger.sendMessage("Joined help desk as help client.",
                                 MessageSubmission.FormatEnum.TEXT, chat, symClient);
 
                     }
-
                 }
-
-            }else if(logger != null){
-                    logger.warn("Incoming new chat received a null value.");
             }
+
+        } else if (logger != null) {
+            logger.warn("Incoming new chat received a null value.");
+        }
     }
 
     /**
      * A method called by the listener when a chat is removed.
      * On chat remove, determine if the user is a client or member.
      * Remove the chat from the appropriate listener.
-     * @param chat   the removed chat
+     *
+     * @param chat the removed chat
      */
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed chat connection: " + chat.getStream());
 
-        if(chat != null) {
+        if (chat != null) {
             Set<User> users = chat.getRemoteUsers();
-            if (users != null && users.size() > 1) {
+            if (users != null && users.size() == 1) {
                 User user = chat.getRemoteUsers().iterator().next();
 
                 if (user != null && MemberCache.MEMBERS.containsKey(user.getEmailAddress())
                         && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
 
-                    chat.removeListener(memberCommandListener);
+                    memberCommandListener.stopListening(chat);
+                    chat.removeListener(transcriptListener);
                     MemberCache.getMember(user).setOnline(false);
 
                 } else if (user != null && ClientCache.retrieveClient(user).isOnCall()) {
 
-                    chat.removeListener(helpClientListener);
+                    helpClientListener.stopListening(chat);
                     ClientCache.removeClient(user);
 
                 }
             }
-        }else if(logger != null) {
+        } else if (logger != null) {
             logger.warn("Incoming new chat received a null value.");
         }
     }

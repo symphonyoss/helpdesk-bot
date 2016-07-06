@@ -37,7 +37,7 @@ public class ClientCache {
     public static final ConcurrentHashMap<String, HelpClient> ALL_CLIENTS = new ConcurrentHashMap<String, HelpClient>();
 
     public static HelpClient addClient(User user) {
-        if(user == null)
+        if (user == null)
             return null;
 
         HelpClient helpClient = new HelpClient(user.getEmailAddress(), user.getId());
@@ -70,7 +70,7 @@ public class ClientCache {
     }
 
     public static boolean hasClient(Long id) {
-        if(id == null)
+        if (id == null)
             return false;
 
         return ALL_CLIENTS.containsKey(id.toString());
