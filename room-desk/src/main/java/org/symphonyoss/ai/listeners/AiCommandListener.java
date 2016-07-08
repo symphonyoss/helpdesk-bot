@@ -43,11 +43,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- * A class that listens in on a chat, and determines if the user's input
+ * A class that listens in on a web, and determines if the user's input
  * matches a command.
  */
 public class AiCommandListener implements ChatListener {
-    private final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
 
     protected SymphonyClient symClient;
 
@@ -63,7 +63,7 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * When a chat message is received, check if it starts with
+     * When a web message is received, check if it starts with
      * the command char. If it does, process message.
      * <p>
      * <p>
@@ -194,7 +194,7 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Determines if the message was pushed, due to registering a new chat listener
+     * Determines if the message was pushed, due to registering a new web listener
      *
      * @param message the message
      * @return if the message was pushed
@@ -213,7 +213,7 @@ public class AiCommandListener implements ChatListener {
      * @param message the message
      * @return if the message is a command
      */
-    public boolean isCommand(Message message) {
+    public static boolean isCommand(Message message, SymphonyClient symClient) {
 
         logger.debug("Received message for response.");
 
@@ -236,9 +236,9 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Registers this listener to a given chat appropriately.
+     * Registers this listener to a given web appropriately.
      *
-     * @param chat The chat to listen on
+     * @param chat The web to listen on
      */
     public void listenOn(Chat chat) {
 
@@ -251,9 +251,9 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Removes this listener from the provided chat appropriately
+     * Removes this listener from the provided web appropriately
      *
-     * @param chat The chat to listen on
+     * @param chat The web to listen on
      */
     public void stopListening(Chat chat) {
 
