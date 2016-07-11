@@ -107,7 +107,76 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>org.symphonyoss.webdesk.bots.WebDeskBot</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.10</version>
+                <configuration>
+                    <repositoryName>lib</repositoryName>
+                    <repositoryLayout>flat</repositoryLayout>
+                    <useWildcardClassPath>true</useWildcardClassPath>
+                    <!-- Set the target configuration directory to be used in the bin scripts -->
+                    <configurationDirectory>conf</configurationDirectory>
+                    <logsDirectory>logs</logsDirectory>
+                    <!-- Copy the contents from "/src/main/config" to the target
+                         configuration directory in the assembled application -->
+                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                    <!-- Include the target configuration directory in the beginning of
+                         the classpath declaration in the bin scripts -->
+                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                    <!-- set alternative assemble directory -->
+                    <assembleDirectory>${project.build.directory}/web-desk-${version.minor}</assembleDirectory>
+                    <!-- Extra JVM arguments that will be included in the bin scripts -->
+                    <extraJvmArguments>-Xms128m -Xmx4096m -Dwebbot.config.dir=../conf
+                    </extraJvmArguments>
+
+                    <!-- Generate bin scripts for windows and unix pr default -->
+                    <platforms>
+                        <platform>unix</platform>
+                    </platforms>
+                    <programs>
+                        <program>
+                            <mainClass>org.symphonyoss.webdesk.bots.WebDeskBot</mainClass>
+                            <id>WebDeskBot</id>
+                            <!-- Only generate windows bat script for this application -->
+                            <platforms>
+                                <platform>unix</platform>
+                            </platforms>
+                        </program>
+
+                    </programs>
+
+
+                </configuration>
+            </plugin>
+
         </plugins>
+
+
     </build>
 
     <dependencies>
@@ -195,4 +264,7 @@
         </dependency>
 
     </dependencies>
+
+
+
 </project>

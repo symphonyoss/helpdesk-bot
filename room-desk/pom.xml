@@ -60,8 +60,23 @@
 
     </dependencies>
 
+
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>SymphonyTest</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
@@ -74,7 +89,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.symphonyoss.webdesk.bots.WebDeskBot</mainClass>
+                                    <mainClass>org.symphonyoss.roomdesk.bots.RoomDeskBot</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -104,9 +119,9 @@
                          the classpath declaration in the bin scripts -->
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                     <!-- set alternative assemble directory -->
-                    <assembleDirectory>${project.build.directory}/web-desk-${version.minor}</assembleDirectory>
+                    <assembleDirectory>${project.build.directory}/room-desk-${version.minor}</assembleDirectory>
                     <!-- Extra JVM arguments that will be included in the bin scripts -->
-                    <extraJvmArguments>-Xms128m -Xmx4096m -Dwebbot.config.dir=../conf
+                    <extraJvmArguments>-Xms128m -Xmx4096m -Droombot.config.dir=../conf
                     </extraJvmArguments>
 
                     <!-- Generate bin scripts for windows and unix pr default -->
@@ -115,8 +130,8 @@
                     </platforms>
                     <programs>
                         <program>
-                            <mainClass>org.symphonyoss.webdesk.bots.WebDeskBot</mainClass>
-                            <id>WebDeskBot</id>
+                            <mainClass>org.symphonyoss.roomdesk.bots.RoomDeskBot</mainClass>
+                            <id>RoomDeskBot</id>
                             <!-- Only generate windows bat script for this application -->
                             <platforms>
                                 <platform>unix</platform>
@@ -129,6 +144,7 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
 
 </project>
