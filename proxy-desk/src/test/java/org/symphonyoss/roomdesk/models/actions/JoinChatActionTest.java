@@ -28,9 +28,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.client.util.MlMessageParser;
+import org.symphonyoss.proxydesk.models.actions.JoinChatAction;
 import org.symphonyoss.symphony.agent.model.Message;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -45,15 +46,15 @@ public class JoinChatActionTest {
         Mockito.doCallRealMethod().when(action).respond(new MlMessageParser(), new Message(), new AiCommand("", 0));
 
 
-        try{
+        try {
             action.respond(new MlMessageParser(), null, null);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("Action failed.");
         }
 
-        try{
+        try {
             action.respond(new MlMessageParser(), new Message(), new AiCommand("", 0));
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("Action failed.");
         }
     }

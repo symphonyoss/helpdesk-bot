@@ -25,10 +25,10 @@
 package org.symphonyoss.roomdesk.utils;
 
 import org.junit.Test;
-import org.symphonyoss.roomdesk.models.HelpBotSession;
+import org.symphonyoss.proxydesk.models.HelpBotSession;
+import org.symphonyoss.proxydesk.utils.CallCache;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.fail;
 
 /**
  * Created by nicktarsillo on 6/23/16.
@@ -37,27 +37,27 @@ public class CallCacheTest {
 
     @Test
     public void testNewCall() throws Exception {
-        try{
+        try {
             CallCache.newCall(null, null, new HelpBotSession());
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("New call test failed");
         }
     }
 
     @Test
     public void testEndCall() throws Exception {
-        try{
+        try {
             CallCache.endCall(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("New call test failed");
         }
     }
 
     @Test
     public void testRemoveCall() throws Exception {
-        try{
+        try {
             CallCache.removeCall(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("New call test failed");
         }
     }

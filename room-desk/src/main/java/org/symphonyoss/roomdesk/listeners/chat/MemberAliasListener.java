@@ -19,12 +19,12 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
 public class MemberAliasListener implements ChatListener {
     private SymphonyClient symClient;
 
-    public MemberAliasListener(SymphonyClient symClient){
+    public MemberAliasListener(SymphonyClient symClient) {
         this.symClient = symClient;
     }
 
     public void onChatMessage(Message message) {
-        if(message == null
+        if (message == null
                 || message.getStream() == null
                 || AiCommandListener.isCommand(message, symClient))
             return;
@@ -32,16 +32,16 @@ public class MemberAliasListener implements ChatListener {
 
         try {
 
-            if(DeskUserCache.getDeskUser(message.getFromUserId().toString()).getUserType() != DeskUser.DeskUserType.MEMBER
+            if (DeskUserCache.getDeskUser(message.getFromUserId().toString()).getUserType() != DeskUser.DeskUserType.MEMBER
                     && symClient.getChatService().getChatByStream(message.getStream()).getRemoteUsers().size() != 1)
-                        return;
+                return;
 
             Member member = (Member) DeskUserCache.getDeskUser(message.getFromUserId().toString());
 
-            if(member.isUseAlias()){
+            if (member.isUseAlias()) {
 
 
-                if(member.isOnCall()){
+                if (member.isOnCall()) {
 
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + member.getAlias() + ": " + MLTypes.END_BOLD
@@ -50,7 +50,7 @@ public class MemberAliasListener implements ChatListener {
                             member.getCall().getCallChat(),
                             symClient);
 
-                }else{
+                } else {
 
 
                     Chat chat = symClient.getChatService().getChatByStream(System.getProperty(RoomBotConfig.MEMBER_CHAT_STREAM));
@@ -70,14 +70,14 @@ public class MemberAliasListener implements ChatListener {
         }
     }
 
-    public void listenOn(Chat chat){
-        if(chat != null && chat.getRemoteUsers().size() == 1){
+    public void listenOn(Chat chat) {
+        if (chat != null && chat.getRemoteUsers().size() == 1) {
             chat.registerListener(this);
         }
     }
 
-    public void stopListenung(Chat chat){
-        if(chat != null){
+    public void stopListenung(Chat chat) {
+        if (chat != null) {
             chat.removeListener(this);
         }
     }

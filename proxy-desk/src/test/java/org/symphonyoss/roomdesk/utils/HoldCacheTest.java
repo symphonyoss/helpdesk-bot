@@ -25,19 +25,20 @@
 package org.symphonyoss.roomdesk.utils;
 
 import org.junit.Test;
+import org.symphonyoss.proxydesk.utils.HoldCache;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 /**
  * Created by nicktarsillo on 6/23/16.
  */
-public class HoldCacheTest{
+public class HoldCacheTest {
 
     @Test
     public void testFindClientCredentialMatch() throws Exception {
-        try{
+        try {
             HoldCache.findClientCredentialMatch(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("New find test failed");
         }
     }

@@ -36,8 +36,8 @@ import static org.symphonyoss.roomdesk.config.RoomBotConfig.Config;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A extension of the org.symphonyoss.ai command listener.
- * Initializes all commands a member can command the org.symphonyoss.ai.
+ * A extension of the org.org.symphonyoss.ai command listener.
+ * Initializes all commands a member can command the org.org.symphonyoss.ai.
  */
 public class MemberCommandListener extends AiCommandListener {
     private HelpBotSession helpBotSession;

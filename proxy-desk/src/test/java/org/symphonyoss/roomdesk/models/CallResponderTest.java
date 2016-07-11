@@ -26,9 +26,9 @@ package org.symphonyoss.roomdesk.models;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.symphonyoss.roomdesk.models.calls.HelpCallResponder;
+import org.symphonyoss.proxydesk.models.calls.HelpCallResponder;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -42,15 +42,15 @@ public class CallResponderTest {
         Mockito.doCallRealMethod().when(callResponder).sendRoomInfo(new Long(0));
         Mockito.doCallRealMethod().when(callResponder).sendRoomInfo(null);
 
-        try{
+        try {
             callResponder.sendRoomInfo(null);
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("send room info failed");
         }
 
-        try{
+        try {
             callResponder.sendRoomInfo(new Long(0));
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("send room info failed");
         }
     }
@@ -59,9 +59,9 @@ public class CallResponderTest {
     public void testSendHelpSummary() throws Exception {
         Mockito.doCallRealMethod().when(callResponder).sendHelpSummary(null);
 
-        try{
+        try {
             callResponder.sendHelpSummary(null);
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("send help summary failed");
         }
     }
@@ -70,9 +70,9 @@ public class CallResponderTest {
     public void testSendConnectedMessage() throws Exception {
         Mockito.doCallRealMethod().when(callResponder).sendConnectedMessage(null);
 
-        try{
+        try {
             callResponder.sendConnectedMessage(null);
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("send connected failed");
         }
     }

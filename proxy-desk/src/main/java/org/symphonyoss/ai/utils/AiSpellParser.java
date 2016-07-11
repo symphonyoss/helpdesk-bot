@@ -40,10 +40,11 @@ public class AiSpellParser {
     /**
      * Determines if a given input matches another command closely enough,
      * in order to suggest a command
-     * @param commands   the list of commands to compare
-     * @param chunks   the text chunks
-     * @param closenessFactor   the minimum closeness value needed to be considered a match
-     * @return   if a suggestion can be made
+     *
+     * @param commands        the list of commands to compare
+     * @param chunks          the text chunks
+     * @param closenessFactor the minimum closeness value needed to be considered a match
+     * @return if a suggestion can be made
      */
     public static boolean canParse(LinkedList<AiCommand> commands, String[] chunks, double closenessFactor) {
         for (AiCommand response : commands) {
@@ -80,15 +81,15 @@ public class AiSpellParser {
 
     /**
      * Find a close matching command.
-     * @param commands   the list of commands to compare
-     * @param chunks    the text chunks
-     * @param symClient   the org.symphonyoss.ai sym client
-     * @param closenessFactor   the minimum closeness value needed to be considered a match
+     *
+     * @param commands        the list of commands to compare
+     * @param chunks          the text chunks
+     * @param symClient       the org.org.symphonyoss.ai sym client
+     * @param closenessFactor the minimum closeness value needed to be considered a match
      * @return command suggestion
      */
     public static AiLastCommand parse(LinkedList<AiCommand> commands, String[] chunks, SymphonyClient symClient, double closenessFactor) {
         for (AiCommand response : commands) {
-
 
 
             if (chunks.length >= response.getNumArguments()) {
@@ -144,10 +145,11 @@ public class AiSpellParser {
 
     /**
      * Determines if one string is closely matched to another
-     * @param input1   the first string
-     * @param input2   the second string
-     * @param closenessFactor   the minimum closeness value needed to be considered a match
-     * @return   if the two strings are close
+     *
+     * @param input1          the first string
+     * @param input2          the second string
+     * @param closenessFactor the minimum closeness value needed to be considered a match
+     * @return if the two strings are close
      */
     private static boolean isCloseTo(String input1, String input2, double closenessFactor) {
         int likeness = 0;

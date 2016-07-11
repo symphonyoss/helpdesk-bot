@@ -35,7 +35,7 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- * A model for org.symphonyoss.ai commands.
+ * A model for org.org.symphonyoss.ai commands.
  * Used to compare input and command, and check for a match.
  */
 public class AiCommand {
@@ -55,11 +55,11 @@ public class AiCommand {
     }
 
     /**
-     * Checks to see if the user's input fulfills the org.symphonyoss.ai command requirements
+     * Checks to see if the user's input fulfills the org.org.symphonyoss.ai command requirements
      * <p>
      * <p>
      *
-     * @param chunks  the user's input in text chunks
+     * @param chunks the user's input in text chunks
      * @return if the user input fulfills the command requirements
      * </p>
      */
@@ -80,9 +80,9 @@ public class AiCommand {
 
         for (int chunkIndex = checkCommand.length; chunkIndex < numArguments + checkCommand.length; chunkIndex++) {
 
-            if (!chunks[chunkIndex].startsWith(prefixRequirements[chunkIndex - checkCommand.length])){
+            if (!chunks[chunkIndex].startsWith(prefixRequirements[chunkIndex - checkCommand.length])) {
                 return false;
-             }
+            }
 
         }
 
@@ -107,8 +107,9 @@ public class AiCommand {
 
     /**
      * Determines if a user is allowed to use this command
-     * @param userID   the user's id
-     * @return  if the user is permited to use this command
+     *
+     * @param userID the user's id
+     * @return if the user is permited to use this command
      */
     public boolean userIsPermitted(Long userID) {
         for (AiPermission permission : permissions) {
@@ -126,8 +127,8 @@ public class AiCommand {
      * Executes all the command's actions.
      * Receives back all the response sequences from the actions.
      *
-     * @param mlMessageParser   a parser that contains the input in ML
-     * @param message   the received message
+     * @param mlMessageParser a parser that contains the input in ML
+     * @param message         the received message
      * @return a set of responses, given by completing all the commands actions
      */
     public Set<AiResponseSequence> getResponses(MlMessageParser mlMessageParser, Message message) {
@@ -184,9 +185,9 @@ public class AiCommand {
 
         if (argumentIndex > numArguments) {
 
-            if(logger != null)
+            if (logger != null)
                 logger.debug("Could not add prefix requirement {}," +
-                    " not enough arguments.", requirement);
+                        " not enough arguments.", requirement);
 
             return;
         }
@@ -203,7 +204,7 @@ public class AiCommand {
 
         if (prefixRequirements.length > argumentIndex) {
             return prefixRequirements[argumentIndex];
-        }else {
+        } else {
             return null;
         }
 
@@ -213,9 +214,9 @@ public class AiCommand {
 
         if (argumentIndex > numArguments) {
 
-            if(logger != null)
-                 logger.debug("Could not add place holder {}, " +
-                    "not enough arguments.", holder);
+            if (logger != null)
+                logger.debug("Could not add place holder {}, " +
+                        "not enough arguments.", holder);
 
             return;
         }
@@ -232,7 +233,7 @@ public class AiCommand {
 
         if (arguments.length < argumentIndex) {
             return arguments[argumentIndex];
-        }else {
+        } else {
             return null;
         }
 

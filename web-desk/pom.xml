@@ -100,7 +100,7 @@
                             <target>
                                 <!-- need to remove these generated files because we have a copy in the project to support cert based auth -->
                                 <delete
-                                        dir="web-proxy/target/generated-sources/swagger/src/gen/java/main/org/symphonyoss/api/client"/>
+                                        dir="web-proxy/target/generated-sources/swagger/src/gen/java/main/org/org.symphonyoss/api/client"/>
                             </target>
                         </configuration>
                     </execution>

@@ -25,8 +25,9 @@
 package org.symphonyoss.roomdesk.utils;
 
 import org.junit.Test;
+import org.symphonyoss.proxydesk.utils.MemberCache;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 /**
  * Created by nicktarsillo on 6/23/16.
@@ -35,9 +36,9 @@ public class MemberCacheTest {
 
     @Test
     public void testWriteMember() throws Exception {
-        try{
+        try {
             MemberCache.writeMember(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("New write test failed");
         }
     }

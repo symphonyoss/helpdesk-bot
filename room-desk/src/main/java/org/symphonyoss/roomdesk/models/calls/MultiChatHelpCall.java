@@ -1,5 +1,7 @@
 package org.symphonyoss.roomdesk.models.calls;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
@@ -24,6 +26,8 @@ import java.util.Set;
  * A model that represents a call between a member and a client.
  */
 public class MultiChatHelpCall extends MultiChatCall {
+    private final Logger logger = LoggerFactory.getLogger(MultiChatHelpCall.class);
+
     private SymphonyClient symClient;
 
     private HelpCallCommandListener helpCallCommandListener;
@@ -56,6 +60,16 @@ public class MultiChatHelpCall extends MultiChatCall {
      * Send initial web messages from the bot.
      */
     public void initiateCall() {
+        if(client == null
+                || member == null){
+
+            if(logger != null)
+                logger.warn("Cal started when member or client were null.");
+
+            return;
+        }
+
+
         helpChat = new Chat();
         helpChat.setLocalUser(symClient.getLocalUser());
 
@@ -106,6 +120,15 @@ public class MultiChatHelpCall extends MultiChatCall {
      * Notify that the call has ended.
      */
     public void endCall() {
+        if(client == null
+                || member == null){
+
+            if(logger != null)
+                logger.warn("Cal ended when member or client were null.");
+
+            return;
+        }
+
         helpCallCommandListener.stopListening(getUserChat(client.getUserID()));
         helpCallCommandListener.stopListening(getUserChat(member.getUserID()));
 

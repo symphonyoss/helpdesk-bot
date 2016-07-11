@@ -137,7 +137,7 @@ public class Member implements DeskUser {
     }
 
     public void setAlias(String alias) {
-        if(alias != ""
+        if (alias != ""
                 || alias != null)
             this.alias = alias;
     }

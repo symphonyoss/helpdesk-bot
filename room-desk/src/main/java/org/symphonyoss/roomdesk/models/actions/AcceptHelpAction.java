@@ -85,7 +85,7 @@ public class AcceptHelpAction implements AiAction {
 
                 member = MemberCache.getMember(message);
                 String useName = member.getEmail();
-                if(member.isUseAlias())
+                if (member.isUseAlias())
                     useName = member.getAlias();
 
                 Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
@@ -113,7 +113,7 @@ public class AcceptHelpAction implements AiAction {
 
                 member = MemberCache.getMember(message);
                 String useName = member.getEmail();
-                if(member.isUseAlias())
+                if (member.isUseAlias())
                     useName = member.getAlias();
 
                 Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD

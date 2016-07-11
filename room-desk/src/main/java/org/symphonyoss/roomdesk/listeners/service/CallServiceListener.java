@@ -52,7 +52,11 @@ public class CallServiceListener implements ChatServiceListener {
      * @param chat the removed web
      */
     public void onRemovedChat(Chat chat) {
-        call.endCall();
+
+        if(chat != null) {
+            call.endCall();
+        }
+
     }
 
 

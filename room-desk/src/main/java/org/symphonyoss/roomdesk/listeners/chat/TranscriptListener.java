@@ -22,11 +22,15 @@ public class TranscriptListener implements ChatListener {
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(TranscriptListener.class);
     private SymphonyClient symClient;
 
-    public TranscriptListener(SymphonyClient symClient){
+    public TranscriptListener(SymphonyClient symClient) {
         this.symClient = symClient;
     }
 
     public void onChatMessage(Message message) {
+        if(message == null
+                || message.getFromUserId() == null)
+            return;
+
         MlMessageParser mlMessageParser = null;
         try {
 
@@ -62,7 +66,7 @@ public class TranscriptListener implements ChatListener {
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
-            bw.write(System.lineSeparator() + dateFormat.format(date) + ": " +  content);
+            bw.write(System.lineSeparator() + dateFormat.format(date) + ": " + content);
             bw.close();
 
             System.out.println("Done");

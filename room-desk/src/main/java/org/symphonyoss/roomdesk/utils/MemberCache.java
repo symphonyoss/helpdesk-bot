@@ -33,7 +33,10 @@ import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.pod.model.User;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/14/16.
@@ -146,8 +149,8 @@ public class MemberCache {
 
             if (member.isOnline() && !member.isBusy()) {
 
-                if(!member.isUseAlias())
-                     list += ", " + member.getEmail();
+                if (!member.isUseAlias())
+                    list += ", " + member.getEmail();
                 else
                     list += ", " + member.getAlias();
 
@@ -180,6 +183,6 @@ public class MemberCache {
     }
 
     public static int size() {
-        return  MEMBERS.size();
+        return MEMBERS.size();
     }
 }

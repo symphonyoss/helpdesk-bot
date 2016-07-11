@@ -88,7 +88,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.symphonyoss.roomdesk.bots.WebDeskBot</mainClass>
+                                    <mainClass>org.symphonyoss.roomdesk.bots.RoomDeskBot</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -120,7 +120,7 @@
                     <!-- set alternative assemble directory -->
                     <assembleDirectory>${project.build.directory}/room-desk-${version.minor}</assembleDirectory>
                     <!-- Extra JVM arguments that will be included in the bin scripts -->
-                    <extraJvmArguments>-Xms128m -Xmx4096m -Dhelpbot.config.dir=../conf
+                    <extraJvmArguments>-Xms128m -Xmx4096m -Droombot.config.dir=../conf
                     </extraJvmArguments>
 
                     <!-- Generate bin scripts for windows and unix pr default -->
@@ -129,7 +129,7 @@
                     </platforms>
                     <programs>
                         <program>
-                            <mainClass>org.symphonyoss.roomdesk.bots.WebDeskBot</mainClass>
+                            <mainClass>org.symphonyoss.roomdesk.bots.RoomDeskBot</mainClass>
                             <id>RoomDeskBot</id>
                             <!-- Only generate windows bat script for this application -->
                             <platforms>

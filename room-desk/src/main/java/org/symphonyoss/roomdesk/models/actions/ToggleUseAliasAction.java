@@ -32,7 +32,7 @@ public class ToggleUseAliasAction implements AiAction {
                     MessageSubmission.FormatEnum.TEXT, userIdList));
 
 
-        }else {
+        } else {
 
             aiResponseSequence.addResponse(new AiResponse("Alias use disabled.",
                     MessageSubmission.FormatEnum.TEXT, userIdList));

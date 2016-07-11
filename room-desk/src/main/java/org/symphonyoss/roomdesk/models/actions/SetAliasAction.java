@@ -45,10 +45,11 @@ public class SetAliasAction implements AiAction {
      * Split the string into a list of tags.
      * Delete old tags.
      * Set new tags.
-     * @param mlMessageParser  the parser containing the message in ML
-     * @param message   the message received
-     * @param command   the command that called this action
-     * @return   success message
+     *
+     * @param mlMessageParser the parser containing the message in ML
+     * @param message         the message received
+     * @param command         the command that called this action
+     * @return success message
      */
     public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();

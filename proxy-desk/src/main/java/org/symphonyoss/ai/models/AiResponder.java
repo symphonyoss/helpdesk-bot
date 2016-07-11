@@ -26,9 +26,9 @@ package org.symphonyoss.ai.models;
 
 import org.symphonyoss.ai.constants.AiConstants;
 import org.symphonyoss.ai.constants.MLTypes;
+import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.UserIdList;
@@ -38,7 +38,7 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A part of the org.symphonyoss.ai with the main purpose of responding back to a user
+ * A part of the org.org.symphonyoss.ai with the main purpose of responding back to a user
  */
 public class AiResponder {
     private SymphonyClient symClient;
@@ -49,10 +49,11 @@ public class AiResponder {
 
     /**
      * Sends a message to a user
+     *
      * @param message   the message received from the user
-     * @param type   the type of message to send
-     * @param userID   the id of the user
-     * @param symClient   the org.symphonyoss.ai's sym client
+     * @param type      the type of message to send
+     * @param userID    the id of the user
+     * @param symClient the org.org.symphonyoss.ai's sym client
      */
     public void sendMessage(String message, MessageSubmission.FormatEnum type, Long userID, SymphonyClient symClient) {
 
@@ -75,7 +76,8 @@ public class AiResponder {
 
     /**
      * Respond to the user, based on the values and ids given in the set of responses
-     * @param responseLists   the set of responses
+     *
+     * @param responseLists the set of responses
      */
     public void respondWith(Set<AiResponseSequence> responseLists) {
 
@@ -94,8 +96,8 @@ public class AiResponder {
     /**
      * Send a message back to the user, suggesting a command
      *
-     * @param suggestion   the suggested command
-     * @param message   the message received from the user
+     * @param suggestion the suggested command
+     * @param message    the message received from the user
      */
     public void sendSuggestionMessage(AiLastCommand suggestion, Message message) {
 
@@ -109,9 +111,9 @@ public class AiResponder {
     /**
      * Sends the command usage menu back to the user
      *
-     * @param message   the message received from the user
-     * @param mlMessageParser   a parser that contains the input in ML
-     * @param activeCommands   the active set of commands within the org.symphonyoss.ai command listener
+     * @param message         the message received from the user
+     * @param mlMessageParser a parser that contains the input in ML
+     * @param activeCommands  the active set of commands within the org.org.symphonyoss.ai command listener
      */
     public void sendUsage(Message message, MlMessageParser mlMessageParser, LinkedList<AiCommand> activeCommands) {
 
@@ -139,7 +141,8 @@ public class AiResponder {
     /**
      * Send a message back to the user, informing them that they do not have the
      * required permission
-     * @param message   the message reveived back from the user
+     *
+     * @param message the message reveived back from the user
      */
     public void sendNoPermission(Message message) {
 

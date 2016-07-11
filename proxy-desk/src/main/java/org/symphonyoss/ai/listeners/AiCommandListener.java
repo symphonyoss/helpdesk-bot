@@ -35,7 +35,7 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.roomdesk.constants.HelpBotConstants;
+import org.symphonyoss.proxydesk.constants.HelpBotConstants;
 import org.symphonyoss.symphony.agent.model.Message;
 
 import java.util.HashMap;
@@ -79,7 +79,7 @@ public class AiCommandListener implements ChatListener {
                 || message.getFromUserId() == null
                 || (isPushMessage(message) && !isPushCommands())) {
 
-            if(logger != null)
+            if (logger != null)
                 logger.warn("Received null message. Ignoring.");
 
             return;
@@ -114,19 +114,20 @@ public class AiCommandListener implements ChatListener {
     /**
      * Check to see if the message matches any of the commands.
      * If it matches, do actions and received responses.
-     * If it doesn't check if the org.symphonyoss.ai can suggest a command from the unmatched command.
+     * If it doesn't check if the org.org.symphonyoss.ai can suggest a command from the unmatched command.
      * If it can suggest, then suggest the command and save the suggested command as the last command.
      * If it can't suggest and the sent command does not match run last command, send usage
      * If it does equal run last command, run the last command
-     * @param mlMessageParser   the parser containing the received input in ML
-     * @param chunks   the received input in text chunks
-     * @param message   the received message
+     *
+     * @param mlMessageParser the parser containing the received input in ML
+     * @param chunks          the received input in text chunks
+     * @param message         the received message
      */
     private void processMessage(MlMessageParser mlMessageParser, String[] chunks, Message message) {
 
-        if(activeCommands == null || activeCommands.size() == 0) {
+        if (activeCommands == null || activeCommands.size() == 0) {
 
-            if(logger != null)
+            if (logger != null)
                 logger.warn("There are no active commands added to the listener. " +
                         "Ignoring process.");
 
@@ -161,7 +162,7 @@ public class AiCommandListener implements ChatListener {
             aiResponder.sendSuggestionMessage(lastCommand, message);
             lastResponse.put(message.getFromUserId().toString(), lastCommand);
 
-        } else{
+        } else {
 
             AiLastCommand lastBotResponse = lastResponse.get(message.getFromUserId().toString());
             aiResponder.respondWith(lastBotResponse.getAiCommand().getResponses(lastBotResponse.getMlMessageParser(), message));
@@ -171,9 +172,10 @@ public class AiCommandListener implements ChatListener {
 
     /**
      * Determines if the given input matches the run last command
-     * @param mlMessageParser   the parser that contains the input in ML
-     * @param message   the received message
-     * @return  if the input matches the run last command
+     *
+     * @param mlMessageParser the parser that contains the input in ML
+     * @param message         the received message
+     * @return if the input matches the run last command
      */
     private boolean equalsRunLastCommand(MlMessageParser mlMessageParser, Message message) {
 
@@ -183,9 +185,10 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Determines if the org.symphonyoss.ai can suggest a command based on the input
-     * @param chunks  the text input
-     * @return if the org.symphonyoss.ai can suggest a command
+     * Determines if the org.org.symphonyoss.ai can suggest a command based on the input
+     *
+     * @param chunks the text input
+     * @return if the org.org.symphonyoss.ai can suggest a command
      */
     private boolean canSuggest(String[] chunks) {
         return AiSpellParser.canParse(activeCommands, chunks, HelpBotConstants.CORRECTFACTOR);
@@ -193,7 +196,8 @@ public class AiCommandListener implements ChatListener {
 
     /**
      * Determines if the message was pushed, due to registering a new web listener
-     * @param message   the message
+     *
+     * @param message the message
      * @return if the message was pushed
      */
     private boolean isPushMessage(Message message) {
@@ -206,7 +210,8 @@ public class AiCommandListener implements ChatListener {
     /**
      * A method that allows other classes to determine if a given message
      * matches a command in this command listener
-     * @param message   the message
+     *
+     * @param message the message
      * @return if the message is a command
      */
     public boolean isCommand(Message message) {
@@ -233,11 +238,12 @@ public class AiCommandListener implements ChatListener {
 
     /**
      * Registers this listener to a given web appropriately.
-     * @param chat    The web to listen on
+     *
+     * @param chat The web to listen on
      */
     public void listenOn(Chat chat) {
 
-        if(chat != null) {
+        if (chat != null) {
 
             chat.registerListener(this);
             entered.put(chat.getStream().getId().toString(), true);
@@ -247,22 +253,23 @@ public class AiCommandListener implements ChatListener {
 
     /**
      * Removes this listener from the provided web appropriately
-     * @param chat   The web to listen on
+     *
+     * @param chat The web to listen on
      */
     public void stopListening(Chat chat) {
 
-        if(chat != null) {
+        if (chat != null) {
 
             chat.removeListener(this);
 
-            if(chat.getStream() != null
+            if (chat.getStream() != null
                     && chat.getStream().getId() != null) {
                 entered.put(chat.getStream().getId().toString(), false);
-            }else{
+            } else {
                 logChatError(chat, new NullPointerException());
             }
 
-        }else{
+        } else {
             logChatError(chat, new NullPointerException());
         }
 
@@ -288,7 +295,8 @@ public class AiCommandListener implements ChatListener {
 
     /**
      * Determines if push commands should be ignored or not
-     * @return   if the push command should be ignored
+     *
+     * @return if the push command should be ignored
      */
     public boolean isPushCommands() {
         return pushCommands;

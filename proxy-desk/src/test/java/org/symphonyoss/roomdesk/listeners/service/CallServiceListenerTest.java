@@ -27,9 +27,10 @@ package org.symphonyoss.roomdesk.listeners.service;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.symphonyoss.client.model.Chat;
+import org.symphonyoss.proxydesk.listeners.service.CallServiceListener;
 import org.symphonyoss.symphony.pod.model.Stream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -45,14 +46,14 @@ public class CallServiceListenerTest {
 
         try {
             listener.onRemovedChat(null);
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("Listen on null test failed.");
         }
 
         Chat chat = new Chat();
         try {
             listener.onRemovedChat(chat);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             fail("Listen on empty web test failed.");
         }
@@ -60,7 +61,7 @@ public class CallServiceListenerTest {
         chat.setStream(new Stream());
         try {
             listener.onRemovedChat(chat);
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("Listen on junk stream, empty web test failed.");
         }
     }

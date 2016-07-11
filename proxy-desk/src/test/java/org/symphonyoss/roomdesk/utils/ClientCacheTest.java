@@ -25,8 +25,9 @@
 package org.symphonyoss.roomdesk.utils;
 
 import org.junit.Test;
+import org.symphonyoss.proxydesk.utils.ClientCache;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 /**
  * Created by nicktarsillo on 6/23/16.
@@ -35,18 +36,18 @@ public class ClientCacheTest {
 
     @Test
     public void testAddClient() throws Exception {
-        try{
+        try {
             ClientCache.addClient(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("New call test failed");
         }
     }
 
     @Test
     public void testHasClient() throws Exception {
-        try{
+        try {
             ClientCache.hasClient(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail("New call test failed");
         }
     }

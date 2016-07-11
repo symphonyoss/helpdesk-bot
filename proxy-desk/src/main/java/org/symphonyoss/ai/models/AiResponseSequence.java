@@ -29,7 +29,7 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A model that represents a sequence of responses from the org.symphonyoss.ai
+ * A model that represents a sequence of responses from the org.org.symphonyoss.ai
  */
 public class AiResponseSequence {
     private Set<AiResponse> aiResponseSet = new HashSet<AiResponse>();

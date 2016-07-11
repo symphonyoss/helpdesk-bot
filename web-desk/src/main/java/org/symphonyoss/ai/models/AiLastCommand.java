@@ -28,7 +28,7 @@ import org.symphonyoss.client.util.MlMessageParser;
 
 /**
  * Created by nicktarsillo on 6/15/16.
- * A model for saving the last command used by the org.symphonyoss.ai.
+ * A model for saving the last command used by the org.org.symphonyoss.ai.
  */
 public class AiLastCommand {
     private MlMessageParser mlMessageParser;

@@ -26,9 +26,10 @@ package org.symphonyoss.roomdesk.listeners.presence;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.symphonyoss.proxydesk.listeners.presence.MemberPresenceListener;
 import org.symphonyoss.symphony.pod.model.UserPresence;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -44,14 +45,14 @@ public class MemberPresenceListenerTest {
 
         try {
             memberPresenceListener.onUserPresence(null);
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("Listen on null test failed.");
         }
 
         UserPresence pres = new UserPresence();
         try {
             memberPresenceListener.onUserPresence(pres);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             fail("Listen on empty web test failed.");
         }
@@ -59,7 +60,7 @@ public class MemberPresenceListenerTest {
         pres.setUid(new Long(21123));
         try {
             memberPresenceListener.onUserPresence(pres);
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("Listen on junk stream, empty web test failed.");
         }
     }

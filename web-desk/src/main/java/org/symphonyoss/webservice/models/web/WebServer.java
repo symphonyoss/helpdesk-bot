@@ -39,7 +39,7 @@ import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.roomdesk.config.WebBotConfig;
+import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webservice.WebServiceConstants;
 import org.symphonyoss.webservice.listeners.SessionListener;
 import org.symphonyoss.webservice.models.session.WebSession;
@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.symphonyoss.roomdesk.config.WebBotConfig.Config;
+import static org.symphonyoss.webdesk.config.WebBotConfig.Config;
 
 /**
  * The representation of the domain.

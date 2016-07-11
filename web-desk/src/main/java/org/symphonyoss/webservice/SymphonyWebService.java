@@ -26,7 +26,7 @@ package org.symphonyoss.webservice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.roomdesk.config.WebBotConfig;
+import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webservice.listeners.SessionListener;
 import org.symphonyoss.webservice.models.session.Session;
 import org.symphonyoss.webservice.models.web.WebServer;

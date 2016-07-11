@@ -26,11 +26,11 @@ package org.symphonyoss.roomdesk.models;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.symphonyoss.roomdesk.models.calls.Call;
-import org.symphonyoss.roomdesk.models.users.HelpClient;
-import org.symphonyoss.roomdesk.models.users.Member;
+import org.symphonyoss.proxydesk.models.calls.Call;
+import org.symphonyoss.proxydesk.models.users.HelpClient;
+import org.symphonyoss.proxydesk.models.users.Member;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -43,9 +43,9 @@ public class CallTest {
     public void testInitiateCall() throws Exception {
         Mockito.doCallRealMethod().when(call).initiateCall();
 
-        try{
+        try {
             call.initiateCall();
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("init failed");
         }
     }
@@ -54,9 +54,9 @@ public class CallTest {
     public void testEnter() throws Exception {
         Mockito.doCallRealMethod().when(call).enter(new HelpClient(new String(), new Long(0)));
 
-        try{
+        try {
             call.enter(new HelpClient(new String(), new Long(0)));
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("enter failed");
         }
     }
@@ -65,9 +65,9 @@ public class CallTest {
     public void testEnter1() throws Exception {
         Mockito.doCallRealMethod().when(call).enter(new Member(new String(), new Long(0)));
 
-        try{
+        try {
             call.enter(new Member(new String(), new Long(0)));
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("enter failed");
         }
     }
@@ -76,9 +76,9 @@ public class CallTest {
     public void testExitCall() throws Exception {
         Mockito.doCallRealMethod().when(call).exitCall();
 
-        try{
+        try {
             call.exitCall();
-        }catch(Exception e){
+        } catch (Exception e) {
             fail("exit failed");
         }
     }
