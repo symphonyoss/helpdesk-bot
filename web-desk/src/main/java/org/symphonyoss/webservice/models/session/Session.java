@@ -29,9 +29,10 @@ import org.symphonyoss.webservice.models.web.WebMessage;
 
 import java.util.List;
 
+/**
+ * An interface that provides all the major methods a session must include.
+ */
 public interface Session {
-    public enum SessionType{SESSION, WEB}
-
     void terminateSession();
 
     List<WebMessage> getTranscription();
@@ -41,5 +42,7 @@ public interface Session {
     public SessionType getSessionType();
 
     boolean isTerminated();
+
+    public enum SessionType {SESSION, WEB}
 
 }

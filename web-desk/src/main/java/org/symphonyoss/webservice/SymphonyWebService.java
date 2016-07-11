@@ -26,8 +26,7 @@ package org.symphonyoss.webservice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.SymphonyClient;
-import org.symphonyoss.webroomdesk.config.HelpBotConfig;
+import org.symphonyoss.roomdesk.config.WebBotConfig;
 import org.symphonyoss.webservice.listeners.SessionListener;
 import org.symphonyoss.webservice.models.session.Session;
 import org.symphonyoss.webservice.models.web.WebServer;
@@ -46,7 +45,7 @@ public class SymphonyWebService {
         logger.info("Starting web service");
 
         // disableSSLCertCheck();
-        if (Boolean.parseBoolean(System.getProperty(HelpBotConfig.TRUST_ALL_SSL))) {
+        if (Boolean.parseBoolean(System.getProperty(WebBotConfig.TRUST_ALL_SSL))) {
             logger.warn("********* Removing SSL Server Certification Validation **********");
             try {
                 SSLUtil.setupSSL();

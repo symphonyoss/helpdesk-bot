@@ -39,8 +39,8 @@ import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.SymphonyClient;
-import org.symphonyoss.webroomdesk.config.HelpBotConfig;
+import org.symphonyoss.roomdesk.config.WebBotConfig;
+import org.symphonyoss.webservice.WebServiceConstants;
 import org.symphonyoss.webservice.listeners.SessionListener;
 import org.symphonyoss.webservice.models.session.WebSession;
 
@@ -49,6 +49,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.symphonyoss.roomdesk.config.WebBotConfig.Config;
+
+/**
+ * The representation of the domain.
+ */
 public class WebServer {
 
     private static Logger logger = LoggerFactory.getLogger(WebServer.class);
@@ -92,8 +97,12 @@ public class WebServer {
             enableStaticHandler(router);
 
             router.route("/").handler(routingContext -> {
+
                 HttpServerResponse response = routingContext.response();
-                response.putHeader("location", "/web/help.html").setStatusCode(302).end();
+
+                response.putHeader(WebServiceConstants.LOCATION,
+                        Config.getString(WebBotConfig.HEADER_HELP)).setStatusCode(302).end();
+
             });
 
             // this is the initiation point for sessions. Posted parameters are
@@ -103,19 +112,25 @@ public class WebServer {
             // With the exception of "name", these parameters are simply passed
             // through.
             router.route("/help").handler(routingContext -> {
+
                 HttpServerRequest req = routingContext.request();
                 String token = UUID.randomUUID().toString().replaceAll("-", "");
+
                 sessionRequestData.put(token, req.params());
+
                 logger.info("New Session Posted: " + token);
+
                 HttpServerResponse response = routingContext.response();
                 // We redirect to the "index.html" page, which parses the token
                 // and uses it to
                 // initiate the WS connection back to helpbot.
-                response.putHeader("location", "/web/index.html?token=" + token).setStatusCode(302).end();
+                response.putHeader(WebServiceConstants.LOCATION,
+                        Config.getString(WebBotConfig.HEADER_INDEX) + token).setStatusCode(302).end();
+
             });
 
             logger.info("Creating https server.");
-            vertx.createHttpServer().requestHandler(router::accept).listen(Integer.parseInt(System.getProperty(HelpBotConfig.WEB_DESK_PORT)),
+            vertx.createHttpServer().requestHandler(router::accept).listen(Integer.parseInt(System.getProperty(WebBotConfig.WEB_DESK_PORT)),
                     result -> {
                         if (result.succeeded()) {
                             logger.info("Create successful.");
@@ -127,41 +142,55 @@ public class WebServer {
         }
 
         private void enableCORS(Router router) {
+
             CorsHandler corsHandler = CorsHandler.create("*");
+
             corsHandler.allowedMethod(HttpMethod.GET);
             corsHandler.allowedMethod(HttpMethod.POST);
             corsHandler.allowedMethod(HttpMethod.PUT);
             corsHandler.allowedMethod(HttpMethod.DELETE);
             corsHandler.allowedHeader("Content-Type");
+
             router.route().handler(corsHandler);
+
         }
 
         private void enableStaticHandler(Router router) {
+
             // StaticHandler staticHandler = StaticHandler.create("web",
             // this.getClass().getClassLoader());
             // TODO - use classpath
 
             logger.info("Creating static handler.");
-            StaticHandler staticHandler = StaticHandler.create("web-desk/src/main/resources/web");
+            StaticHandler staticHandler = StaticHandler.create(System.getProperty(WebBotConfig.FILES_WEBDESK));
             staticHandler.setCacheEntryTimeout(5);
             staticHandler.setFilesReadOnly(false);
-            router.route("/web/*").handler(staticHandler);
+
+            router.route(Config.getString(WebBotConfig.WEB_DIRECTORY)).handler(staticHandler);
+
         }
 
         private void enableSockJS(Router router) {
+
             SockJSHandlerOptions options = new SockJSHandlerOptions().setHeartbeatInterval(5000);
             SockJSHandler sockJSHandler = SockJSHandler.create(vertx, options);
+
             sockJSHandler.socketHandler(sockJSSocket -> {
+
                 String name = null;
                 MultiMap sessionData = null;
                 String uri = sockJSSocket.uri();
-                logger.info("New WS connection: " + uri);
                 String token = getTokenFromURI(uri);
+
+                logger.info("New WS connection: " + uri);
+
                 if (token == null) {
                     logger.info("Rejecting. Unable to get token from path: " + uri);
+
                     sockJSSocket.close();
                     return;
                 }
+
                 logger.info("New WebSocket Session: " + token);
                 // We remove the token, you can only init session once.
                 sessionData = sessionRequestData.remove(token);
@@ -178,8 +207,11 @@ public class WebServer {
                             sockJSSocket.close();
                         });
 
+
             });
+
             router.route("/ws/*").handler(sockJSHandler);
+
         }
 
     }

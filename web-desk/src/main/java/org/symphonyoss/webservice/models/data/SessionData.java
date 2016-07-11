@@ -1,7 +1,7 @@
 package org.symphonyoss.webservice.models.data;
 
 /**
- * Created by nicktarsillo on 7/8/16.
+ * Represents the data a user provides before entering a sessions.
  */
 public class SessionData {
     private String name;

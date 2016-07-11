@@ -35,7 +35,7 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.webroomdesk.constants.HelpBotConstants;
+import org.symphonyoss.roomdesk.constants.HelpBotConstants;
 import org.symphonyoss.symphony.agent.model.Message;
 
 import java.util.HashMap;

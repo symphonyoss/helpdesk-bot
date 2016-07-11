@@ -24,12 +24,15 @@
 
 package org.symphonyoss.webservice.models.web;
 
+/**
+ * A model used to send messages to a web session.
+ */
 public class WebMessage {
 
     String from;
-    private String email;
     long time;
     String message;
+    private String email;
 
     public WebMessage(long time, String from, String email, String message) {
         super();

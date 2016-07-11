@@ -30,8 +30,7 @@ import io.vertx.core.json.Json;
 import io.vertx.ext.web.handler.sockjs.SockJSSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.SymphonyClient;
-import org.symphonyoss.webservice.WebDeskConstants;
+import org.symphonyoss.webservice.WebServiceConstants;
 import org.symphonyoss.webservice.listeners.WebSessionListener;
 import org.symphonyoss.webservice.models.callback.AsyncCallback;
 import org.symphonyoss.webservice.models.callback.ErrorCallback;
@@ -47,8 +46,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * this Session proxies conversation between a helpee (on a web page via WS
- * requests), and one or more agents (on Symphony)
+ * this Session proxies conversation between a the web user (on a web page via WS
+ * requests), and an external source
  */
 public class WebSession implements Session {
 
@@ -72,9 +71,6 @@ public class WebSession implements Session {
 
         initWebSocket(sockJSSocket);
 
-        sendMessageToWebService(new WebMessage(System.currentTimeMillis(),
-                WebDeskConstants.HB_USER_NAME, getSessionData().getEmail(), WebDeskConstants.PLEASE_WAIT));
-
         CompletableFuture.runAsync(
                 () -> createRoom(readyCallback, errorCallback), executor);
 
@@ -97,7 +93,7 @@ public class WebSession implements Session {
 
             // Send a welcome message to the WS
             sendMessageToWebService(new WebMessage(System.currentTimeMillis(),
-                    WebDeskConstants.HB_USER_NAME, sessionData.getEmail(), WebDeskConstants.WELCOME_MSG));
+                    WebServiceConstants.HB_USER_NAME, sessionData.getEmail(), WebServiceConstants.WELCOME_MSG));
 
             return true;
 
@@ -143,9 +139,9 @@ public class WebSession implements Session {
     public void terminateSession() {
 
         sendMessageToWebService(new WebMessage(System.currentTimeMillis(),
-                WebDeskConstants.HB_USER_NAME,
+                WebServiceConstants.HB_USER_NAME,
                 sessionData.getEmail(),
-                WebDeskConstants.SESSION_TERMINATED_MESSAGE));
+                WebServiceConstants.SESSION_TERMINATED_MESSAGE));
 
         // TODO - clean up the room?
         sockJSSocket.close();
@@ -180,7 +176,7 @@ public class WebSession implements Session {
 
     public void removeListener(WebSessionListener webSessionListener) {
 
-        if(externalListeners.contains(webSessionListener))
+        if (externalListeners.contains(webSessionListener))
             externalListeners.remove(webSessionListener);
 
     }
