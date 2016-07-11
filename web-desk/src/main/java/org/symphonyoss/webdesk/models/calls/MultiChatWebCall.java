@@ -37,6 +37,15 @@ public class MultiChatWebCall extends MultiChatHelpCall {
     public void initiateCall() {
         super.initiateCall();
 
+        if(webClient == null
+                || member == null){
+
+            if(logger != null)
+                logger.warn("Call started when member or client were null.");
+
+            return;
+        }
+
         webClient.getWebSession().removeListener(webHelpSessionListener);
         memberRelayListener = new WebCallChatListener(member, webClient, symClient);
         try {
@@ -55,6 +64,16 @@ public class MultiChatWebCall extends MultiChatHelpCall {
 
     @Override
     public void endCall() {
+
+        if(webClient == null
+                || member == null){
+
+            if(logger != null)
+                logger.warn("Call end when member or client were null.");
+
+            return;
+        }
+
         webClient.getWebSession().removeListener(webRelayListener);
 
         getUserChat(member.getUserID()).removeListener(memberRelayListener);

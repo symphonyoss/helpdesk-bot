@@ -32,10 +32,13 @@ public class WebCallChatListener implements ChatListener {
      * @param message
      */
     public void onChatMessage(Message message) {
-        logger.info("New Message {}", message.getMessage());
         if (message == null
+                || message.getFromUserId() != null
                 || AiCommandListener.isCommand(message, symClient))
             return;
+
+        if(logger != null)
+             logger.info("New Message {}", message.getMessage());
 
         MlMessageParser mlMessageParser;
 

@@ -22,42 +22,43 @@
  *
  */
 
-package org.symphonyoss.webdesk.listeners.service;
+package org.symphonyoss.webdesk.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.client.services.ChatServiceListener;
-import org.symphonyoss.webdesk.models.calls.MultiChatCall;
+import org.junit.Test;
+import org.symphonyoss.webdesk.models.HelpBotSession;
+import org.symphonyoss.webdesk.utils.CallCache;
+
+import static org.junit.Assert.fail;
 
 /**
- * Created by nicktarsillo on 6/21/16.
- * Handles removing or adding chats in a call.
+ * Created by nicktarsillo on 6/23/16.
  */
-public class CallServiceListener implements ChatServiceListener {
-    private final Logger logger = LoggerFactory.getLogger(CallServiceListener.class);
-    private MultiChatCall call;
+public class CallCacheTest {
 
-    public CallServiceListener(MultiChatCall call) {
-        this.call = call;
-    }
-
-    public void onNewChat(Chat chat) {
-        //Not possible so do nothing
-    }
-
-    /**
-     * On remove web, exit remote user from call
-     *
-     * @param chat the removed web
-     */
-    public void onRemovedChat(Chat chat) {
-
-        if(chat != null) {
-            call.endCall();
+    @Test
+    public void testNewCall() throws Exception {
+        try {
+            CallCache.newCall(null, null, new HelpBotSession());
+        } catch (Exception e) {
+            fail("New call test failed");
         }
-
     }
 
+    @Test
+    public void testEndCall() throws Exception {
+        try {
+            CallCache.endCall(null);
+        } catch (Exception e) {
+            fail("New call test failed");
+        }
+    }
 
+    @Test
+    public void testRemoveCall() throws Exception {
+        try {
+            CallCache.removeCall(null);
+        } catch (Exception e) {
+            fail("New call test failed");
+        }
+    }
 }

@@ -1,7 +1,8 @@
-package org.symphonyoss.roomdesk.models.calls;
+package org.symphonyoss.webdesk.models.calls;
 
 import junit.framework.TestCase;
 import org.mockito.Mockito;
+import org.symphonyoss.webdesk.models.calls.MultiChatHelpCall;
 
 import static org.mockito.Mockito.mock;
 
@@ -31,5 +32,6 @@ public class MultiChatHelpCallTest extends TestCase {
         }catch(Exception e){
             fail("Initiate call failed.");
         }
+
     }
 }

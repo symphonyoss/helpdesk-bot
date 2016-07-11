@@ -27,6 +27,10 @@ public class TranscriptListener implements ChatListener {
     }
 
     public void onChatMessage(Message message) {
+        if(message == null
+                || message.getFromUserId() == null)
+            return;
+
         MlMessageParser mlMessageParser = null;
         try {
 
