@@ -33,7 +33,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <packaging>jar</packaging>
     <groupId>org.symphonyoss</groupId>
     <artifactId>proxy-desk</artifactId>
 
@@ -91,19 +91,6 @@
 
     <build>
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>SymphonyTest</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

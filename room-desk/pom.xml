@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.symphonyoss</groupId>
+    <packaging>jar</packaging>
     <artifactId>room-desk</artifactId>
     <version>1.0-SNAPSHOT</version>
 

@@ -13,6 +13,7 @@ import org.symphonyoss.webservice.models.web.WebMessage;
 
 /**
  * Created by nicktarsillo on 7/8/16.
+ * Relay messages from symphony to the web call
  */
 public class WebCallChatListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(WebCallChatListener.class);
