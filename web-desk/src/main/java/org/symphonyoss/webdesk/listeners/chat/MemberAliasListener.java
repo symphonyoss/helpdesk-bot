@@ -31,7 +31,7 @@ public class MemberAliasListener implements ChatListener {
      */
     public void onChatMessage(Message message) {
         if (message == null
-                || message.getStream() == null
+                || message.getStreamId() == null
                 || AiCommandListener.isCommand(message, symClient))
             return;
 

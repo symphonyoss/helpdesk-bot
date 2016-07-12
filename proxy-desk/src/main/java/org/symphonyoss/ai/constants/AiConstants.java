@@ -37,4 +37,5 @@ public class AiConstants {
     public static final String NO_PERMISSION = "Sorry, you do not have permission to use that command.";
     public static final String NOT_INTERPRETABLE = " is not a command.";
     public static final String USAGE = "Check the usage:";
+    public static final double CORRECTFACTOR = 0.5;
 }

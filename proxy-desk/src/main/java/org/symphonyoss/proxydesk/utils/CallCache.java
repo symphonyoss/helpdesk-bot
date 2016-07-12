@@ -44,6 +44,13 @@ public class CallCache {
     public static final ConcurrentLinkedQueue<Call> ACTIVECALLS = new ConcurrentLinkedQueue<Call>();
     private static final Logger logger = LoggerFactory.getLogger(CallCache.class);
 
+    /**
+     * Starts a new help call.
+     * @param member the member to start the call with
+     * @param helpClient the client to start the call with
+     * @param helpBotSession the helpbot session
+     * @return the new call
+     */
     public static Call newCall(Member member, HelpClient helpClient, HelpBotSession helpBotSession) {
         if (member == null
                 || helpClient == null
@@ -64,6 +71,12 @@ public class CallCache {
 
     }
 
+    /**
+     * Starts a new basic call.
+     * @param symClient the symclient
+     * @param isPrivate
+     * @return the new call
+     */
     public static Call newCall(SymphonyClient symClient, boolean isPrivate) {
         if (symClient == null) {
 

@@ -51,6 +51,7 @@ import org.symphonyoss.webdesk.utils.MemberCache;
 import org.symphonyoss.webservice.SymphonyWebService;
 import org.symphonyoss.webservice.listeners.WebSessionListener;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -195,24 +196,24 @@ public class WebDeskBot implements ChatServiceListener {
             symClient = new SymphonyBasicClient();
 
             logger.debug("{} {}", System.getProperty(WebBotConfig.SESSIONAUTH_URL),
-                    System.getProperty("keyauth.url"));
+                    System.getProperty(WebBotConfig.KEYAUTH_URL));
             AuthorizationClient authClient = new AuthorizationClient(
-                    System.getProperty("sessionauth.url"),
-                    System.getProperty("keyauth.url"));
+                    System.getProperty(WebBotConfig.SESSIONAUTH_URL),
+                    System.getProperty(WebBotConfig.KEYAUTH_URL));
 
             authClient.setKeystores(
                     System.getProperty(WebBotConfig.TRUSTSTORE_FILE),
-                    System.getProperty("truststore.password"),
-                    System.getProperty("certs.dir") + System.getProperty("bot.user") + ".p12",
-                    System.getProperty("keystore.password"));
+                    System.getProperty(WebBotConfig.TRUSTSTORE_PASSWORD),
+                    System.getProperty(WebBotConfig.CERTS_DIR) + System.getProperty(WebBotConfig.BOT_USER) + ".p12",
+                    System.getProperty(WebBotConfig.KEYSTORE_PASSWORD));
 
             SymAuth symAuth = authClient.authenticate();
 
             symClient.init(
                     symAuth,
-                    System.getProperty("bot.user") + "@markit.com",
-                    System.getProperty("symphony.agent.agent.url"),
-                    System.getProperty("symphony.agent.pod.url")
+                    System.getProperty(WebBotConfig.BOT_USER) + "@markit.com",
+                    System.getProperty(WebBotConfig.SYMPHONY_AGENT),
+                    System.getProperty(WebBotConfig.SYMPHONY_POD)
             );
 
         } catch (Exception e) {
@@ -236,12 +237,21 @@ public class WebDeskBot implements ChatServiceListener {
     public void onNewChat(Chat chat) {
 
         if (chat != null) {
-            logger.debug("New web connection: " + chat.getStream());
+            logger.info("New chat: " + chat.getStream().getId());
+            logger.info("Users in chat: " + Arrays.toString(chat.getRemoteUsers().toArray()));
 
             Set<User> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
                 User user = users.iterator().next();
-                logger.debug("Accepted Chat: " + chat.toString());
+
+                try {
+                    if(!chat.getStream().getId().equals(symClient.getStreamsClient().getStream(user).getId()))
+                        return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                logger.info("Accepted Chat: " + chat.toString());
                 if (user != null && !DeskUserCache.hasUser(user)) {
                     if (MemberCache.hasMember(user.getId().toString())) {
 

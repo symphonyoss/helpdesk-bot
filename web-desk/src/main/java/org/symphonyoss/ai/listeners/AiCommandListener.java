@@ -37,8 +37,9 @@ import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.symphony.agent.model.Message;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -49,13 +50,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AiCommandListener implements ChatListener {
     private static final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
 
+    private static Message lastAnsweredMessage;
+
     protected SymphonyClient symClient;
 
     private LinkedList<AiCommand> activeCommands = new LinkedList<AiCommand>();
     private ConcurrentHashMap<String, AiLastCommand> lastResponse = new ConcurrentHashMap<String, AiLastCommand>();
     private AiResponder aiResponder;
-    private boolean pushCommands;
-    private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();
 
     public AiCommandListener(SymphonyClient symClient) {
         this.symClient = symClient;
@@ -92,6 +93,17 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
+     * If the message was already answered by another listener, return true.
+     * @param message the message
+     * @return if the message was answered
+     */
+    public static boolean wasAnswered(Message message){
+
+        return lastAnsweredMessage != null && lastAnsweredMessage.getId().equals(message.getId());
+
+    }
+
+    /**
      * When a web message is received, check if it starts with
      * the command char. If it does, process message.
      * <p>
@@ -103,9 +115,11 @@ public class AiCommandListener implements ChatListener {
 
     public void onChatMessage(Message message) {
 
+        if(wasAnswered(message))
+            return;
+
         if (message == null
-                || message.getFromUserId() == null
-                || (isPushMessage(message) && !isPushCommands())) {
+                || message.getFromUserId() == null) {
 
             if (logger != null)
                 logger.warn("Received null message. Ignoring.");
@@ -166,13 +180,14 @@ public class AiCommandListener implements ChatListener {
 
             if (command.isCommand(chunks) && command.userIsPermitted(message.getFromUserId())) {
 
+                lastAnsweredMessage = message;
                 aiResponder.respondWith(command.getResponses(mlMessageParser, message));
                 lastResponse.put(message.getId(), new AiLastCommand(mlMessageParser, command));
-
                 return;
 
             } else if (command.isCommand(chunks)) {
 
+                lastAnsweredMessage = message;
                 aiResponder.sendNoPermission(message);
                 return;
 
@@ -180,6 +195,7 @@ public class AiCommandListener implements ChatListener {
 
         }
 
+        lastAnsweredMessage = message;
         if (!equalsRunLastCommand(mlMessageParser, message)
                 && !canSuggest(chunks)) {
             aiResponder.sendUsage(message, mlMessageParser, activeCommands);
@@ -223,19 +239,6 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Determines if the message was pushed, due to registering a new web listener
-     *
-     * @param message the message
-     * @return if the message was pushed
-     */
-    private boolean isPushMessage(Message message) {
-
-        return (entered.get(message.getStream()) == null
-                || !entered.get(message.getStream()));
-
-    }
-
-    /**
      * Registers this listener to a given web appropriately.
      *
      * @param chat The web to listen on
@@ -245,7 +248,6 @@ public class AiCommandListener implements ChatListener {
         if (chat != null) {
 
             chat.registerListener(this);
-            entered.put(chat.getStream().getId().toString(), true);
 
         }
     }
@@ -263,7 +265,7 @@ public class AiCommandListener implements ChatListener {
 
             if (chat.getStream() != null
                     && chat.getStream().getId() != null) {
-                entered.put(chat.getStream().getId().toString(), false);
+
             } else {
                 logChatError(chat, new NullPointerException());
             }
@@ -292,19 +294,6 @@ public class AiCommandListener implements ChatListener {
         }
     }
 
-    /**
-     * Determines if push commands should be ignored or not
-     *
-     * @return if the push command should be ignored
-     */
-    public boolean isPushCommands() {
-        return pushCommands;
-    }
-
-    public void setPushCommands(boolean pushCommands) {
-        this.pushCommands = pushCommands;
-    }
-
     public LinkedList<AiCommand> getActiveCommands() {
         return activeCommands;
     }
@@ -319,5 +308,13 @@ public class AiCommandListener implements ChatListener {
 
     public void setResponder(AiResponder responder) {
         this.aiResponder = responder;
+    }
+
+    public Message getLastAnsweredMessage() {
+        return lastAnsweredMessage;
+    }
+
+    public void setLastAnsweredMessage(Message lastAnsweredMessage) {
+        this.lastAnsweredMessage = lastAnsweredMessage;
     }
 }

@@ -67,7 +67,7 @@ public class Messenger {
         userMessage.setMessage(message);
 
         Stream stream = new Stream();
-        stream.setId(refMes.getStream());
+        stream.setId(refMes.getStreamId());
         try {
             symClient.getMessagesClient().sendMessage(stream, userMessage);
         } catch (Exception e) {

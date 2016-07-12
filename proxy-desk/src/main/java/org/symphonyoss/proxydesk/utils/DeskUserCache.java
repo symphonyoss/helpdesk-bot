@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nicktarsillo on 6/16/16.
+ * A cache for all users using the help desk service
  */
 public class DeskUserCache {
     public static final ConcurrentHashMap<String, DeskUser> ALL_USERS = new ConcurrentHashMap<String, DeskUser>();

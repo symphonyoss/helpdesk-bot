@@ -65,8 +65,8 @@ public class HelpClientListener implements ChatListener {
      */
     public void onChatMessage(Message message) {
         if (message == null
-                || message.getStream() == null
-                || helpResponseListener.isCommand(message)) {
+                || message.getStreamId() == null
+                || AiCommandListener.isCommand(message,symClient)) {
             if (logger != null)
                 logger.warn("Ignored message {}.", message);
             return;

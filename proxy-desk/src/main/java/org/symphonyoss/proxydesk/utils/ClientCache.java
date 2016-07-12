@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nicktarsillo on 6/16/16.
+ * A cache that holds all the help clients
  */
 public class ClientCache {
     public static final ConcurrentHashMap<String, HelpClient> ALL_CLIENTS = new ConcurrentHashMap<String, HelpClient>();

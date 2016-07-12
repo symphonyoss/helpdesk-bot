@@ -135,8 +135,6 @@ public class MemberCommandListener extends AiCommandListener {
         getActiveCommands().add(onlineMembers);
         getActiveCommands().add(queueResponse);
         getActiveCommands().add(mySettings);
-
-        setPushCommands(true);
     }
 
     @Override

@@ -96,8 +96,6 @@ public class MemberCommandListener extends AiCommandListener {
         getActiveCommands().add(toggleAlias);
         getActiveCommands().add(onlineMembers);
         getActiveCommands().add(queueResponse);
-
-        setPushCommands(true);
     }
 
 }

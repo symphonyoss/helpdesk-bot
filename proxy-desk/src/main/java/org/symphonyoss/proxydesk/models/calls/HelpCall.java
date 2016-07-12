@@ -315,11 +315,7 @@ public class HelpCall extends Call {
 
             Chat chat = Messenger.getChat(member.getUserID(), memberCommandListener.getSymClient());
 
-            memberCommandListener.setPushCommands(false);
-
             memberCommandListener.listenOn(chat);
-
-            memberCommandListener.setPushCommands(true);
 
             for (HelpClient c : clients) {
                 helpCallResponder.sendExitMessage(c, member);

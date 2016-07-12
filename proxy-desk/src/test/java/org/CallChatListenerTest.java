@@ -58,7 +58,7 @@ public class CallChatListenerTest {
             fail("On web message empty message test failed.");
         }
 
-        message.setStream("TEST STREAM");
+        message.setStreamId("TEST STREAM");
         try {
             listener.onChatMessage(message);
         } catch (Exception e) {

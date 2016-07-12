@@ -6,12 +6,14 @@ import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
+import org.symphonyoss.client.services.RoomService;
 import org.symphonyoss.roomdesk.config.RoomBotConfig;
 import org.symphonyoss.roomdesk.models.users.DeskUser;
 import org.symphonyoss.roomdesk.models.users.Member;
 import org.symphonyoss.roomdesk.utils.DeskUserCache;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.pod.model.User;
 
 /**
  * Created by nicktarsillo on 7/7/16.
@@ -25,15 +27,17 @@ public class MemberAliasListener implements ChatListener {
 
     public void onChatMessage(Message message) {
         if (message == null
-                || message.getStream() == null
+                || message.getStreamId() == null
                 || AiCommandListener.isCommand(message, symClient))
             return;
 
-
         try {
+            RoomService roomService  = new RoomService(symClient);
 
-            if (DeskUserCache.getDeskUser(message.getFromUserId().toString()).getUserType() != DeskUser.DeskUserType.MEMBER
-                    && symClient.getChatService().getChatByStream(message.getStream()).getRemoteUsers().size() != 1)
+
+
+            User user = symClient.getUsersClient().getUserFromId(message.getFromUserId());
+            if (DeskUserCache.getDeskUser(message.getFromUserId().toString()).getUserType() != DeskUser.DeskUserType.MEMBER)
                 return;
 
             Member member = (Member) DeskUserCache.getDeskUser(message.getFromUserId().toString());

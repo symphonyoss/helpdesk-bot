@@ -77,6 +77,11 @@ public class MemberCache {
         }
     }
 
+    /**
+     * Write a member to local file.
+     * Location is specified in the config.
+     * @param member the member to write to file
+     */
     public static void writeMember(Member member) {
 
         if (member == null)
@@ -99,6 +104,12 @@ public class MemberCache {
 
     }
 
+    /**
+     * Gets a list of the most qualified members to answer a help request.
+     * Top percentage is specified in config.
+     * @param helpRequest a help request
+     * @return An array of members
+     */
     public static Member[] getBestMembers(final String helpRequest) {
         ArrayList<Member> orderMembers = new ArrayList<Member>(MEMBERS.values());
 
@@ -147,6 +158,10 @@ public class MemberCache {
         DeskUserCache.addUser(member);
     }
 
+    /**
+     * Returns a list of the online members
+     * @return online members
+     */
     public static Set<Member> getOnlineMembers() {
         Set<Member> members = new HashSet<Member>();
         for (Member member : MEMBERS.values()) {
@@ -178,6 +193,10 @@ public class MemberCache {
             return list;
     }
 
+    /**
+     * Return a string that lists all online members
+     * @return the online member string
+     */
     public static String listOnlineMembers() {
         String list = "";
         int index = 1;

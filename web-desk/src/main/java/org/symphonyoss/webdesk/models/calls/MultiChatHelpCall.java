@@ -129,9 +129,7 @@ public class MultiChatHelpCall extends MultiChatCall {
 
         helpClientListener.listenOn(getUserChat(client.getUserID()));
 
-        memberCommandListener.setPushCommands(false);
         memberCommandListener.listenOn(getUserChat(member.getUserID()));
-        memberCommandListener.setPushCommands(true);
 
         helpChat.removeListener(transcriptListener);
 

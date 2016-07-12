@@ -167,24 +167,24 @@ public class ProxyDeskBot implements ChatServiceListener {
             symClient = new SymphonyBasicClient();
 
             logger.debug("{} {}", System.getProperty(ProxyBotConfig.SESSIONAUTH_URL),
-                    System.getProperty("keyauth.url"));
+                    System.getProperty(ProxyBotConfig.KEYAUTH_URL));
             AuthorizationClient authClient = new AuthorizationClient(
-                    System.getProperty("sessionauth.url"),
-                    System.getProperty("keyauth.url"));
+                    System.getProperty(ProxyBotConfig.SESSIONAUTH_URL),
+                    System.getProperty(ProxyBotConfig.KEYAUTH_URL));
 
             authClient.setKeystores(
                     System.getProperty(ProxyBotConfig.TRUSTSTORE_FILE),
-                    System.getProperty("truststore.password"),
-                    System.getProperty("certs.dir") + System.getProperty("bot.user") + ".p12",
-                    System.getProperty("keystore.password"));
+                    System.getProperty(ProxyBotConfig.TRUSTSTORE_PASSWORD),
+                    System.getProperty(ProxyBotConfig.CERTS_DIR) + System.getProperty(ProxyBotConfig.BOT_USER) + ".p12",
+                    System.getProperty(ProxyBotConfig.KEYSTORE_PASSWORD));
 
             SymAuth symAuth = authClient.authenticate();
 
             symClient.init(
                     symAuth,
-                    System.getProperty("bot.user") + "@markit.com",
-                    System.getProperty("symphony.agent.agent.url"),
-                    System.getProperty("symphony.agent.pod.url")
+                    System.getProperty(ProxyBotConfig.BOT_USER) + "@markit.com",
+                    System.getProperty(ProxyBotConfig.SYMPHONY_AGENT),
+                    System.getProperty(ProxyBotConfig.SYMPHONY_POD)
             );
 
         } catch (Exception e) {

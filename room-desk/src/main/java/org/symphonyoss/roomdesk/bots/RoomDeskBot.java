@@ -177,26 +177,26 @@ public class RoomDeskBot implements ChatServiceListener {
         try {
 
             symClient = new SymphonyBasicClient();
-
+            
             logger.debug("{} {}", System.getProperty(RoomBotConfig.SESSIONAUTH_URL),
-                    System.getProperty("keyauth.url"));
+                    System.getProperty(RoomBotConfig.KEYAUTH_URL));
             AuthorizationClient authClient = new AuthorizationClient(
-                    System.getProperty("sessionauth.url"),
-                    System.getProperty("keyauth.url"));
+                    System.getProperty(RoomBotConfig.SESSIONAUTH_URL),
+                    System.getProperty(RoomBotConfig.KEYAUTH_URL));
 
             authClient.setKeystores(
                     System.getProperty(RoomBotConfig.TRUSTSTORE_FILE),
-                    System.getProperty("truststore.password"),
-                    System.getProperty("certs.dir") + System.getProperty("bot.user") + ".p12",
-                    System.getProperty("keystore.password"));
+                    System.getProperty(RoomBotConfig.TRUSTSTORE_PASSWORD),
+                    System.getProperty(RoomBotConfig.CERTS_DIR) + System.getProperty(RoomBotConfig.BOT_USER) + ".p12",
+                    System.getProperty(RoomBotConfig.KEYSTORE_PASSWORD));
 
             SymAuth symAuth = authClient.authenticate();
 
             symClient.init(
                     symAuth,
-                    System.getProperty("bot.user") + "@markit.com",
-                    System.getProperty("symphony.agent.agent.url"),
-                    System.getProperty("symphony.agent.pod.url")
+                    System.getProperty(RoomBotConfig.BOT_USER) + "@markit.com",
+                    System.getProperty(RoomBotConfig.SYMPHONY_AGENT),
+                    System.getProperty(RoomBotConfig.SYMPHONY_POD)
             );
 
         } catch (Exception e) {

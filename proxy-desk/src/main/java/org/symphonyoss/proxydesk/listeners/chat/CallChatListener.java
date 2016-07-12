@@ -67,8 +67,8 @@ public class CallChatListener implements ChatListener {
      */
     public void onChatMessage(Message message) {
         if (message == null
-                || message.getStream() == null
-                || (callCommandListener != null && callCommandListener.isCommand(message))
+                || message.getStreamId() == null
+                || (callCommandListener != null && AiCommandListener.isCommand(message, symClient))
                 || isPushMessage(message)) {
 
             if (logger != null)
@@ -174,8 +174,8 @@ public class CallChatListener implements ChatListener {
      * @return if the message is a push message
      */
     private boolean isPushMessage(Message message) {
-        return (entered.get(message.getStream()) == null
-                || !entered.get(message.getStream()));
+        return (entered.get(message.getStreamId()) == null
+                || !entered.get(message.getStreamId()));
     }
 
     /**
