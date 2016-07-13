@@ -241,14 +241,6 @@ public class HelpCall extends Call {
 
         }
 
-        if (clients != null) {
-
-            for (HelpClient client : new LinkedList<HelpClient>(clients)) {
-                exit(client);
-            }
-
-        }
-
     }
 
     @Override
@@ -303,6 +295,7 @@ public class HelpCall extends Call {
     /**
      * Set member off call.
      * Cross listeners back.
+     * If members are empty end call.
      *
      * @param member the member trying to exit the web
      */
@@ -330,6 +323,16 @@ public class HelpCall extends Call {
             }
 
             members.remove(member);
+
+            if(members.size() == 0) {
+
+                for (HelpClient helpClient : clients) {
+
+                    exit(helpClient);
+
+                }
+
+            }
 
         } else {
             if (logger != null)

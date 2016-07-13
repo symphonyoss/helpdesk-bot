@@ -128,7 +128,7 @@ public class MemberCache {
         });
 
         int sendTo = 0;
-        if (orderMembers.get(0).countTagMatches(helpRequest) == 0) {
+        if (orderMembers.get(0).countTagMatches(helpRequest) != 0) {
 
             sendTo = (int) (orderMembers.size()
                     * Double.parseDouble(Config.getString(ProxyBotConfig.BEST_PERCENTAGE))) + 1;

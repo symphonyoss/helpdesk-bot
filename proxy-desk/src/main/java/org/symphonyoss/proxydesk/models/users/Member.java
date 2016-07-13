@@ -74,7 +74,7 @@ public class Member implements DeskUser {
         int count = 0;
 
         for (String tag : getTags()) {
-            if (match.contains(tag))
+            if (match.toLowerCase().contains(tag.toLowerCase()))
                 count++;
         }
 
