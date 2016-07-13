@@ -50,7 +50,7 @@ public class MemberCache {
 
         File[] files = new File(System.getProperty("files.json")).listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                String ext = FilenameUtils.getExtension(dir.getAbsolutePath());
+                String ext = FilenameUtils.getExtension(name);
                 return ext.equalsIgnoreCase("json");
             }
         });
