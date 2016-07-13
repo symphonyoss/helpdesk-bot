@@ -2130,7 +2130,7 @@ paths:
         - Util
       responses:
         '200':
-          description: Message sent.
+          description: WebMessage sent.
           schema:
             $ref: '#/definitions/SimpleMessage'
         '400':
@@ -2179,7 +2179,7 @@ paths:
         - Util
       responses:
         '200':
-          description: Message sent.
+          description: WebMessage sent.
           schema:
             $ref: '#/definitions/SimpleMessage'
           headers:
@@ -2251,9 +2251,9 @@ paths:
         - Messages
       responses:
         '200':
-          description: Message sent.
+          description: WebMessage sent.
           schema:
-            $ref: '#/definitions/Message'
+            $ref: '#/definitions/WebMessage'
         '400':
           description: 'Client error, see response body for further details.'
           schema:
@@ -2457,7 +2457,7 @@ definitions:
         message:
           type: string
           format: MessageML
-          description: Message text in MessageML
+          description: WebMessage text in MessageML
         fromUserId:
           type: integer
           format: int64
@@ -2482,7 +2482,7 @@ definitions:
   MessageList:
     type: array
     items:
-      $ref: '#/definitions/Message'
+      $ref: '#/definitions/WebMessage'
   SimpleMessage:
     description: A string wrapped in a JSON object.
     type: object

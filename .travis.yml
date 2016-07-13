@@ -43,7 +43,7 @@ env:
 addons:
   coverity_scan:
     project:
-      name: "symphonyoss/helpdesk-bot"
+      name: "symphonyoss/roomdesk-bot"
       description: "Build submitted via Travis CI"
     notification_email: maoo@symphony.foundation
     build_command_prepend: "mvn clean"

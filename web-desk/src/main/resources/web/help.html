@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!--
   ~
@@ -25,72 +24,71 @@
   -->
 
 <html>
-  <head>
+<head>
     <title>HelpBOT Admin</title>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Bootstrap core CSS -->
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" media="screen">
- 
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"
+          media="screen">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
-      <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
     <![endif]-->
-  </head>
-  <body>
- 	<div class="container-fluid">
-	 	<div class="row">
-		 	 <div class="col-md-12"> 
-			 	<h1>Live Help</h1>
-	 		 </div>
-	 	</div>
-	 	<div class="row">
-		 	<div class="col-md-12"> 
-	 	 
- 	 
- 	 
-<form class="form-horizontal" action="/help/" method="POST" >
-  <div class="control-group">
-    <label class="control-label" for="name">Name</label>
-    <div class="controls">
-      <input type="text" class="input-xxlarge"name="name"  id="name" placeholder="Name">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Live Help</h1>
+        </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="email">Email</label>
-    <div class="controls">
-      <input type="text" class="input-xxlarge"  name="email"  id="email" placeholder="Email">
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <form class="form-horizontal" action="/help/" method="POST">
+                <div class="control-group">
+                    <label class="control-label" for="name">Name</label>
+
+                    <div class="controls">
+                        <input type="text" class="input-xxlarge" name="name" id="name" placeholder="Name">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="email">Email</label>
+
+                    <div class="controls">
+                        <input type="text" class="input-xxlarge" name="email" id="email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="topic">Help Topic</label>
+
+                    <div class="controls">
+                        <textarea rows=5 name="topic" id="topic" placeholder="Help Topic"></textarea>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <button type="submit" class="btn">Request Help</button>
+                </div>
+            </form>
+
+        </div>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="topic">Email</label>
-    <div class="controls">
-      <textarea rows=5 name="topic"  id="topic" placeholder="Help Topic"></textarea>
-    </div>
-  </div>
-  
-  <div class="control-group">
-      <button type="submit" class="btn">Request Help</button>
-  </div>
-</form>
-
-	 	  	</div>
-		</div>
-	</div>
+</div>
 
 
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
-
- 
-
-  </body>
+</body>
 </html>
 
 
