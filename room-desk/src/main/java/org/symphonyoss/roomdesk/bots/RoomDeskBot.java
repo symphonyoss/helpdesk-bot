@@ -82,8 +82,8 @@ public class RoomDeskBot implements ChatServiceListener {
     /**
      * Sets up the bot.
      * Loads all the members from file into the cache.
-     * Registers web service.
-     * Instantiates web listeners.
+     * Registers chat service.
+     * Instantiates chat listeners.
      * Starts threads (inactivity).
      */
     public void setupBot() {
@@ -211,16 +211,16 @@ public class RoomDeskBot implements ChatServiceListener {
     }
 
     /**
-     * A method that is called by the listener when a new web is created.
-     * On a new web, determine if the remote user is a member or client.
-     * Register the web to the appropriate listener.
+     * A method that is called by the listener when a new chat is created.
+     * On a new chat, determine if the remote user is a member or client.
+     * Register the chat to the appropriate listener.
      *
-     * @param chat the new web
+     * @param chat the new chat
      */
     public void onNewChat(Chat chat) {
 
         if (chat != null) {
-            logger.debug("New web connection: " + chat.getStream());
+            logger.debug("New chat connection: " + chat.getStream());
 
             Set<User> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
@@ -249,19 +249,19 @@ public class RoomDeskBot implements ChatServiceListener {
             }
 
         } else if (logger != null) {
-            logger.warn("Incoming new web received a null value.");
+            logger.warn("Incoming new chat received a null value.");
         }
     }
 
     /**
-     * A method called by the listener when a web is removed.
-     * On web remove, determine if the user is a client or member.
-     * Remove the web from the appropriate listener.
+     * A method called by the listener when a chat is removed.
+     * On chat remove, determine if the user is a client or member.
+     * Remove the chat from the appropriate listener.
      *
-     * @param chat the removed web
+     * @param chat the removed chat
      */
     public void onRemovedChat(Chat chat) {
-        logger.debug("Removed web connection: " + chat.getStream());
+        logger.debug("Removed chat connection: " + chat.getStream());
 
         if (chat != null) {
             Set<User> users = chat.getRemoteUsers();
@@ -284,7 +284,7 @@ public class RoomDeskBot implements ChatServiceListener {
                 }
             }
         } else if (logger != null) {
-            logger.warn("Incoming new web received a null value.");
+            logger.warn("Incoming new chat received a null value.");
         }
     }
 }

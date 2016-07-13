@@ -57,7 +57,7 @@ public class HelpClientListener implements ChatListener {
     }
 
     /**
-     * A method called from the web listener, when a new web message is received.
+     * A method called from the chat listener, when a new chat message is received.
      * If the received message is not a command, relay the message to the onlines, off call
      * members.
      *
@@ -102,9 +102,9 @@ public class HelpClientListener implements ChatListener {
     }
 
     /**
-     * Register this listener to the web appropriately
+     * Register this listener to the chat appropriately
      *
-     * @param chat the web to register this listener on
+     * @param chat the chat to register this listener on
      */
     public void listenOn(Chat chat) {
         if (chat != null) {
@@ -118,9 +118,9 @@ public class HelpClientListener implements ChatListener {
     }
 
     /**
-     * Remove this listener from the web appropriately
+     * Remove this listener from the chat appropriately
      *
-     * @param chat the web to remove this listener from
+     * @param chat the chat to remove this listener from
      */
     public void stopListening(Chat chat) {
         if (chat != null) {
@@ -133,6 +133,13 @@ public class HelpClientListener implements ChatListener {
         }
     }
 
+    /**
+     * Relay the message from the client to the members.
+     *
+     * @param helpClient the helpclient that sent the message
+     * @param message the message
+     * @param chunks the message in text chunks
+     */
     private void relayToMembers(HelpClient helpClient, Message message, String[] chunks) {
 
         for (Member member : MemberCache.getBestMembers(String.join(" ", chunks))) {

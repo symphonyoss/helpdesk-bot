@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Listens on web, and writes messages into a file.
+ * Listens on chats, and writes messages into a file.
  */
 public class TranscriptListener implements ChatListener {
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(TranscriptListener.class);

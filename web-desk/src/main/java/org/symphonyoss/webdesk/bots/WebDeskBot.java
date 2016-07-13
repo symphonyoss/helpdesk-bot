@@ -91,6 +91,7 @@ public class WebDeskBot implements ChatServiceListener {
      * Loads all the members from file into the cache.
      * Registers web service.
      * Instantiates web listeners.
+     * Instantiates chat listeners.
      * Starts threads (inactivity).
      */
     public void setupBot() {
@@ -131,12 +132,18 @@ public class WebDeskBot implements ChatServiceListener {
         }
     }
 
+    /**
+     * Start the web service
+     */
     private void setupWeb() {
         SymphonyWebService webService = new SymphonyWebService();
 
         webService.registerListener(new WebRegistrationListener(symClient, webSessionListener, helpClientListener));
     }
 
+    /**
+     * Setup the member chat room
+     */
     private void setupChat() {
 
         Chat chat = new Chat();
@@ -153,6 +160,9 @@ public class WebDeskBot implements ChatServiceListener {
         symClient.getChatService().addChat(chat);
     }
 
+    /**
+     * Add the admin as a member as specified in the config
+     */
     private void addAdmin() {
 
         User user = null;
@@ -228,11 +238,11 @@ public class WebDeskBot implements ChatServiceListener {
     }
 
     /**
-     * A method that is called by the listener when a new web is created.
-     * On a new web, determine if the remote user is a member or client.
-     * Register the web to the appropriate listener.
+     * A method that is called by the listener when a new chat is created.
+     * On a new chat, determine if the remote user is a member or client.
+     * Register the chat to the appropriate listener.
      *
-     * @param chat the new web
+     * @param chat the new chat
      */
     public void onNewChat(Chat chat) {
 
@@ -280,11 +290,11 @@ public class WebDeskBot implements ChatServiceListener {
     }
 
     /**
-     * A method called by the listener when a web is removed.
-     * On web remove, determine if the user is a client or member.
-     * Remove the web from the appropriate listener.
+     * A method called by the listener when a chat is removed.
+     * On chat remove, determine if the user is a client or member.
+     * Remove the chat from the appropriate listener.
      *
-     * @param chat the removed web
+     * @param chat the removed chat
      */
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed web connection: " + chat.getStream());

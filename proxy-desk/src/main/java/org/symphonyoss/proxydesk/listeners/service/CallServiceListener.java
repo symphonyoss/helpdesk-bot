@@ -54,9 +54,9 @@ public class CallServiceListener implements ChatServiceListener {
     }
 
     /**
-     * On remove web, exit remote user from call
+     * On remove chat, exit remote user from call
      *
-     * @param chat the removed web
+     * @param chat the removed chat
      */
     public void onRemovedChat(Chat chat) {
 
@@ -81,7 +81,7 @@ public class CallServiceListener implements ChatServiceListener {
 
                 } else {
                     logger.warn("Could not find desk user {}." +
-                            " Ignoring web removal.", user.getId());
+                            " Ignoring chat removal.", user.getId());
                 }
 
             }

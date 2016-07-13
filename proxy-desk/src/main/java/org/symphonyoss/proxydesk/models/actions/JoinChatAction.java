@@ -44,7 +44,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 6/16/16.
- * An AiAction that allows a member to join a web.
+ * An AiAction that allows a member to join a chat.
  */
 public class JoinChatAction implements AiAction {
     private final Logger logger = LoggerFactory.getLogger(JoinChatAction.class);

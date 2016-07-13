@@ -31,7 +31,10 @@ public class MultiChatWebCall extends MultiChatHelpCall {
     }
 
     /**
-     * Provides additional action to the initiate call method
+     * Provides additional actions to the initiate call method
+     * Remove Web Help Session listener
+     * Add new WS to symphony chat listener
+     * Add new symphony to WS chat listener
      */
     @Override
     public void initiateCall() {

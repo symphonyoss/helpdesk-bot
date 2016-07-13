@@ -84,7 +84,7 @@ public class AiSpellParser {
      *
      * @param commands        the list of commands to compare
      * @param chunks          the text chunks
-     * @param symClient       the org.org.symphonyoss.ai sym client
+     * @param symClient       the ai sym client
      * @param closenessFactor the minimum closeness value needed to be considered a match
      * @return command suggestion
      */

@@ -35,7 +35,7 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- * A model for org.org.symphonyoss.ai commands.
+ * A model for ai commands.
  * Used to compare input and command, and check for a match.
  */
 public class AiCommand {
@@ -55,7 +55,7 @@ public class AiCommand {
     }
 
     /**
-     * Checks to see if the user's input fulfills the org.org.symphonyoss.ai command requirements
+     * Checks to see if the user's input fulfills the ai command requirements
      * <p>
      * <p>
      *

@@ -53,7 +53,7 @@ public class MultiChatHelpCall extends MultiChatCall {
      * Cross listeners.
      * Add new command listener.
      * Set on call.
-     * Send initial web messages from the bot.
+     * Send initial chat messages from the bot.
      */
     public void initiateCall() {
         if(client == null

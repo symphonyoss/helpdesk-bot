@@ -51,6 +51,9 @@ public class CallCommandListener extends AiCommandListener {
         init();
     }
 
+    /**
+     * Create and add the commands used in a basic call.
+     */
     private void init() {
         AiCommand exit = new AiCommand(Config.getString(ProxyBotConfig.EXIT), 0);
         exit.addAction(new ExitAction(call));

@@ -35,7 +35,7 @@ import org.symphonyoss.webdesk.models.permissions.IsMember;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A extension of the org.org.symphonyoss.ai command listener.
+ * A extension of the ai command listener.
  * Initializes the required commands, used inside a call.
  */
 public class HelpCallCommandListener extends AiCommandListener {

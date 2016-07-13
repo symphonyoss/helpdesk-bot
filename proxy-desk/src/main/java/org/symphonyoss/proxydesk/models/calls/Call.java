@@ -61,7 +61,7 @@ public class Call {
     /**
      * Instantiate the call command listener.
      * Instantiate the call responder.
-     * Instantiate the call web listener.
+     * Instantiate the call chat listener.
      * Instantiate the call service listener.
      * Add the service listener to the sym client.
      */
@@ -109,7 +109,7 @@ public class Call {
     }
 
     /**
-     * @param deskUser the desk user trying to enter the web
+     * @param deskUser the desk user trying to enter the chat
      */
     public void enter(DeskUser deskUser) {
 
@@ -157,7 +157,7 @@ public class Call {
     }
 
     /**
-     * @param deskUser the desk user trying to exit the web
+     * @param deskUser the desk user trying to exit the chat
      */
     public void exit(DeskUser deskUser) {
 
@@ -186,9 +186,9 @@ public class Call {
     }
 
     /**
-     * Removes all call listeners from provided web.
+     * Removes all call listeners from provided chat.
      *
-     * @param chat the web to remove listeners from
+     * @param chat the chat to remove listeners from
      */
     public void stopListening(Chat chat) {
 
@@ -200,7 +200,7 @@ public class Call {
 
             } else {
                 if (logger != null)
-                    logger.error("Could not listen on web, because a listener was null.");
+                    logger.error("Could not listen on chat, because a listener was null.");
             }
 
         } else {
@@ -210,9 +210,9 @@ public class Call {
     }
 
     /**
-     * Registers all call listeners from provided web.
+     * Registers all call listeners from provided chat.
      *
-     * @param chat the web to register listeners to
+     * @param chat the chat to register listeners to
      */
     public void listenOn(Chat chat) {
 
@@ -224,7 +224,7 @@ public class Call {
 
             } else {
                 if (logger != null)
-                    logger.error("Could not listen on web, because a listener was null.");
+                    logger.error("Could not listen on chat, because a listener was null.");
             }
 
         } else {

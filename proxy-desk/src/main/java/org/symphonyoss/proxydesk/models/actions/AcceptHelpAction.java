@@ -52,7 +52,7 @@ public class AcceptHelpAction implements AiAction {
     }
 
     /**
-     * Accept a client into a web, where a member can assist.
+     * Accept a client into a chat, where a member can assist.
      *
      * @param mlMessageParser the parser contains the input in ML
      * @param message         the received message

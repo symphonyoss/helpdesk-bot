@@ -83,8 +83,8 @@ public class ProxyDeskBot implements ChatServiceListener {
     /**
      * Sets up the bot.
      * Loads all the members from file into the cache.
-     * Registers web service.
-     * Instantiates web listeners.
+     * Instantiates chat listeners. (Member chat, Help chat)
+     *
      * Starts threads (inactivity).
      */
     public void setupBot() {
@@ -111,16 +111,6 @@ public class ProxyDeskBot implements ChatServiceListener {
             inactivityThread.start();
 
 
-            MemberCommandListener listener = new MemberCommandListener(helpBotSession);
-            Chat OURCHAT = new Chat();
-
-            OURCHAT.registerListener(listener);
-            OURCHAT.registerListener(listener);
-            OURCHAT.registerListener(listener);
-            OURCHAT.registerListener(listener);
-            OURCHAT.registerListener(listener);
-
-
             System.out.println("Help desk bot is alive, and ready to help!");
 
         } catch (Exception e) {
@@ -133,6 +123,9 @@ public class ProxyDeskBot implements ChatServiceListener {
         }
     }
 
+    /**
+     * Adds the admin specified in the config
+     */
     private void addAdmin() {
 
         User user = null;
@@ -199,11 +192,11 @@ public class ProxyDeskBot implements ChatServiceListener {
     }
 
     /**
-     * A method that is called by the listener when a new web is created.
-     * On a new web, determine if the remote user is a member or client.
-     * Register the web to the appropriate listener.
+     * A method that is called by the listener when a new chat is created.
+     * On a chat, determine if the remote user is a member or client.
+     * Register the chat to the appropriate listener. (Member chat or HelpClient Chat)
      *
-     * @param chat the new web
+     * @param chat the new chat
      */
     public void onNewChat(Chat chat) {
 
@@ -238,11 +231,11 @@ public class ProxyDeskBot implements ChatServiceListener {
     }
 
     /**
-     * A method called by the listener when a web is removed.
-     * On web remove, determine if the user is a client or member.
-     * Remove the web from the appropriate listener.
+     * A method called by the listener when a chat is removed.
+     * On chat remove, determine if the user is a client or member.
+     * Remove the chat from the appropriate listener. (Member chat or HelpClient Chat)
      *
-     * @param chat the removed web
+     * @param chat the removed chat
      */
     public void onRemovedChat(Chat chat) {
         logger.debug("Removed web connection: " + chat.getStream());

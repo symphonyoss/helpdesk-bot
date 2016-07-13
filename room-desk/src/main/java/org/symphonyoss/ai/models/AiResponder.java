@@ -38,7 +38,7 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A part of the org.org.symphonyoss.ai with the main purpose of responding back to a user
+ * A part of the ai with the main purpose of responding back to a user
  */
 public class AiResponder {
     private SymphonyClient symClient;

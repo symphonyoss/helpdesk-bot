@@ -44,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- * A class that listens in on a web, and determines if the user's input
+ * A class that listens in on a chat, and determines if the user's input
  * matches a command.
  */
 public class AiCommandListener implements ChatListener {
@@ -104,7 +104,7 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * When a web message is received, check if it starts with
+     * When a chat message is received, check if it starts with
      * the command char. If it does, process message.
      * <p>
      * <p>
@@ -239,9 +239,9 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Registers this listener to a given web appropriately.
+     * Registers this listener to a given chat appropriately.
      *
-     * @param chat The web to listen on
+     * @param chat The chat to listen on
      */
     public void listenOn(Chat chat) {
 
@@ -253,9 +253,9 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Removes this listener from the provided web appropriately
+     * Removes this listener from the provided chat appropriately
      *
-     * @param chat The web to listen on
+     * @param chat The chat to listen on
      */
     public void stopListening(Chat chat) {
 

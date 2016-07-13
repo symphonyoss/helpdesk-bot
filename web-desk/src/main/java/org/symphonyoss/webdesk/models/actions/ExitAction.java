@@ -33,7 +33,7 @@ import org.symphonyoss.webdesk.models.calls.MultiChatCall;
 
 /**
  * Created by nicktarsillo on 6/16/16.
- * An AiAction taht allows a client or member to exit a call.
+ * An AiAction that allows a client or member to exit a call.
  */
 public class ExitAction implements AiAction {
     private MultiChatCall call;

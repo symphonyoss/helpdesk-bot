@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- * A class that listens in on a web, and determines if the user's input
+ * A class that listens in on a chat, and determines if the user's input
  * matches a command.
  */
 public class AiCommandListener implements ChatListener {
@@ -102,7 +102,7 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * When a web message is received, check if it starts with
+     * When a chat message is received, check if it starts with
      * the command char. If it does, process message.
      * <p>
      * <p>
@@ -154,7 +154,7 @@ public class AiCommandListener implements ChatListener {
     /**
      * Check to see if the message matches any of the commands.
      * If it matches, do actions and received responses.
-     * If it doesn't check if the org.org.symphonyoss.ai can suggest a command from the unmatched command.
+     * If it doesn't check if the ai can suggest a command from the unmatched command.
      * If it can suggest, then suggest the command and save the suggested command as the last command.
      * If it can't suggest and the sent command does not match run last command, send usage
      * If it does equal run last command, run the last command
@@ -227,19 +227,19 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Determines if the org.org.symphonyoss.ai can suggest a command based on the input
+     * Determines if the ai can suggest a command based on the input
      *
      * @param chunks the text input
-     * @return if the org.org.symphonyoss.ai can suggest a command
+     * @return if the ai can suggest a command
      */
     private boolean canSuggest(String[] chunks) {
         return AiSpellParser.canParse(activeCommands, chunks, AiConstants.CORRECTFACTOR);
     }
 
     /**
-     * Registers this listener to a given web appropriately.
+     * Registers this listener to a given chat appropriately.
      *
-     * @param chat The web to listen on
+     * @param chat The chat to listen on
      */
     public void listenOn(Chat chat) {
 
@@ -251,9 +251,9 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Removes this listener from the provided web appropriately
+     * Removes this listener from the provided chat appropriately
      *
-     * @param chat The web to listen on
+     * @param chat The chat to listen on
      */
     public void stopListening(Chat chat) {
 

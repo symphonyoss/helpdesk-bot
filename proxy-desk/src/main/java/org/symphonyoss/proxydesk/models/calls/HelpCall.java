@@ -77,7 +77,7 @@ public class HelpCall extends Call {
     /**
      * Instantiate the call command listener.
      * Instantiate the call responder.
-     * Instantiate the call web listener.
+     * Instantiate the call chat listener.
      * Instantiate the call service listener.
      * Add the service listener to the sym client.
      */
@@ -144,11 +144,11 @@ public class HelpCall extends Call {
     }
 
     /**
-     * Allows a single client to enter this web.
+     * Allows a single client to enter this chat.
      * Set client on call.
      * Cross listeners.
      *
-     * @param client the client trying to enter the web
+     * @param client the client trying to enter the chat
      */
     public void enter(HelpClient client) {
         super.enter(client);
@@ -184,11 +184,11 @@ public class HelpCall extends Call {
     }
 
     /**
-     * Allows a single member to enter this web.
+     * Allows a single member to enter this chat.
      * Set member on call.
      * Cross listeners.
      *
-     * @param member the member trying to enter the web
+     * @param member the member trying to enter the chat
      */
     public void enter(Member member) {
         super.enter(member);
@@ -260,7 +260,7 @@ public class HelpCall extends Call {
      * Set client off call.
      * Cross listeners back.
      *
-     * @param client the client trying to exit the web
+     * @param client the client trying to exit the chat
      */
     public void exit(HelpClient client) {
         super.exit(client);
@@ -297,7 +297,7 @@ public class HelpCall extends Call {
      * Cross listeners back.
      * If members are empty end call.
      *
-     * @param member the member trying to exit the web
+     * @param member the member trying to exit the chat
      */
     public void exit(Member member) {
         super.exit(member);
@@ -343,9 +343,9 @@ public class HelpCall extends Call {
     }
 
     /**
-     * Removes all call listeners from provided web.
+     * Removes all call listeners from provided chat.
      *
-     * @param chat the web to remove listeners from
+     * @param chat the chat to remove listeners from
      */
     @Override
     public void stopListening(Chat chat) {
@@ -358,7 +358,7 @@ public class HelpCall extends Call {
 
             } else {
                 if (logger != null)
-                    logger.error("Could not listen on web, because a listener was null.");
+                    logger.error("Could not listen on chat, because a listener was null.");
             }
 
         } else {
@@ -368,9 +368,9 @@ public class HelpCall extends Call {
     }
 
     /**
-     * Registers all call listeners from provided web.
+     * Registers all call listeners from provided chat.
      *
-     * @param chat the web to register listeners to
+     * @param chat the chat to register listeners to
      */
     @Override
     public void listenOn(Chat chat) {
@@ -383,7 +383,7 @@ public class HelpCall extends Call {
 
             } else {
                 if (logger != null)
-                    logger.error("Could not listen on web, because a listener was null.");
+                    logger.error("Could not listen on chat, because a listener was null.");
             }
 
         } else {

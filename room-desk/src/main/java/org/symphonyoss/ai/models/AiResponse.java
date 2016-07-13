@@ -29,7 +29,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A model that represents a single response from the org.org.symphonyoss.ai.
+ * A model that represents a single response from the ai.
  */
 public class AiResponse {
     private String message;

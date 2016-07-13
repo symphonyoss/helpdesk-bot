@@ -47,9 +47,9 @@ public class CallServiceListener implements ChatServiceListener {
     }
 
     /**
-     * On remove web, exit remote user from call
+     * On remove chat, exit remote user from call
      *
-     * @param chat the removed web
+     * @param chat the removed chat
      */
     public void onRemovedChat(Chat chat) {
 

@@ -39,8 +39,8 @@ import org.symphonyoss.symphony.pod.model.User;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A extension of the org.org.symphonyoss.ai command listener.
- * Initializes all commands a member can command the org.org.symphonyoss.ai.
+ * A extension of the ai command listener.
+ * Initializes all commands a member can command the ai.
  */
 public class MemberCommandListener extends AiCommandListener {
     private HelpBotSession helpBotSession;
@@ -54,6 +54,9 @@ public class MemberCommandListener extends AiCommandListener {
         init();
     }
 
+    /**
+     * Create and add the commands used by members
+     */
     public void init() {
 
         AiCommand acceptNextHelpClient = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.ACCEPT_NEXT), 0);

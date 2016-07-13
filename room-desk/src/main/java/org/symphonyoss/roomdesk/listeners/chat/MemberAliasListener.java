@@ -25,6 +25,12 @@ public class MemberAliasListener implements ChatListener {
         this.symClient = symClient;
     }
 
+    /**
+     * Listens on one to one chats. If a message event is triggered, the bot will
+     * send a message into the user's current room, using an specified alias
+     *
+     * @param message
+     */
     public void onChatMessage(Message message) {
         if (message == null
                 || message.getStreamId() == null

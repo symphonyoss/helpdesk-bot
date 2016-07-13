@@ -43,10 +43,15 @@ import java.util.HashMap;
 
 /**
  * Created by nicktarsillo on 6/21/16.
- * A web listener for calls between members and clients.
+ * A chat listener for calls between members and clients.
  */
 public class CallChatListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(CallChatListener.class);
+    /**
+     * Calls do not push commands when listener is registered.
+     * To avoid pushing commands on chat registration, we use a hash map to
+     * keep track if the player is entering or has already entered.
+     */
     private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();
     private Call call;
     private AiCommandListener callCommandListener;
@@ -59,8 +64,8 @@ public class CallChatListener implements ChatListener {
     }
 
     /**
-     * A method called by the web listener, when a new message is received.
-     * On new web message, if the message is not a command, relay the message
+     * A method called by the chat listener, when a new message is received.
+     * On new chat message, if the message is not a command, relay the message
      * between both parties.
      *
      * @param message the received message
@@ -115,10 +120,10 @@ public class CallChatListener implements ChatListener {
     }
 
     /**
-     * Registers this listener to the web.
-     * Then set entered to true, based on the stream.
+     * Registers this listener to the chat.
+     * Then set entered to true, using the stream id.
      *
-     * @param chat the web to register listeners to
+     * @param chat the chat to register listeners to
      */
     public void listenOn(Chat chat) {
 
@@ -141,10 +146,10 @@ public class CallChatListener implements ChatListener {
     }
 
     /**
-     * Remove this listener to the web.
+     * Remove this listener to the chat.
      * Then set entered to false, based on the stream.
      *
-     * @param chat the web to remove listeners from
+     * @param chat the chat to remove listeners from
      */
     public void stopListening(Chat chat) {
 
