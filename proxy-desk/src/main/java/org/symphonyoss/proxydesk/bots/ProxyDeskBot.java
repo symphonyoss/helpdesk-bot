@@ -69,7 +69,7 @@ public class ProxyDeskBot implements ChatServiceListener {
 
 
     public ProxyDeskBot() {
-        logger.info("Init for help desk user {}", ProxyBotConfig.Config.getString(ProxyBotConfig.BOT_USER));
+        logger.info("Init for help desk user {}", System.getProperty(ProxyBotConfig.BOT_USER));
         initConnection();
         setupBot();
     }

@@ -25,6 +25,7 @@
 package org.symphonyoss.proxydesk.utils;
 
 import com.google.gson.Gson;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.proxydesk.config.ProxyBotConfig;
@@ -49,7 +50,8 @@ public class MemberCache {
 
         File[] files = new File(System.getProperty("files.json")).listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return !name.equals(".DS_Store");
+                String ext = FilenameUtils.getExtension(dir.getAbsolutePath());
+                return ext.equalsIgnoreCase("json");
             }
         });
 
