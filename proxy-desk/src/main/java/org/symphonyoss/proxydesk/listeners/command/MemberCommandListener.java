@@ -115,6 +115,7 @@ public class MemberCommandListener extends AiCommandListener {
 
         AiCommand onlineMembers = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.ONLINE_MEMBERS), 0);
         onlineMembers.addAction(new OnlineMembersAction());
+        onlineMembers.addPermission(new OffCall());
 
         AiCommand queueResponse = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.CLIENT_QUEUE), 0);
         queueResponse.addAction(new ClientQueueAction());

@@ -202,7 +202,7 @@ public class HelpCall extends Call {
 
             Chat chat = Messenger.getChat(member.getUserID(), symClient);
 
-            helpClientListener.stopListening(chat);
+            memberCommandListener.stopListening(chat);
 
             for (HelpClient c : clients) {
                 helpCallResponder.sendEnteredChatMessage(c, member);
@@ -269,7 +269,9 @@ public class HelpCall extends Call {
 
             Chat chat = Messenger.getChat(client.getUserID(), memberCommandListener.getSymClient());
 
+            helpClientListener.setPushMessages(false);
             helpClientListener.listenOn(chat);
+            helpClientListener.setPushMessages(true);
 
             for (HelpClient c : clients) {
 

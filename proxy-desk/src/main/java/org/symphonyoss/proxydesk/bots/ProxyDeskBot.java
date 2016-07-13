@@ -76,7 +76,7 @@ public class ProxyDeskBot implements ChatServiceListener {
 
     public static void main(String[] args) {
         System.out.println("ProxyDeskBot starting...");
-
+        ProxyBotConfig.getConfig().getString("");
         new ProxyDeskBot();
     }
 
@@ -100,6 +100,7 @@ public class ProxyDeskBot implements ChatServiceListener {
             helpBotSession.setSymphonyClient(symClient);
 
             helpClientListener = new HelpClientListener(symClient);
+            helpClientListener.setPushMessages(true);
             helpBotSession.setHelpClientListener(helpClientListener);
 
             memberCommandListener = new MemberCommandListener(helpBotSession);
@@ -209,8 +210,8 @@ public class ProxyDeskBot implements ChatServiceListener {
 
                 if (user != null && MemberCache.hasMember(user.getId().toString())) {
 
-                    memberCommandListener.listenOn(chat);
                     MemberCache.getMember(user).setOnline(true);
+                    memberCommandListener.listenOn(chat);
                     Messenger.sendMessage("Joined help desk as member.",
                             MessageSubmission.FormatEnum.TEXT, chat, symClient);
 

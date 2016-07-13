@@ -42,6 +42,8 @@ import org.symphonyoss.proxydesk.utils.MemberCache;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 
+import java.util.HashMap;
+
 /**
  * Created by nicktarsillo on 6/14/16.
  * The main listener for dealing with clients requesting help
@@ -50,6 +52,9 @@ public class HelpClientListener implements ChatListener {
     private final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
     private AiCommandListener helpResponseListener;
     private SymphonyClient symClient;
+
+    private boolean pushMessages;
+    private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();
 
     public HelpClientListener(SymphonyClient symClient) {
         this.symClient = symClient;
@@ -66,6 +71,7 @@ public class HelpClientListener implements ChatListener {
     public void onChatMessage(Message message) {
         if (message == null
                 || message.getStreamId() == null
+                || isPushMessage(message)
                 || AiCommandListener.isCommand(message,symClient)) {
             if (logger != null)
                 logger.warn("Ignored message {}.", message);
@@ -101,6 +107,10 @@ public class HelpClientListener implements ChatListener {
         }
     }
 
+    private boolean isPushMessage(Message message){
+        return entered.containsKey(message.getStreamId()) && !entered.get(message.getStreamId()) && !pushMessages;
+    }
+
     /**
      * Register this listener to the chat appropriately
      *
@@ -110,7 +120,10 @@ public class HelpClientListener implements ChatListener {
         if (chat != null) {
 
             helpResponseListener.listenOn(chat);
+
             chat.registerListener(this);
+
+            entered.put(chat.getStream().getId(), true);
 
         } else {
             logChatError(chat, new NullPointerException());
@@ -126,7 +139,10 @@ public class HelpClientListener implements ChatListener {
         if (chat != null) {
 
             helpResponseListener.stopListening(chat);
+
             chat.removeListener(this);
+
+            entered.put(chat.getStream().getId(), false);
 
         } else {
             logChatError(chat, new NullPointerException());
@@ -194,4 +210,11 @@ public class HelpClientListener implements ChatListener {
     }
 
 
+    public boolean isPushMessages() {
+        return pushMessages;
+    }
+
+    public void setPushMessages(boolean pushMessages) {
+        this.pushMessages = pushMessages;
+    }
 }

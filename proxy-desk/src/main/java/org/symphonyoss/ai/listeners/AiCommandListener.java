@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nicktarsillo on 6/13/16.
- * A class that listens in on a web, and determines if the user's input
+ * A class that listens in on a chat, and determines if the user's input
  * matches a command.
  */
 public class AiCommandListener implements ChatListener {
@@ -77,7 +77,7 @@ public class AiCommandListener implements ChatListener {
         try {
 
             mlMessageParser = new MlMessageParser(symClient);
-            mlMessageParser.parseMessage(message.getMessage());
+            mlMessageParser.parseMessage(message.getMessage().trim());
 
             String[] chunks = mlMessageParser.getTextChunks();
 
