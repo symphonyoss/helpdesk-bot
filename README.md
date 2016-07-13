@@ -76,8 +76,8 @@ Required System Properties:
         -Dsessionauth.url=https://(pod-host).symphony.com:8444/sessionauth
         //Note: you may have local HSM vs pod
         -Dkeyauth.url=https://(pod-host).symphony.com:8444/keyauth
-        -Dsymphony.agent.pod.url=https://(symagent-host).mdevlab.com:8446/pod
-        -Dsymphony.agent.agent.url=https://(symagent-host).mdevlab.com:8446/agent
+        -Dsymphony.agent.pod.url=https://(symagent-host):8446/pod
+        -Dsymphony.agent.agent.url=https://(symagent-host):8446/agent
         -Dcerts.dir=/dev/certs/
         -Dtruststore.file=/dev/certs/server.truststore
         -Dbot.user=(user name)
