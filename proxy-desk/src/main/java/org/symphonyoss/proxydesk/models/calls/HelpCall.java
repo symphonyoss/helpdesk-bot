@@ -286,6 +286,8 @@ public class HelpCall extends Call {
                 helpCallResponder.sendExitMessage(m, client);
             }
 
+            clients.remove(client);
+
             if(clients.size() == 0) {
 
                 for (Member member : members) {
@@ -295,8 +297,6 @@ public class HelpCall extends Call {
                 }
 
             }
-
-            clients.remove(client);
 
         } else {
             if (logger != null)

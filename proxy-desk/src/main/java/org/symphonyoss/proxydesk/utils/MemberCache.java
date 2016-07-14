@@ -209,7 +209,7 @@ public class MemberCache {
                 if (!member.isHideIdentity()) {
                     list += ", " + member.getEmail();
                 } else {
-                    list += ", Member " + index;
+                    list += ", " + member.getAlias();
                 }
 
             }
