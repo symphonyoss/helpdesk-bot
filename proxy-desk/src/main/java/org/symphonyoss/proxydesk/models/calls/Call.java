@@ -68,7 +68,7 @@ public class Call {
     protected void constructCall() {
         callResponder = new CallResponder(this, symClient);
 
-        callChatListener = new CallChatListener(this, null, symClient);
+        callChatListener = new CallChatListener(this, symClient);
         callServiceListener = new CallServiceListener(this);
 
         symClient.getChatService().registerListener(callServiceListener);
@@ -297,4 +297,12 @@ public class Call {
 
     public enum CallTypes {BASE_CALL, HELP_CALL}
 
+    public String toString(){
+        String text = "Call" + CallCache.getCallID(this) + ": [";
+        for(DeskUser deskUser : deskUsers){
+            text += ", " + deskUser.getEmail();
+        }
+
+        return text.substring(1) + "]";
+    }
 }

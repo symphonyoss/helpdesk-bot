@@ -31,9 +31,11 @@ import org.symphonyoss.proxydesk.constants.HelpBotConstants;
 import org.symphonyoss.proxydesk.models.HelpBotSession;
 import org.symphonyoss.proxydesk.models.calls.Call;
 import org.symphonyoss.proxydesk.models.calls.HelpCall;
+import org.symphonyoss.proxydesk.models.users.DeskUser;
 import org.symphonyoss.proxydesk.models.users.HelpClient;
 import org.symphonyoss.proxydesk.models.users.Member;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -41,7 +43,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by nicktarsillo on 6/16/16.
  */
 public class CallCache {
-    public static final ConcurrentLinkedQueue<Call> ACTIVECALLS = new ConcurrentLinkedQueue<Call>();
+    public static final ArrayList<Call> ACTIVECALLS = new ArrayList<Call>();
     private static final Logger logger = LoggerFactory.getLogger(CallCache.class);
 
     /**
@@ -125,5 +127,28 @@ public class CallCache {
         }
 
 
+    }
+
+    public static String listQueue() {
+        String text = "";
+
+        for(Call call : ACTIVECALLS) {
+            text += ", " + call.toString();
+        }
+
+        if(text.length() != 0) {
+            return text.substring(1);
+        }else {
+            return text;
+        }
+
+    }
+
+    public static int size() {
+        return ACTIVECALLS.size();
+    }
+
+    public static int getCallID(Call call) {
+        return ACTIVECALLS.indexOf(call);
     }
 }

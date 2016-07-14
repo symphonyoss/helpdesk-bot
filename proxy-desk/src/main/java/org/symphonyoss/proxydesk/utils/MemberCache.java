@@ -239,4 +239,8 @@ public class MemberCache {
     public static boolean hasMember(String userID) {
         return MEMBERS.containsKey(userID);
     }
+
+    public static int size() {
+        return MEMBERS.size();
+    }
 }

@@ -60,6 +60,8 @@ public class HelpBotConstants {
     public static final String SEE_HELP = "You will now see help request messages.";
     public static final String HIDE_HELP = "You will no longer see help requests.";
     public static final String SEE_HELP_LABEL = "   See Help: ";
-    public static final String HIDE_IDENTITY_LABEL = "   Hide Identity: ";
+    public static final String USE_ALIAS_LABEL = "   Use Alias: ";
     public static final String TAGS_LABEL = "   Tags: ";
+    public static final String ALIAS_LABEL ="   Alias: ";
+    public static final String CALL_CACHE_LABEL = MLTypes.START_BOLD + "Call Cache: " + MLTypes.END_BOLD;
 }

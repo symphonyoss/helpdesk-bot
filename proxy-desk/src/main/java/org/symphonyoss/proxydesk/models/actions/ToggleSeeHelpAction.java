@@ -43,7 +43,7 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  * An AiAction that allows a member to toggle the visibility of help requests.
  */
 public class ToggleSeeHelpAction implements AiAction {
-    private final Logger logger = LoggerFactory.getLogger(ToggleIdentityAction.class);
+    private final Logger logger = LoggerFactory.getLogger(ToggleAliasAction.class);
 
     /**
      * Find member by message from id.

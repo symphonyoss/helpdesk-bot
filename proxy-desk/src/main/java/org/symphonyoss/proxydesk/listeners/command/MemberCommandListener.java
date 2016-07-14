@@ -26,16 +26,11 @@ package org.symphonyoss.proxydesk.listeners.command;
 
 import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.ai.models.AiCommand;
-import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.proxydesk.config.ProxyBotConfig;
 import org.symphonyoss.proxydesk.models.HelpBotSession;
 import org.symphonyoss.proxydesk.models.actions.*;
-import org.symphonyoss.proxydesk.models.calls.Call;
 import org.symphonyoss.proxydesk.models.permissions.IsMember;
 import org.symphonyoss.proxydesk.models.permissions.OffCall;
-import org.symphonyoss.proxydesk.utils.CallCache;
-import org.symphonyoss.proxydesk.utils.DeskUserCache;
-import org.symphonyoss.symphony.pod.model.User;
 
 /**
  * Created by nicktarsillo on 6/20/16.
@@ -44,13 +39,11 @@ import org.symphonyoss.symphony.pod.model.User;
  */
 public class MemberCommandListener extends AiCommandListener {
     private HelpBotSession helpBotSession;
-    private Call call;
 
     public MemberCommandListener(HelpBotSession helpBotSession) {
         super(helpBotSession.getSymphonyClient());
         helpBotSession.setMemberListener(this);
         this.helpBotSession = helpBotSession;
-        call = CallCache.newCall(symClient, false);
         init();
     }
 
@@ -76,10 +69,10 @@ public class MemberCommandListener extends AiCommandListener {
         toggleHelp.addPermission(new IsMember());
         toggleHelp.addPermission(new OffCall());
 
-        AiCommand toggleIdentity = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.TOGGLE_SHOW_IDENTITY), 0);
-        toggleIdentity.addAction(new ToggleIdentityAction());
-        toggleIdentity.addPermission(new IsMember());
-        toggleIdentity.addPermission(new OffCall());
+        AiCommand toggleAlias = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.TOGGLE_USE_ALIAS), 0);
+        toggleAlias.addAction(new ToggleAliasAction());
+        toggleAlias.addPermission(new IsMember());
+        toggleAlias.addPermission(new OffCall());
 
         AiCommand addMember = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.ADD_MEMBER), 1);
         addMember.setArgument(0, "Client");
@@ -94,6 +87,12 @@ public class MemberCommandListener extends AiCommandListener {
         joinChat.addAction(new JoinChatAction(symClient));
         joinChat.addPermission(new IsMember());
         joinChat.addPermission(new OffCall());
+
+        AiCommand setAlias = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.SET_ALIAS), 1);
+        setAlias.setArgument(0, "Alias");
+        setAlias.addAction(new SetAliasAction());
+        setAlias.addPermission(new IsMember());
+        setAlias.addPermission(new OffCall());
 
         AiCommand setTags = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.SET_TAGS), 1);
         setTags.setArgument(0, "Tags(ex. Password Reset)");
@@ -122,6 +121,11 @@ public class MemberCommandListener extends AiCommandListener {
         queueResponse.addPermission(new IsMember());
         queueResponse.addPermission(new OffCall());
 
+        AiCommand callCache = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.CALL_QUEUE), 0);
+        callCache.addAction(new ViewCallsAction());
+        callCache.addPermission(new IsMember());
+        callCache.addPermission(new OffCall());
+
         AiCommand mySettings = new AiCommand(ProxyBotConfig.Config.getString(ProxyBotConfig.MY_SETTINGS), 0);
         mySettings.addAction(new MySettingsAction());
         mySettings.addPermission(new IsMember());
@@ -129,43 +133,17 @@ public class MemberCommandListener extends AiCommandListener {
 
         getActiveCommands().add(acceptNextHelpClient);
         getActiveCommands().add(acceptHelpClient);
-        getActiveCommands().add(toggleHelp);
-        getActiveCommands().add(toggleIdentity);
         getActiveCommands().add(addMember);
         getActiveCommands().add(joinChat);
+        getActiveCommands().add(toggleHelp);
+        getActiveCommands().add(toggleAlias);
+        getActiveCommands().add(setAlias);
         getActiveCommands().add(setTags);
         getActiveCommands().add(addTags);
         getActiveCommands().add(removeTags);
         getActiveCommands().add(onlineMembers);
         getActiveCommands().add(queueResponse);
+        getActiveCommands().add(callCache);
         getActiveCommands().add(mySettings);
-    }
-
-    @Override
-    public void listenOn(Chat chat) {
-        super.listenOn(chat);
-
-        if (chat != null) {
-
-            User user = chat.getRemoteUsers().iterator().next();
-
-            call.enter(DeskUserCache.getDeskUser(user.getId().toString()));
-
-        }
-
-    }
-
-    @Override
-    public void stopListening(Chat chat) {
-        super.stopListening(chat);
-
-        if (chat != null) {
-
-            User user = chat.getRemoteUsers().iterator().next();
-
-            call.exit(DeskUserCache.getDeskUser(user.getId().toString()));
-
-        }
-
     }
 }

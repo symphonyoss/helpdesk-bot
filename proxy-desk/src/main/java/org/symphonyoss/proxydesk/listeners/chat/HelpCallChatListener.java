@@ -40,7 +40,7 @@ public class HelpCallChatListener extends CallChatListener {
     private HelpCall helpCall;
 
     public HelpCallChatListener(HelpCall call, CallCommandListener callCommandListener, SymphonyClient symClient) {
-        super(call, callCommandListener, symClient);
+        super(call, symClient);
         helpCall = call;
     }
 
@@ -55,8 +55,7 @@ public class HelpCallChatListener extends CallChatListener {
             Member member = MemberCache.getMember(deskUser.getUserID().toString());
             if (member.isHideIdentity()) {
 
-                return MLTypes.START_BOLD.toString() + HelpBotConstants.MEMBER_LABEL
-                        + (helpCall.getMembers().indexOf(member) + 1) + ": " + MLTypes.END_BOLD + text;
+                return MLTypes.START_BOLD.toString() + member.getAlias() + ": " + MLTypes.END_BOLD + text;
 
             } else {
 

@@ -40,7 +40,7 @@ public final class ProxyBotConfig {
     public final static String ACCEPT_NEXT = "proxybot.command.acceptnext";
     public final static String ACCEPT = "proxybot.command.accept";
     public final static String TOGGLE_ONLINE = "proxybot.command.toggleonline";
-    public final static String TOGGLE_SHOW_IDENTITY = "proxybot.command.toggleidentity";
+    public final static String TOGGLE_USE_ALIAS = "proxybot.command.togglealias";
     public final static String ADD_MEMBER = "proxybot.command.addmember";
     public final static String JOIN_CHAT = "proxybot.command.joinchat";
     public final static String ONLINE_MEMBERS = "proxybot.command.onlinemembers";
@@ -48,6 +48,9 @@ public final class ProxyBotConfig {
     public final static String MY_SETTINGS = "proxybot.command.mysettings";
     public final static String HELP_SUMMARY = "proxybot.command.helpsummary";
     public final static String ROOM_INFO = "proxybot.command.roominfo";
+    public static final String SET_ALIAS = "proxybot.command.setalias";
+    public static final String CALL_QUEUE = "proxybot.command.callcache";
+
     public final static String EXIT = "proxybot.command.exit";
     public final static String SET_TAGS = "proxybot.command.settags";
     public final static String ADD_TAGS = "proxybot.command.addtags";

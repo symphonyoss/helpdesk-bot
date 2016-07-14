@@ -53,7 +53,8 @@ public class MySettingsAction implements AiAction {
         aiResponseSequence.addResponse(new AiResponse(MLTypes.START_ML.toString() +
                 MLTypes.START_BOLD + member.getEmail() + ": " + MLTypes.END_BOLD
                 + MLTypes.BREAK + HelpBotConstants.SEE_HELP_LABEL + member.isSeeHelpRequests()
-                + MLTypes.BREAK + HelpBotConstants.HIDE_IDENTITY_LABEL + member.isHideIdentity()
+                + MLTypes.BREAK + HelpBotConstants.USE_ALIAS_LABEL + member.isHideIdentity()
+                + MLTypes.BREAK + HelpBotConstants.ALIAS_LABEL + member.getAlias()
                 + MLTypes.BREAK + HelpBotConstants.TAGS_LABEL + Arrays.toString(member.getTags().toArray())
                 + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, userIdList));
 

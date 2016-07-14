@@ -24,7 +24,9 @@
 
 package org.symphonyoss.proxydesk.models.users;
 
+import org.symphonyoss.proxydesk.constants.HelpBotConstants;
 import org.symphonyoss.proxydesk.models.calls.Call;
+import org.symphonyoss.proxydesk.utils.MemberCache;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -38,6 +40,7 @@ public class Member implements DeskUser {
     private String email;
     private Long userID;
     private Set<String> tags = new LinkedHashSet<String>();
+    private String alias;
     private boolean onCall;
     private boolean seeHelpRequests = true;
     private boolean busy;
@@ -47,14 +50,17 @@ public class Member implements DeskUser {
     public Member(String email, Long userID) {
         setEmail(email);
         setUserID(userID);
+        setAlias(HelpBotConstants.MEMBER_LABEL
+                + " " + (MemberCache.size() + 1));
     }
 
-    public Member(String email, Long userID, boolean seeHelpRequests, boolean hideIdentity, Set<String> tags) {
+    public Member(String email, Long userID, boolean seeHelpRequests, boolean hideIdentity, Set<String> tags, String alias) {
         setEmail(email);
         setUserID(userID);
         this.seeHelpRequests = seeHelpRequests;
         this.hideIdentity = hideIdentity;
         this.tags = tags;
+        this.alias = alias;
     }
 
     /**
@@ -153,7 +159,7 @@ public class Member implements DeskUser {
     }
 
     public SerializableMember toSerializable() {
-        return new SerializableMember(email, userID, seeHelpRequests, hideIdentity, tags);
+        return new SerializableMember(email, userID, seeHelpRequests, hideIdentity, tags, alias);
     }
 
     public boolean isOnline() {
@@ -171,5 +177,13 @@ public class Member implements DeskUser {
 
     public void setTags(Set<String> tags) {
         this.tags = tags;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }

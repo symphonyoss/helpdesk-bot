@@ -54,12 +54,10 @@ public class CallChatListener implements ChatListener {
      */
     private HashMap<String, Boolean> entered = new HashMap<String, Boolean>();
     private Call call;
-    private AiCommandListener callCommandListener;
     private SymphonyClient symClient;
 
-    public CallChatListener(Call call, AiCommandListener callCommandListener, SymphonyClient symClient) {
+    public CallChatListener(Call call, SymphonyClient symClient) {
         this.symClient = symClient;
-        this.callCommandListener = callCommandListener;
         this.call = call;
     }
 
@@ -73,7 +71,7 @@ public class CallChatListener implements ChatListener {
     public void onChatMessage(Message message) {
         if (message == null
                 || message.getStreamId() == null
-                || (callCommandListener != null && AiCommandListener.isCommand(message, symClient))
+                ||  AiCommandListener.isCommand(message, symClient)
                 || isPushMessage(message)) {
 
             if (logger != null)
@@ -232,10 +230,5 @@ public class CallChatListener implements ChatListener {
             }
 
         }
-    }
-
-
-    public void setCallCommandListener(AiCommandListener callCommandListener) {
-        this.callCommandListener = callCommandListener;
     }
 }

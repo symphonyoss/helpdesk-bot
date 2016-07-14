@@ -35,23 +35,25 @@ public class SerializableMember {
     private String email;
     private Long userID;
     private Set<String> tags = new LinkedHashSet<String>();
+    private String alias;
 
     private boolean seeCommands = true;
     private boolean hideIdentity;
 
-    public SerializableMember(String email, Long userID, boolean seeCommands, boolean hideIdentity, Set<String> tags) {
+    public SerializableMember(String email, Long userID, boolean seeCommands, boolean hideIdentity, Set<String> tags, String alias) {
         this.email = email;
         this.userID = userID;
         this.seeCommands = seeCommands;
         this.hideIdentity = hideIdentity;
         this.tags = tags;
+        this.alias = alias;
     }
 
     /**
      * @return convert back to member
      */
     public Member toMember() {
-        return new Member(email, userID, seeCommands, hideIdentity, tags);
+        return new Member(email, userID, seeCommands, hideIdentity, tags, alias);
     }
 
 

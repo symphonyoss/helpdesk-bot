@@ -40,10 +40,10 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 6/15/16.
- * An AiAction that allows a member to toggle the visibility of his identity.
+ * An AiAction that allows a member to toggle the visibility of his alias.
  */
-public class ToggleIdentityAction implements AiAction {
-    private final Logger logger = LoggerFactory.getLogger(ToggleIdentityAction.class);
+public class ToggleAliasAction implements AiAction {
+    private final Logger logger = LoggerFactory.getLogger(ToggleAliasAction.class);
 
     /**
      * Find member by message from id.

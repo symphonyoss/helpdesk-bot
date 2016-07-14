@@ -63,7 +63,7 @@ public class HelpCallResponder extends CallResponder {
 
         } else {
 
-            Messenger.sendMessage(HelpBotConstants.MEMBER_LABEL + (helpCall.getMembers().indexOf(member) + 1)
+            Messenger.sendMessage(member.getAlias()
                     + HelpBotConstants.LEFT_CALL, MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
 
         }
@@ -136,7 +136,7 @@ public class HelpCallResponder extends CallResponder {
         } else {
 
             Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD +
-                    HelpBotConstants.MEMBER_LABEL + (helpCall.getMembers().indexOf(member) + 1) + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
+                   member.getAlias() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
                     + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
 
         }
@@ -222,7 +222,7 @@ public class HelpCallResponder extends CallResponder {
             if (!member.isHideIdentity()) {
                 list += ", " + member.getEmail();
             } else {
-                list += ", " + HelpBotConstants.MEMBER_LABEL + (helpCall.getMembers().indexOf(member) + 1);
+                list += ", " + member.getAlias();
             }
 
         }
