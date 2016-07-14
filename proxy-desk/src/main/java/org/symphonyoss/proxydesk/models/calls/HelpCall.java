@@ -42,6 +42,7 @@ import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 /**
@@ -285,6 +286,8 @@ public class HelpCall extends Call {
             for (Member m : members) {
                 helpCallResponder.sendExitMessage(m, client);
             }
+
+            client.setHelpRequests(new LinkedHashSet<String>());
 
             clients.remove(client);
 
