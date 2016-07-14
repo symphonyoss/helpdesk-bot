@@ -285,6 +285,16 @@ public class HelpCall extends Call {
                 helpCallResponder.sendExitMessage(m, client);
             }
 
+            if(clients.size() == 0) {
+
+                for (Member member : members) {
+
+                    exit(member);
+
+                }
+
+            }
+
             clients.remove(client);
 
         } else {
