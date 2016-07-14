@@ -20,6 +20,7 @@ import org.symphonyoss.webdesk.models.users.HelpClient;
 import org.symphonyoss.webdesk.models.users.Member;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -138,6 +139,7 @@ public class MultiChatHelpCall extends MultiChatCall {
 
         client.setCall(null);
         client.setOnCall(false);
+        client.setHelpRequests(new LinkedHashSet<>());
 
         member.setCall(null);
         member.setOnCall(false);

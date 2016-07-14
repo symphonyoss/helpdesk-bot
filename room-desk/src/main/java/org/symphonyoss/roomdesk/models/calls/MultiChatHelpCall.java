@@ -20,6 +20,7 @@ import org.symphonyoss.symphony.pod.model.User;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -143,6 +144,7 @@ public class MultiChatHelpCall extends MultiChatCall {
 
         client.setCall(null);
         client.setOnCall(false);
+        client.setHelpRequests(new LinkedHashSet<String>());
 
         member.setCall(null);
         member.setOnCall(false);
