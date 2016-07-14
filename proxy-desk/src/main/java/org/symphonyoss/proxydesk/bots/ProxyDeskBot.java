@@ -36,7 +36,11 @@ import org.symphonyoss.proxydesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.proxydesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.proxydesk.listeners.presence.MemberPresenceListener;
 import org.symphonyoss.proxydesk.models.HelpBotSession;
+import org.symphonyoss.proxydesk.models.calls.Call;
+import org.symphonyoss.proxydesk.models.calls.HelpCall;
+import org.symphonyoss.proxydesk.models.users.HelpClient;
 import org.symphonyoss.proxydesk.models.users.Member;
+import org.symphonyoss.proxydesk.utils.CallCache;
 import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.HoldCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
@@ -69,6 +73,7 @@ public class ProxyDeskBot implements ChatServiceListener {
 
 
     public ProxyDeskBot() {
+
         logger.info("Init for help desk user {}", System.getProperty(ProxyBotConfig.BOT_USER));
         initConnection();
         setupBot();

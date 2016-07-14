@@ -149,6 +149,6 @@ public class CallCache {
     }
 
     public static int getCallID(Call call) {
-        return ACTIVECALLS.indexOf(call);
+        return ACTIVECALLS.indexOf(call) + 1;
     }
 }

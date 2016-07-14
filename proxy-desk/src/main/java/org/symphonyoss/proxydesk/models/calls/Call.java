@@ -298,11 +298,11 @@ public class Call {
     public enum CallTypes {BASE_CALL, HELP_CALL}
 
     public String toString(){
-        String text = "Call" + CallCache.getCallID(this) + ": [";
+        String text = "Call " + CallCache.getCallID(this) + ": [ ";
         for(DeskUser deskUser : deskUsers){
-            text += ", " + deskUser.getEmail();
+            text += deskUser.getEmail() + ", ";
         }
 
-        return text.substring(1) + "]";
+        return text.substring(0, text.length() - 2) + "]";
     }
 }

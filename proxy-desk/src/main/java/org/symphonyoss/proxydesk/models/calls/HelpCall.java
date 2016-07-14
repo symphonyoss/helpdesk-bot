@@ -37,6 +37,7 @@ import org.symphonyoss.proxydesk.models.HelpBotSession;
 import org.symphonyoss.proxydesk.models.users.DeskUser;
 import org.symphonyoss.proxydesk.models.users.HelpClient;
 import org.symphonyoss.proxydesk.models.users.Member;
+import org.symphonyoss.proxydesk.utils.CallCache;
 import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
 
@@ -449,5 +450,23 @@ public class HelpCall extends Call {
 
     public void setHelpCallResponder(HelpCallResponder helpCallResponder) {
         this.helpCallResponder = helpCallResponder;
+    }
+
+    @Override
+    public String toString(){
+        String text = "Call " + CallCache.getCallID(this) + ": [ Members: ";
+        for(Member member : members){
+            if(!member.isHideIdentity())
+                text += member.getEmail() + ", ";
+            else
+                text += member.getAlias() + ", ";
+        }
+
+        text = text.substring(0, text.length() -2) + " | Clients: ";
+        for(HelpClient client : clients){
+            text += client.getEmail() + ", ";
+        }
+
+        return text.substring(0, text.length() - 2) + " ]";
     }
 }
