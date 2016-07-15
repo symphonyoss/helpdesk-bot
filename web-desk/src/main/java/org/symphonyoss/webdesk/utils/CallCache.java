@@ -34,13 +34,14 @@ import org.symphonyoss.webdesk.models.users.HelpClient;
 import org.symphonyoss.webdesk.models.users.Member;
 import org.symphonyoss.webdesk.models.users.WebClient;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by nicktarsillo on 6/16/16.
  */
 public class CallCache {
-    public static final ConcurrentLinkedQueue<MultiChatCall> ACTIVECALLS = new ConcurrentLinkedQueue<MultiChatCall>();
+    public static final ArrayList<MultiChatCall> ACTIVECALLS = new ArrayList<>();
     private static final Logger logger = LoggerFactory.getLogger(CallCache.class);
 
     public static MultiChatCall newCall(Member member, HelpClient helpClient, HelpBotSession helpBotSession) {
@@ -97,5 +98,24 @@ public class CallCache {
 
         ACTIVECALLS.remove(call);
 
+    }
+
+    public static String listCache() {
+        String text = "";
+
+        for(MultiChatCall call : ACTIVECALLS) {
+            text += ", " + call.toString();
+        }
+
+        if(text.length() != 0) {
+            return text.substring(1);
+        }else {
+            return text;
+        }
+
+    }
+
+    public static int getCallID(MultiChatHelpCall multiChatHelpCall) {
+        return ACTIVECALLS.indexOf(multiChatHelpCall);
     }
 }

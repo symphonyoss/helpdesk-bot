@@ -89,12 +89,18 @@ public class MemberCommandListener extends AiCommandListener {
         queueResponse.addPermission(new IsMember());
         queueResponse.addPermission(new OffCall());
 
+        AiCommand callCache = new AiCommand(Config.getString(RoomBotConfig.CALL_CACHE), 0);
+        callCache.addAction(new ViewCallsAction());
+        callCache.addPermission(new IsMember());
+        callCache.addPermission(new OffCall());
+
         getActiveCommands().add(acceptNextHelpClient);
         getActiveCommands().add(acceptHelpClient);
         getActiveCommands().add(addMember);
         getActiveCommands().add(setAlias);
         getActiveCommands().add(toggleAlias);
         getActiveCommands().add(onlineMembers);
+        getActiveCommands().add(callCache);
         getActiveCommands().add(queueResponse);
     }
 

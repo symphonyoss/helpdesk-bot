@@ -457,7 +457,7 @@ public class HelpCall extends Call {
 
     @Override
     public String toString(){
-        String text = "Call " + CallCache.getCallID(this) + ": [ Members: ";
+        String text = "Call " + (CallCache.getCallID(this) +1) + ": [ Members: ";
         for(Member member : members){
             if(!member.isHideIdentity())
                 text += member.getEmail() + ", ";

@@ -1,4 +1,4 @@
-package org.symphonyoss.proxydesk.models.actions;
+package org.symphonyoss.roomdesk.models.actions;
 
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.models.AiAction;
@@ -6,8 +6,8 @@ import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
 import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.proxydesk.constants.HelpBotConstants;
-import org.symphonyoss.proxydesk.utils.CallCache;
+import org.symphonyoss.roomdesk.constants.HelpBotConstants;
+import org.symphonyoss.roomdesk.utils.CallCache;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.UserIdList;

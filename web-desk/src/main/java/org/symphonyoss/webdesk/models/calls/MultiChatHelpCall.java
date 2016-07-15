@@ -18,6 +18,7 @@ import org.symphonyoss.webdesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.webdesk.models.HelpBotSession;
 import org.symphonyoss.webdesk.models.users.HelpClient;
 import org.symphonyoss.webdesk.models.users.Member;
+import org.symphonyoss.webdesk.utils.CallCache;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -199,5 +200,19 @@ public class MultiChatHelpCall extends MultiChatCall {
         }
 
         return symClient.getChatService().getChatByStream(stream.getId());
+    }
+
+    @Override
+    public String toString(){
+        String text = "Call " + (CallCache.getCallID(this)+1) + ": [ Member: ";
+        if(!member.isUseAlias())
+            text += member.getEmail() + ", ";
+        else
+            text += member.getAlias() + ", ";
+
+        text = text.substring(0, text.length() -2) + " | Client: ";
+        text += client.getEmail() + ", ";
+
+        return text.substring(0, text.length() - 2) + " ]";
     }
 }

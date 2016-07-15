@@ -45,4 +45,5 @@ public class HelpBotConstants {
     public static final String TO_MEMBER = " to member!";
     public static final String CLIENT_QUEUE_LABEL = MLTypes.START_BOLD + "Client Queue: " + MLTypes.END_BOLD;
     public static final String MEMBERS_ONLINE = MLTypes.START_BOLD + "Online members: " + MLTypes.END_BOLD;
+    public static final String CALL_CACHE_LABEL = MLTypes.START_BOLD + "Call Cache: " + MLTypes.END_BOLD;
 }

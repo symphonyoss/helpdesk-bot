@@ -10,6 +10,7 @@ import org.symphonyoss.webdesk.listeners.chat.WebCallChatListener;
 import org.symphonyoss.webdesk.models.HelpBotSession;
 import org.symphonyoss.webdesk.models.users.Member;
 import org.symphonyoss.webdesk.models.users.WebClient;
+import org.symphonyoss.webdesk.utils.CallCache;
 import org.symphonyoss.webservice.listeners.WebSessionListener;
 import org.symphonyoss.webservice.models.web.WebMessage;
 
@@ -96,6 +97,20 @@ public class MultiChatWebCall extends MultiChatHelpCall {
                         + webMessage.getMessage() + MLTypes.END_ML,
                 MessageSubmission.FormatEnum.MESSAGEML, helpChat, symClient);
 
+    }
+
+    @Override
+    public String toString(){
+        String text = "Web Call " + (CallCache.getCallID(this)+1) + ": [ Member: ";
+        if(!member.isUseAlias())
+            text += member.getEmail() + ", ";
+        else
+            text += member.getAlias() + ", ";
+
+        text = text.substring(0, text.length() -2) + " | Web Client: ";
+        text += webClient.getEmail() + ", ";
+
+        return text.substring(0, text.length() - 2) + " ]";
     }
 
 }

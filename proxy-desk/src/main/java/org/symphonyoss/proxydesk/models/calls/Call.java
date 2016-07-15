@@ -298,7 +298,7 @@ public class Call {
     public enum CallTypes {BASE_CALL, HELP_CALL}
 
     public String toString(){
-        String text = "Call " + CallCache.getCallID(this) + ": [ ";
+        String text = "Call " + (CallCache.getCallID(this)+1) + ": [ ";
         for(DeskUser deskUser : deskUsers){
             text += deskUser.getEmail() + ", ";
         }

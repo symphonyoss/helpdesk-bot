@@ -47,6 +47,7 @@ public final class RoomBotConfig {
     public final static String HELP_SUMMARY = "roombot.command.helpsummary";
     public final static String ROOM_INFO = "roombot.command.roominfo";
     public final static String EXIT = "roombot.command.exit";
+    public static final java.lang.String CALL_CACHE = "roombot.command.callcache";
 
     public final static String KEYSTORE_PASSWORD = "keystore.password";
     public final static String TRUSTSTORE_PASSWORD = "truststore.password";

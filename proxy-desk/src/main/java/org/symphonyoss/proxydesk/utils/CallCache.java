@@ -129,7 +129,7 @@ public class CallCache {
 
     }
 
-    public static String listQueue() {
+    public static String listCache() {
         String text = "";
 
         for(Call call : ACTIVECALLS) {
@@ -149,6 +149,6 @@ public class CallCache {
     }
 
     public static int getCallID(Call call) {
-        return ACTIVECALLS.indexOf(call) + 1;
+        return ACTIVECALLS.indexOf(call);
     }
 }

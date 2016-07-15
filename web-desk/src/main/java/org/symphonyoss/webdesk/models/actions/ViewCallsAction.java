@@ -1,4 +1,4 @@
-package org.symphonyoss.proxydesk.models.actions;
+package org.symphonyoss.webdesk.models.actions;
 
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.models.AiAction;
@@ -6,11 +6,11 @@ import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
 import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.proxydesk.constants.HelpBotConstants;
-import org.symphonyoss.proxydesk.utils.CallCache;
 import org.symphonyoss.symphony.agent.model.Message;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.UserIdList;
+import org.symphonyoss.webdesk.constants.WebDeskConstants;
+import org.symphonyoss.webdesk.utils.CallCache;
 
 /**
  * Created by nicktarsillo on 7/14/16.
@@ -22,7 +22,7 @@ public class ViewCallsAction implements AiAction{
         UserIdList userIdList = new UserIdList();
         userIdList.add(message.getFromUserId());
 
-        aiResponseSequence.addResponse(new AiResponse(MLTypes.START_ML.toString() + HelpBotConstants.CALL_CACHE_LABEL
+        aiResponseSequence.addResponse(new AiResponse(MLTypes.START_ML.toString() + WebDeskConstants.CALL_CACHE_LABEL
                 + CallCache.listCache() + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML,
                 userIdList));
 

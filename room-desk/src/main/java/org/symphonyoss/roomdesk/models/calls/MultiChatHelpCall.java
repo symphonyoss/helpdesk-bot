@@ -14,6 +14,7 @@ import org.symphonyoss.roomdesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.roomdesk.models.HelpBotSession;
 import org.symphonyoss.roomdesk.models.users.HelpClient;
 import org.symphonyoss.roomdesk.models.users.Member;
+import org.symphonyoss.roomdesk.utils.CallCache;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.pod.model.Stream;
 import org.symphonyoss.symphony.pod.model.User;
@@ -205,4 +206,20 @@ public class MultiChatHelpCall extends MultiChatCall {
 
         return symClient.getChatService().getChatByStream(stream.getId());
     }
+
+    @Override
+    public String toString(){
+        String text = "Call " + (CallCache.getCallID(this)+1) + ": [ Member: ";
+            if(!member.isUseAlias())
+                text += member.getEmail() + ", ";
+            else
+                text += member.getAlias() + ", ";
+
+        text = text.substring(0, text.length() -2) + " | Client: ";
+        text += client.getEmail() + ", ";
+
+        return text.substring(0, text.length() - 2) + " ]";
+    }
+
+
 }

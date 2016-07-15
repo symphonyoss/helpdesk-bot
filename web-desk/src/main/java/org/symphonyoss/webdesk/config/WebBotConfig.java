@@ -50,6 +50,7 @@ public final class WebBotConfig {
     public final static String HEADER_INDEX = "header.index";
     public final static String HEADER_HELP = "header.help";
     public final static String WEB_DIRECTORY = "web.directory";
+    public static final String CALL_CACHE = "roombot.command.callcache";
 
     public final static String KEYSTORE_PASSWORD = "keystore.password";
     public final static String TRUSTSTORE_PASSWORD = "truststore.password";

@@ -48,4 +48,5 @@ public class WebDeskConstants {
     public static final String COULD_NOT_LOCATE = "Could not locate symphony user profile.";
     public static final String OPENED_SESSION = " has opened a new web help session. ";
     public static final String TOPIC = " Topic: ";
+    public static final String CALL_CACHE_LABEL = MLTypes.START_BOLD + "Call Cache: " + MLTypes.END_BOLD;
 }
