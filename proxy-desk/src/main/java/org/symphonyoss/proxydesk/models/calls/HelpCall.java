@@ -206,6 +206,12 @@ public class HelpCall extends Call {
 
             memberCommandListener.stopListening(chat);
 
+            helpCallResponder.sendConnectedMessage(member);
+
+            helpCallResponder.sendRoomInfo(member.getUserID());
+
+            helpCallResponder.sendHelpSummary(member.getUserID());
+
             for (HelpClient c : clients) {
                 helpCallResponder.sendEnteredChatMessage(c, member);
             }

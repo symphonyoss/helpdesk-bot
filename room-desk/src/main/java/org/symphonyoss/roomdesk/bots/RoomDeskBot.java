@@ -225,6 +225,14 @@ public class RoomDeskBot implements ChatServiceListener {
             Set<User> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
                 User user = users.iterator().next();
+
+                try {
+                    if(!chat.getStream().getId().equals(symClient.getStreamsClient().getStream(user).getId()))
+                        return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 logger.debug("Accepted Chat: " + chat.toString());
                 if (user != null && !DeskUserCache.hasUser(user)) {
                     if (MemberCache.hasMember(user.getId().toString())) {

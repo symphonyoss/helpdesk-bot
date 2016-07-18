@@ -28,3 +28,13 @@ Features:
        -Veiw a list of active calls (chat sessions)
        -Members can add members
        -Bot detects member presences and will not send messages to members who are busy
+       
+Setup:
+       
+       -Set the location for JSON member files to be saved via properties file, enviroment variable or system property
+       -Set the location of your certs via properties file, enviroment variable or system property
+       -Set the location of your trust store file via properties file, enviroment variable or system property
+       -Set the admin user using their email via properties file, enviroment variable or system property
+       -Set the name of the bot account via properties file, enviroment variable or system property
+     
+     

@@ -44,8 +44,12 @@ import org.symphonyoss.webservice.WebServiceConstants;
 import org.symphonyoss.webservice.listeners.SessionListener;
 import org.symphonyoss.webservice.models.session.WebSession;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -68,12 +72,22 @@ public class WebServer {
         try {
             URI uri = new URI(uriString);
             String query = uri.getQuery();
-            String token = query.substring(query.indexOf('=') + 1, query.length());
+            String token = splitQuery(query).get("token");
             return token;
         } catch (Exception e) {
             // Invalid token
             return null;
         }
+    }
+
+    public static Map<String, String> splitQuery(String query) throws UnsupportedEncodingException {
+        Map<String, String> query_pairs = new LinkedHashMap<>();
+        String[] pairs = query.split("&");
+        for (String pair : pairs) {
+            int idx = pair.indexOf("=");
+            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+        }
+        return query_pairs;
     }
 
     class RestVert extends AbstractVerticle {
