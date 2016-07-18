@@ -4,8 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.utils.Messenger;
+import org.symphonyoss.client.model.Room;
 import org.symphonyoss.client.services.ChatListener;
+import org.symphonyoss.client.services.RoomService;
 import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.webdesk.constants.WebDeskConstants;
 import org.symphonyoss.webdesk.listeners.chat.WebCallChatListener;
 import org.symphonyoss.webdesk.models.HelpBotSession;
 import org.symphonyoss.webdesk.models.users.Member;
@@ -21,7 +24,7 @@ public class MultiChatWebCall extends MultiChatHelpCall {
     private final Logger logger = LoggerFactory.getLogger(MultiChatHelpCall.class);
     private WebClient webClient;
     private WebSessionListener webRelayListener;
-    private ChatListener memberRelayListener;
+    private WebCallChatListener memberRelayListener;
     private WebSessionListener webHelpSessionListener;
 
     public MultiChatWebCall(Member member, WebClient client, HelpBotSession session) {
@@ -52,16 +55,21 @@ public class MultiChatWebCall extends MultiChatHelpCall {
 
         webClient.getWebSession().removeListener(webHelpSessionListener);
         memberRelayListener = new WebCallChatListener(member, webClient, symClient);
-        try {
-            String id = symClient.getStreamsClient().getStreamFromEmail(member.getEmail()).getId();
-            symClient.getChatService().getChatByStream(id).registerListener(memberRelayListener);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        getUserChat(member.getUserID()).registerListener(memberRelayListener);
+
+        helpChat.registerListener(memberRelayListener);
+
+        webClient.getWebSession().sendMessageToWebService(new WebMessage(System.currentTimeMillis(),
+                "HelpBot", "", WebDeskConstants.CONNECTED_TO_CALL));
+
+        webClient.getWebSession().sendMessageToWebService(new WebMessage(System.currentTimeMillis(),
+                "HelpBot", "", super.getRoomInfo()));
 
         webRelayListener = (message) -> sendToSymphony(message);
         webClient.getWebSession().registerListener(webRelayListener);
 
+        memberCommandListener.stopListening(getUserChat(member.getUserID()));
         memberCommandListener.stopListening(helpChat);
 
     }
@@ -78,12 +86,19 @@ public class MultiChatWebCall extends MultiChatHelpCall {
             return;
         }
 
-        webClient.getWebSession().removeListener(webRelayListener);
 
         getUserChat(member.getUserID()).removeListener(memberRelayListener);
-        getUserChat(webClient.getUserID()).removeListener(memberRelayListener);
+
+        helpChat.removeListener(memberRelayListener);
+
+        webClient.getWebSession().removeListener(webRelayListener);
 
         webClient.getWebSession().registerListener(webHelpSessionListener);
+
+        symClient.getChatService().removeChat(helpChat);
+
+        webClient.getWebSession().sendMessageToWebService(new WebMessage(System.currentTimeMillis(),
+                "HelpBot", "", "Member has left the call. Help session ended."));
 
         logger.info("Ended Chat.");
 

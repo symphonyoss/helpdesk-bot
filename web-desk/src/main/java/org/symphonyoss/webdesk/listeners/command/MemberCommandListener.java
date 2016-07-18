@@ -91,9 +91,9 @@ public class MemberCommandListener extends AiCommandListener {
         queueResponse.addPermission(new OffCall());
 
         AiCommand callCache = new AiCommand(Config.getString(WebBotConfig.CALL_CACHE), 0);
-        queueResponse.addAction(new ViewCallsAction());
-        queueResponse.addPermission(new IsMember());
-        queueResponse.addPermission(new OffCall());
+        callCache.addAction(new ViewCallsAction());
+        callCache.addPermission(new IsMember());
+        callCache.addPermission(new OffCall());
 
         getActiveCommands().add(acceptNextHelpClient);
         getActiveCommands().add(acceptHelpClient);

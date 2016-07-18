@@ -37,6 +37,8 @@ import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.symphony.agent.model.Message;
 
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -48,6 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AiCommandListener implements ChatListener {
     private static final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
 
+    private static LinkedHashMap<String, HashSet<AiCommandListener>> listeners = new LinkedHashMap<String, HashSet<AiCommandListener>>();
     private static Message lastAnsweredMessage;
 
     protected SymphonyClient symClient;
@@ -91,17 +94,6 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * If the message was already answered by another listener, return true.
-     * @param message the message
-     * @return if the message was answered
-     */
-    public static boolean wasAnswered(Message message){
-
-        return lastAnsweredMessage != null && lastAnsweredMessage.getId().equals(message.getId());
-
-    }
-
-    /**
      * When a chat message is received, check if it starts with
      * the command char. If it does, process message.
      * <p>
@@ -141,6 +133,9 @@ public class AiCommandListener implements ChatListener {
                 mlMessageParser.parseMessage(message.getMessage().replaceFirst(">" + AiConstants.COMMAND, ">"));
                 chunks = mlMessageParser.getTextChunks();
 
+                if(!isBestResponse(mlMessageParser, chunks, message))
+                    return;
+
                 processMessage(mlMessageParser, chunks, message);
 
             }
@@ -151,10 +146,30 @@ public class AiCommandListener implements ChatListener {
 
     }
 
+    private boolean wasAnswered(Message message){
+
+        if(lastAnsweredMessage != null && lastAnsweredMessage.getId().equals(message.getId()))
+            return true;
+
+        return false;
+
+    }
+
+    private boolean isBestResponse(MlMessageParser mlMessageParser, String[] chunks, Message message) {
+        if(hasResponse(mlMessageParser, chunks, message))
+            return true;
+
+        for(AiCommandListener aiCommandListener : listeners.get(message.getStreamId()))
+            if(aiCommandListener != this && aiCommandListener.hasResponse(mlMessageParser, chunks, message))
+                return false;
+
+        return true;
+    }
+
     /**
      * Check to see if the message matches any of the commands.
      * If it matches, do actions and received responses.
-     * If it doesn't check if the ai can suggest a command from the unmatched command.
+     * If it doesn't check if the org.org.symphonyoss.ai can suggest a command from the unmatched command.
      * If it can suggest, then suggest the command and save the suggested command as the last command.
      * If it can't suggest and the sent command does not match run last command, send usage
      * If it does equal run last command, run the last command
@@ -174,18 +189,18 @@ public class AiCommandListener implements ChatListener {
             return;
         }
 
+        lastAnsweredMessage = message;
+
         for (AiCommand command : activeCommands) {
 
             if (command.isCommand(chunks) && command.userIsPermitted(message.getFromUserId())) {
 
-                lastAnsweredMessage = message;
                 aiResponder.respondWith(command.getResponses(mlMessageParser, message));
                 lastResponse.put(message.getId(), new AiLastCommand(mlMessageParser, command));
                 return;
 
             } else if (command.isCommand(chunks)) {
 
-                lastAnsweredMessage = message;
                 aiResponder.sendNoPermission(message);
                 return;
 
@@ -193,7 +208,6 @@ public class AiCommandListener implements ChatListener {
 
         }
 
-        lastAnsweredMessage = message;
         if (!equalsRunLastCommand(mlMessageParser, message)
                 && !canSuggest(chunks)) {
             aiResponder.sendUsage(message, mlMessageParser, activeCommands);
@@ -213,6 +227,45 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
+     * Checks to see if this command listener has a real response (One that matches a AiCommand).
+     * @param mlMessageParser the parser
+     * @param chunks  the message in text chunks
+     * @param message  the message
+     * @return  if ai command listener has response
+     */
+    private boolean hasResponse(MlMessageParser mlMessageParser, String[] chunks, Message message){
+
+        for (AiCommand command : activeCommands) {
+
+            if (command.isCommand(chunks) && command.userIsPermitted(message.getFromUserId())) {
+
+                return true;
+
+            } else if (command.isCommand(chunks)) {
+
+                return false;
+
+            }
+
+        }
+
+        if (!equalsRunLastCommand(mlMessageParser, message)
+                && !canSuggest(chunks)) {
+            return false;
+
+        } else if (!equalsRunLastCommand(mlMessageParser, message)) {
+
+            return false;
+
+        } else {
+
+            return true;
+
+        }
+
+    }
+
+    /**
      * Determines if the given input matches the run last command
      *
      * @param mlMessageParser the parser that contains the input in ML
@@ -227,10 +280,10 @@ public class AiCommandListener implements ChatListener {
     }
 
     /**
-     * Determines if the ai can suggest a command based on the input
+     * Determines if the org.org.symphonyoss.ai can suggest a command based on the input
      *
      * @param chunks the text input
-     * @return if the ai can suggest a command
+     * @return if the org.org.symphonyoss.ai can suggest a command
      */
     private boolean canSuggest(String[] chunks) {
         return AiSpellParser.canParse(activeCommands, chunks, AiConstants.CORRECTFACTOR);
@@ -244,6 +297,19 @@ public class AiCommandListener implements ChatListener {
     public void listenOn(Chat chat) {
 
         if (chat != null) {
+
+            if(listeners.containsKey(chat.getStream().getId())) {
+
+                listeners.get(chat.getStream().getId()).add(this);
+
+            }else{
+
+                HashSet<AiCommandListener> newChat = new HashSet<AiCommandListener>();
+                newChat.add(this);
+
+                listeners.put(chat.getStream().getId(), newChat);
+
+            }
 
             chat.registerListener(this);
 
@@ -263,6 +329,13 @@ public class AiCommandListener implements ChatListener {
 
             if (chat.getStream() != null
                     && chat.getStream().getId() != null) {
+
+                if(listeners.containsKey(chat.getStream().getId())
+                        && listeners.get(chat.getStream().getId()).contains(this)) {
+
+                    listeners.get(chat.getStream().getId()).remove(this);
+
+                }
 
             } else {
                 logChatError(chat, new NullPointerException());
@@ -300,19 +373,4 @@ public class AiCommandListener implements ChatListener {
         return symClient;
     }
 
-    public AiResponder getResponder() {
-        return aiResponder;
-    }
-
-    public void setResponder(AiResponder responder) {
-        this.aiResponder = responder;
-    }
-
-    public Message getLastAnsweredMessage() {
-        return lastAnsweredMessage;
-    }
-
-    public void setLastAnsweredMessage(Message lastAnsweredMessage) {
-        this.lastAnsweredMessage = lastAnsweredMessage;
-    }
 }

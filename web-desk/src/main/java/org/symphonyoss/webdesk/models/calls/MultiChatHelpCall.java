@@ -86,6 +86,8 @@ public class MultiChatHelpCall extends MultiChatCall {
             helpChat.setRemoteUsers(users);
             helpChat.setStream(symClient.getStreamsClient().getStream(users));
 
+            symClient.getChatService().addChat(helpChat);
+
             helpClientListener.stopListening(getUserChat(client.getUserID()));
             memberCommandListener.stopListening(getUserChat(member.getUserID()));
 
