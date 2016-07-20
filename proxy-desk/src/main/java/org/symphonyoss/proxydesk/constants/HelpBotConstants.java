@@ -41,7 +41,7 @@ public class HelpBotConstants {
     public static final String MEMBERS_LABEL = MLTypes.BREAK.toString() + MLTypes.START_BOLD + "Members in room: " + MLTypes.END_BOLD;
     public static final String HELP_SUMMARY_LABEL = MLTypes.BREAK.toString() + MLTypes.START_BOLD + "Help Summary: " + MLTypes.END_BOLD + MLTypes.BREAK;
     public static final String HELP_CLIENT_LABEL = "Help client ";
-    public static final String ENTERED_CHAT = " has entered the web.";
+    public static final String ENTERED_CHAT = " has entered the call.";
     public static final String MEMBER_LABEL = "Member ";
     public static final String EXIT_CALL = "You have exited the call.";
     public static final String LEFT_CALL = " has left the call.";

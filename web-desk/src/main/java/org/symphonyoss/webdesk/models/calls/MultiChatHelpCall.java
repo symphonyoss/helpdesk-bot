@@ -171,7 +171,10 @@ public class MultiChatHelpCall extends MultiChatCall {
             roomInfo += client.getEmail() + MLTypes.BREAK;
         }
 
-        roomInfo += "   " + WebDeskConstants.MEMBER_LABEL + ": " + member.getEmail() + MLTypes.BREAK;
+        if(!member.isUseAlias())
+            roomInfo += "   " + WebDeskConstants.MEMBER_LABEL + ": " + member.getEmail() + MLTypes.BREAK;
+        else
+            roomInfo += "   " + WebDeskConstants.MEMBER_LABEL + ": " + member.getAlias() + MLTypes.BREAK;
 
         return roomInfo + MLTypes.END_ML;
     }
