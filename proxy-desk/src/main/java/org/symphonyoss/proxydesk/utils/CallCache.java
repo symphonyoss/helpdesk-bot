@@ -36,7 +36,9 @@ import org.symphonyoss.proxydesk.models.users.HelpClient;
 import org.symphonyoss.proxydesk.models.users.Member;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -44,7 +46,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class CallCache {
     public static final ArrayList<Call> ACTIVECALLS = new ArrayList<Call>();
+    public static final Set<Double> ALL_CALL_TIMES = new HashSet<Double>();
+
     private static final Logger logger = LoggerFactory.getLogger(CallCache.class);
+    private static double meanCallTime;
 
     /**
      * Starts a new help call.
@@ -102,12 +107,18 @@ public class CallCache {
         if (call == null)
             return;
 
-        ACTIVECALLS.remove(call);
+       removeCall(call);
         call.exitCall();
 
     }
 
     public static void removeCall(Call call) {
+
+
+        if(call == null || call.getTimer() == null)
+            return;
+
+        ALL_CALL_TIMES.add(call.getTimer().getTime());
 
         ACTIVECALLS.remove(call);
 
@@ -150,5 +161,24 @@ public class CallCache {
 
     public static int getCallID(Call call) {
         return ACTIVECALLS.indexOf(call);
+    }
+
+    public static double getMeanCallTime() {
+        double meanCallTime = 0;
+
+        for(Double time : ALL_CALL_TIMES)
+            meanCallTime += time;
+
+        return meanCallTime / ALL_CALL_TIMES.size();
+    }
+
+    public static double maxCallTime(){
+        double max = 0;
+
+        for(Double time : ALL_CALL_TIMES)
+            if(time > max)
+                max = time;
+
+        return max;
     }
 }

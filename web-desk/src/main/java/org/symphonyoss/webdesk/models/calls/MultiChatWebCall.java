@@ -86,7 +86,6 @@ public class MultiChatWebCall extends MultiChatHelpCall {
             return;
         }
 
-
         getUserChat(member.getUserID()).removeListener(memberRelayListener);
 
         helpChat.removeListener(memberRelayListener);
@@ -127,5 +126,4 @@ public class MultiChatWebCall extends MultiChatHelpCall {
 
         return text.substring(0, text.length() - 2) + " ]";
     }
-
 }

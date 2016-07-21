@@ -80,6 +80,7 @@ public class CallTest {
             call.exitCall();
         } catch (Exception e) {
             fail("exit failed");
+            e.printStackTrace();
         }
     }
 }

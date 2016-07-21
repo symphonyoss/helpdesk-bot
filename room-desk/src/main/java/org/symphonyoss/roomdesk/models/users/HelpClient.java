@@ -27,6 +27,7 @@ package org.symphonyoss.roomdesk.models.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.roomdesk.models.calls.MultiChatCall;
+import org.symphonyoss.roomdesk.models.calls.Timer;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -43,9 +44,12 @@ public class HelpClient implements DeskUser {
     private boolean onCall;
     private Set<String> helpRequests = new LinkedHashSet<String>();
 
+    private Timer holdTimer;
+
     public HelpClient(String email, Long userID) {
         setEmail(email);
         setUserID(userID);
+        setHoldTimer(new Timer());
     }
 
     /**
@@ -123,4 +127,11 @@ public class HelpClient implements DeskUser {
     }
 
 
+    public Timer getHoldTimer() {
+        return holdTimer;
+    }
+
+    public void setHoldTimer(Timer holdTimer) {
+        this.holdTimer = holdTimer;
+    }
 }

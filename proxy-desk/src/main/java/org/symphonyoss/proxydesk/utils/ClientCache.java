@@ -76,4 +76,13 @@ public class ClientCache {
 
         return ALL_CLIENTS.containsKey(id.toString());
     }
+
+    public static int getTotalHelpMessages() {
+        int total = 0;
+
+        for(HelpClient client : ALL_CLIENTS.values())
+            total += client.getHelpRequests().size();
+
+        return total;
+    }
 }
