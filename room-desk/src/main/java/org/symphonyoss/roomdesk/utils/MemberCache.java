@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.symphonyoss.roomdesk.config.RoomBotConfig;
 import org.symphonyoss.roomdesk.models.users.Member;
 import org.symphonyoss.roomdesk.models.users.SerializableMember;
 import org.symphonyoss.symphony.agent.model.Message;
@@ -48,7 +49,7 @@ public class MemberCache {
 
     public static void loadMembers() {
 
-        File[] files = new File(System.getProperty("files.json")).listFiles(new FilenameFilter() {
+        File[] files = new File(System.getProperty(RoomBotConfig.FILES_JSON)).listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 String ext = FilenameUtils.getExtension(name);
                 return ext.equalsIgnoreCase("json");

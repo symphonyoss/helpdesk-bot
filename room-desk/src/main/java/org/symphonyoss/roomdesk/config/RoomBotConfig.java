@@ -24,30 +24,30 @@
 
 package org.symphonyoss.roomdesk.config;
 
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public final class RoomBotConfig {
 
     public static final Configuration Config;
     //Properties
-    public final static String CONFIG_DIR = "roombot.config.dir";
-    public final static String CONFIG_FILE = "roombot.properties";
-    public final static String ACCEPT_NEXT = "roombot.command.acceptnext";
-    public final static String ACCEPT = "roombot.command.accept";
-    public final static String ADD_MEMBER = "roombot.command.addmember";
-    public final static String SET_ALIAS = "roombot.command.setalias";
-    public final static String TOGGLE_ALIAS = "roombot.command.togglealias";
-    public final static String ONLINE_MEMBERS = "roombot.command.onlinemembers";
-    public final static String CLIENT_QUEUE = "roombot.command.clientqueue";
-    public final static String HELP_SUMMARY = "roombot.command.helpsummary";
-    public final static String ROOM_INFO = "roombot.command.roominfo";
-    public final static String EXIT = "roombot.command.exit";
-    public static final java.lang.String CALL_CACHE = "roombot.command.callcache";
+    public final static String CONFIG_DIR = "bot.config.dir";
+    public final static String CONFIG_FILE = "bot.properties";
+    public final static String ACCEPT_NEXT = "ai.command.acceptnext";
+    public final static String ACCEPT = "ai.command.accept";
+    public final static String ADD_MEMBER = "ai.command.addmember";
+    public final static String SET_ALIAS = "ai.command.setalias";
+    public final static String TOGGLE_ALIAS = "ai.command.togglealias";
+    public final static String ONLINE_MEMBERS = "ai.command.onlinemembers";
+    public final static String CLIENT_QUEUE = "ai.command.clientqueue";
+    public final static String HELP_SUMMARY = "ai.command.helpsummary";
+    public final static String ROOM_INFO = "ai.command.roominfo";
+    public final static String EXIT = "ai.command.exit";
+    public static final java.lang.String CALL_CACHE = "ai.command.callcache";
 
     public final static String KEYSTORE_PASSWORD = "keystore.password";
     public final static String TRUSTSTORE_PASSWORD = "truststore.password";
@@ -58,10 +58,10 @@ public final class RoomBotConfig {
     public final static String CERTS_DIR = "certs.dir";
     public final static String TRUSTSTORE_FILE = "truststore.file";
     public final static String BOT_USER = "bot.user";
-    public final static String FILES_JSON = "files.json";
     public final static String FILES_TRANSCRIPT = "files.transcript";
     public final static String ADMIN_USER = "admin.user";
-    public final static String MEMBER_CHAT_STREAM = "member.chat.stream";
+    public final static String FILES_JSON = "roombot.files.json";
+    public final static String MEMBER_CHAT_STREAM = "roombot.member.chat.stream";
     //Env
     public final static String KEYSTORE_PASSWORD_ENV = "KEYSTORE_PASSWORD";
     public final static String TRUSTSTORE_PASSWORD_ENV = "TRUSTSTORE_PASSWORD";

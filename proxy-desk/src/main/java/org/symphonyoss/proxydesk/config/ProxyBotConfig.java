@@ -35,27 +35,27 @@ public final class ProxyBotConfig {
 
     public static final Configuration Config;
     //Properties
-    public final static String CONFIG_DIR = "proxybot.config.dir";
-    public final static String CONFIG_FILE = "proxybot.properties";
-    public final static String ACCEPT_NEXT = "proxybot.command.acceptnext";
-    public final static String ACCEPT = "proxybot.command.accept";
-    public final static String TOGGLE_ONLINE = "proxybot.command.toggleonline";
-    public final static String TOGGLE_USE_ALIAS = "proxybot.command.togglealias";
-    public final static String ADD_MEMBER = "proxybot.command.addmember";
-    public final static String JOIN_CHAT = "proxybot.command.joinchat";
-    public final static String ONLINE_MEMBERS = "proxybot.command.onlinemembers";
-    public final static String CLIENT_QUEUE = "proxybot.command.clientqueue";
-    public final static String MY_SETTINGS = "proxybot.command.mysettings";
-    public final static String HELP_SUMMARY = "proxybot.command.helpsummary";
-    public final static String ROOM_INFO = "proxybot.command.roominfo";
-    public static final String SET_ALIAS = "proxybot.command.setalias";
-    public static final String CALL_QUEUE = "proxybot.command.callcache";
-
+    public final static String CONFIG_DIR = "bot.config.dir";
+    public final static String CONFIG_FILE = "bot.properties";
+    public final static String ACCEPT_NEXT = "ai.command.acceptnext";
+    public final static String ACCEPT = "ai.command.accept";
+    public final static String TOGGLE_USE_ALIAS = "ai.command.togglealias";
+    public final static String ADD_MEMBER = "ai.command.addmember";
+    public final static String ONLINE_MEMBERS = "ai.command.onlinemembers";
+    public final static String CLIENT_QUEUE = "ai.command.clientqueue";
+    public final static String MY_SETTINGS = "ai.command.mysettings";
+    public final static String HELP_SUMMARY = "ai.command.helpsummary";
+    public final static String ROOM_INFO = "ai.command.roominfo";
+    public static final String SET_ALIAS = "ai.command.setalias";
+    public static final String CALL_QUEUE = "ai.command.callcache";
+    public final static String JOIN_CHAT = "proxybot.ai.command.joinchat";
+    public final static String TOGGLE_ONLINE = "proxybot.ai.command.toggleonline";
     public final static String EXIT = "proxybot.command.exit";
-    public final static String SET_TAGS = "proxybot.command.settags";
-    public final static String ADD_TAGS = "proxybot.command.addtags";
+    public final static String SET_TAGS = "proxybot.ai.command.settags";
+    public final static String ADD_TAGS = "proxybot.ai.command.addtags";
+    public final static String REMOVE_TAGS = "proxybot.ai.command.removetags";
     public static final String BEST_PERCENTAGE = "proxybot.setting.bestpercentage";
-    public final static String REMOVE_TAGS = "proxybot.command.removetags";
+
     public final static String KEYSTORE_PASSWORD = "keystore.password";
     public final static String TRUSTSTORE_PASSWORD = "truststore.password";
     public final static String SESSIONAUTH_URL = "sessionauth.url";
@@ -65,8 +65,8 @@ public final class ProxyBotConfig {
     public final static String CERTS_DIR = "certs.dir";
     public final static String TRUSTSTORE_FILE = "truststore.file";
     public final static String BOT_USER = "bot.user";
-    public final static String FILES_JSON = "files.json";
     public final static String ADMIN_USER = "admin.user";
+    public final static String FILES_JSON = "proxybot.files.json";
     //Env
     public final static String KEYSTORE_PASSWORD_ENV = "KEYSTORE_PASSWORD";
     public final static String TRUSTSTORE_PASSWORD_ENV = "TRUSTSTORE_PASSWORD";
