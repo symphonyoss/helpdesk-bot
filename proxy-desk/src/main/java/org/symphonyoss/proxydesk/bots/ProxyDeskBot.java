@@ -48,6 +48,8 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.pod.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
