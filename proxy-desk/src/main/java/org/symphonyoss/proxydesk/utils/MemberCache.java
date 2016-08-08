@@ -48,7 +48,7 @@ public class MemberCache {
 
     public static void loadMembers() {
 
-        File[] files = new File(System.getProperty("files.json")).listFiles(new FilenameFilter() {
+        File[] files = new File(System.getProperty(ProxyBotConfig.FILES_JSON)).listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 String ext = FilenameUtils.getExtension(name);
                 return ext.equalsIgnoreCase("json");

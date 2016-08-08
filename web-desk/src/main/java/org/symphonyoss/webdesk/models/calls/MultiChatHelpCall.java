@@ -39,6 +39,9 @@ public class MultiChatHelpCall extends MultiChatCall {
     private TranscriptListener transcriptListener;
     private HelpClient client;
 
+
+    private Timer callTimer;
+
     public MultiChatHelpCall(Member member, HelpClient client, HelpBotSession session) {
         super();
         this.member = member;
@@ -48,6 +51,9 @@ public class MultiChatHelpCall extends MultiChatCall {
         this.memberCommandListener = session.getMemberListener();
         this.helpClientListener = session.getHelpClientListener();
         this.transcriptListener = session.getTranscriptListener();
+
+        this.callTimer = new Timer();
+
     }
 
     /**
@@ -66,6 +72,8 @@ public class MultiChatHelpCall extends MultiChatCall {
 
             return;
         }
+
+        callTimer.start();
 
         helpChat = new Chat();
         helpChat.setLocalUser(symClient.getLocalUser());
@@ -120,13 +128,17 @@ public class MultiChatHelpCall extends MultiChatCall {
      */
     public void endCall() {
         if(client == null
-                || member == null){
+                || member == null
+                || callTimer == null){
 
             if(logger != null)
                 logger.warn("Cal started when member or client were null.");
 
             return;
         }
+
+        callTimer.stop();
+        callTimer = null;
 
         helpCallCommandListener.stopListening(getUserChat(client.getUserID()));
         helpCallCommandListener.stopListening(getUserChat(member.getUserID()));
@@ -171,7 +183,10 @@ public class MultiChatHelpCall extends MultiChatCall {
             roomInfo += client.getEmail() + MLTypes.BREAK;
         }
 
-        roomInfo += "   " + WebDeskConstants.MEMBER_LABEL + ": " + member.getEmail() + MLTypes.BREAK;
+        if(!member.isUseAlias())
+            roomInfo += "   " + WebDeskConstants.MEMBER_LABEL + ": " + member.getEmail() + MLTypes.BREAK;
+        else
+            roomInfo += "   " + WebDeskConstants.MEMBER_LABEL + ": " + member.getAlias() + MLTypes.BREAK;
 
         return roomInfo + MLTypes.END_ML;
     }
@@ -216,5 +231,13 @@ public class MultiChatHelpCall extends MultiChatCall {
         text += client.getEmail() + ", ";
 
         return text.substring(0, text.length() - 2) + " ]";
+    }
+
+    public Timer getCallTimer() {
+        return callTimer;
+    }
+
+    public void setCallTimer(Timer callTimer) {
+        this.callTimer = callTimer;
     }
 }

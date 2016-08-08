@@ -51,10 +51,12 @@ public class Call {
     private boolean privateCall;
     private float inactivityTime;
 
+    private Timer timer;
+
     public Call(SymphonyClient symClient, boolean privateCall) {
         this.symClient = symClient;
         this.privateCall = privateCall;
-
+        this.timer = new Timer();
         constructCall();
     }
 
@@ -87,6 +89,8 @@ public class Call {
 
             return;
         }
+
+        timer.start();
 
         if (privateCall) {
             for (DeskUser deskUser : deskUsers) {
@@ -152,6 +156,11 @@ public class Call {
         }
 
         CallCache.removeCall(this);
+
+        if(timer != null)
+            timer.stop();
+        timer = null;
+
         if (symClient != null)
             symClient.getChatService().removeListener(callServiceListener);
     }
@@ -176,6 +185,9 @@ public class Call {
             if (deskUsers.size() == 0) {
                 CallCache.removeCall(this);
                 symClient.getChatService().removeListener(callServiceListener);
+
+                timer.stop();
+                timer = null;
             }
 
         } else {
@@ -294,6 +306,16 @@ public class Call {
     public void setDeskUsers(ArrayList<DeskUser> deskUsers) {
         this.deskUsers = deskUsers;
     }
+
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
 
     public enum CallTypes {BASE_CALL, HELP_CALL}
 

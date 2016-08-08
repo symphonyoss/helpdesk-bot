@@ -35,22 +35,22 @@ public final class WebBotConfig {
 
     public static final Configuration Config;
     //Properties
-    public final static String CONFIG_DIR = "webbot.config.dir";
-    public final static String CONFIG_FILE = "webbot.properties";
-    public final static String ACCEPT_NEXT = "webbot.command.acceptnext";
-    public final static String ACCEPT = "webbot.command.accept";
-    public final static String SET_ALIAS = "webbot.command.setalias";
-    public final static String TOGGLE_ALIAS = "webbot.command.togglealias";
-    public final static String ADD_MEMBER = "webbot.command.addmember";
-    public final static String ONLINE_MEMBERS = "webbot.command.onlinemembers";
-    public final static String CLIENT_QUEUE = "webbot.command.clientqueue";
-    public final static String HELP_SUMMARY = "webbot.command.helpsummary";
-    public final static String ROOM_INFO = "webbot.command.roominfo";
-    public final static String EXIT = "webbot.command.exit";
-    public final static String HEADER_INDEX = "header.index";
-    public final static String HEADER_HELP = "header.help";
-    public final static String WEB_DIRECTORY = "web.directory";
-    public static final String CALL_CACHE = "roombot.command.callcache";
+    public final static String CONFIG_DIR = "bot.config.dir";
+    public final static String CONFIG_FILE = "bot.properties";
+    public final static String ACCEPT_NEXT = "ai.command.acceptnext";
+    public final static String ACCEPT = "ai.command.accept";
+    public final static String SET_ALIAS = "ai.command.setalias";
+    public final static String TOGGLE_ALIAS = "ai.command.togglealias";
+    public final static String ADD_MEMBER = "ai.command.addmember";
+    public final static String ONLINE_MEMBERS = "ai.command.onlinemembers";
+    public final static String CLIENT_QUEUE = "ai.command.clientqueue";
+    public final static String HELP_SUMMARY = "ai.command.helpsummary";
+    public final static String ROOM_INFO = "ai.command.roominfo";
+    public static final String CALL_CACHE = "ai.command.callcache";
+    public final static String EXIT = "ai.command.exit";
+    public final static String HEADER_INDEX = "webbot.header.index";
+    public final static String HEADER_HELP = "webbot.header.help";
+    public final static String WEB_DIRECTORY = "webbot.web.directory";
 
     public final static String KEYSTORE_PASSWORD = "keystore.password";
     public final static String TRUSTSTORE_PASSWORD = "truststore.password";
@@ -61,13 +61,13 @@ public final class WebBotConfig {
     public final static String CERTS_DIR = "certs.dir";
     public final static String TRUSTSTORE_FILE = "truststore.file";
     public final static String BOT_USER = "bot.user";
-    public final static String FILES_JSON = "files.json";
     public final static String FILES_TRANSCRIPT = "files.transcript";
     public final static String ADMIN_USER = "admin.user";
-    public final static String MEMBER_CHAT_STREAM = "member.chat.stream";
-    public final static String TRUST_ALL_SSL = "trust.all.ssl";
-    public final static String WEB_DESK_PORT = "web.desk.port";
-    public final static String FILES_WEBDESK = "files.webdesk";
+    public final static String FILES_JSON = "webbot.files.json";
+    public final static String MEMBER_CHAT_STREAM = "webbot.member.chat.stream";
+    public final static String TRUST_ALL_SSL = "webbot.trust.all.ssl";
+    public final static String WEB_DESK_PORT = "webbot.web.desk.port";
+    public final static String FILES_WEBDESK = "webbot.files.webdesk";
 
     //Env
     public final static String KEYSTORE_PASSWORD_ENV = "KEYSTORE_PASSWORD";

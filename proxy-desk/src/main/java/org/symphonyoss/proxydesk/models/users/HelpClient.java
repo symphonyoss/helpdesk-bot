@@ -27,6 +27,7 @@ package org.symphonyoss.proxydesk.models.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.proxydesk.models.calls.Call;
+import org.symphonyoss.proxydesk.models.calls.Timer;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -42,10 +43,12 @@ public class HelpClient implements DeskUser {
     private Long userID;
     private boolean onCall;
     private Set<String> helpRequests = new LinkedHashSet<String>();
+    private Timer pickUpTimer;
 
     public HelpClient(String email, Long userID) {
         setEmail(email);
         setUserID(userID);
+        setPickUpTimer(new Timer());
     }
 
     /**
@@ -123,4 +126,11 @@ public class HelpClient implements DeskUser {
     }
 
 
+    public Timer getPickUpTimer() {
+        return pickUpTimer;
+    }
+
+    public void setPickUpTimer(Timer pickUpTimer) {
+        this.pickUpTimer = pickUpTimer;
+    }
 }

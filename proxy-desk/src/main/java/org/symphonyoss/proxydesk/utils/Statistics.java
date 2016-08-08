@@ -51,4 +51,17 @@ public class Statistics {
     public static int getNumCalls() {
         return CallCache.ACTIVECALLS.size();
     }
+
+    public static int getHelpTranscriptMessagesNum() {
+        return ClientCache.getTotalHelpMessages();
+    }
+
+    public static double getMeanCallTime(){return CallCache.getMeanCallTime();}
+
+    public static double getMaxCallTime(){return CallCache.maxCallTime();}
+
+    public static double getMaxHoldTime(){return HoldCache.getMaxHoldTime();}
+
+    public static double getMeanHoldTime(){return HoldCache.getMeanHoldTime();}
+
 }

@@ -43,6 +43,8 @@ public class MultiChatHelpCall extends MultiChatCall {
     private Member member;
     private HelpClient client;
 
+    private Timer callTimer;
+
     public MultiChatHelpCall(Member member, HelpClient client, HelpBotSession session) {
         super();
         this.member = member;
@@ -52,6 +54,8 @@ public class MultiChatHelpCall extends MultiChatCall {
         this.memberCommandListener = session.getMemberListener();
         this.helpClientListener = session.getHelpClientListener();
         this.transcriptListener = session.getTranscriptListener();
+
+        callTimer = new Timer();
     }
 
     /**
@@ -71,6 +75,7 @@ public class MultiChatHelpCall extends MultiChatCall {
             return;
         }
 
+        callTimer.start();
 
         helpChat = new Chat();
         helpChat.setLocalUser(symClient.getLocalUser());
@@ -123,13 +128,17 @@ public class MultiChatHelpCall extends MultiChatCall {
      */
     public void endCall() {
         if(client == null
-                || member == null){
+                || member == null
+                || callTimer == null){
 
             if(logger != null)
                 logger.warn("Cal ended when member or client were null.");
 
             return;
         }
+
+        callTimer.stop();
+        callTimer = null;
 
         helpCallCommandListener.stopListening(getUserChat(client.getUserID()));
         helpCallCommandListener.stopListening(getUserChat(member.getUserID()));
@@ -222,4 +231,11 @@ public class MultiChatHelpCall extends MultiChatCall {
     }
 
 
+    public Timer getCallTimer() {
+        return callTimer;
+    }
+
+    public void setCallTimer(Timer callTimer) {
+        this.callTimer = callTimer;
+    }
 }

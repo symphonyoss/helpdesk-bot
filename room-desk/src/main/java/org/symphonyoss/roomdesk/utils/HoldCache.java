@@ -27,25 +27,41 @@ package org.symphonyoss.roomdesk.utils;
 import org.symphonyoss.roomdesk.models.users.HelpClient;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/15/16.
  */
 public class HoldCache {
     public static final ArrayList<HelpClient> ONHOLD = new ArrayList<HelpClient>();
+    public static final Set<Double> ALL_HOLD_TIMES = new HashSet<Double>();
 
     public static void putClientOnHold(HelpClient client) {
+
+        client.getHoldTimer().start();
+
         ONHOLD.add(client);
     }
 
     public static HelpClient pickUpNextClient() {
         HelpClient client = ONHOLD.get(0);
+
+        client.getHoldTimer().stop();
+        ALL_HOLD_TIMES.add(client.getHoldTimer().getTime());
+        client.getHoldTimer().setTime(0);
+
         ONHOLD.remove(client);
         return client;
     }
 
     public static HelpClient pickUpClient(HelpClient client) {
         ONHOLD.remove(client);
+
+        client.getHoldTimer().stop();
+        ALL_HOLD_TIMES.add(client.getHoldTimer().getTime());
+        client.getHoldTimer().setTime(0);
+
         return client;
     }
 
@@ -73,5 +89,24 @@ public class HoldCache {
 
     public static boolean hasClient(HelpClient client) {
         return ONHOLD.contains(client);
+    }
+
+    public static double getMeanHoldTime() {
+        double meanTime = 0;
+
+        for(Double time : ALL_HOLD_TIMES)
+            meanTime += time;
+
+        return meanTime / ALL_HOLD_TIMES.size();
+    }
+
+    public static double getMaxHoldTime(){
+        double max = 0;
+
+        for(Double time : ALL_HOLD_TIMES)
+            if(time > max)
+                max = time;
+
+        return max;
     }
 }

@@ -48,6 +48,8 @@ import org.symphonyoss.symphony.agent.model.MessageSubmission;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.pod.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -120,7 +122,7 @@ public class ProxyDeskBot implements ChatServiceListener {
             System.out.println("Help desk bot is alive, and ready to help!");
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             if (logger != null)
                 logger.error(e.toString());
             else

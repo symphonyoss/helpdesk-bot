@@ -123,7 +123,7 @@ public class WebDeskBot implements ChatServiceListener {
             System.out.println("Help desk bot is alive, and ready to help!");
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             if (logger != null)
                 logger.error(e.toString());
             else

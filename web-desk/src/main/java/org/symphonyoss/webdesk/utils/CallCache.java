@@ -35,6 +35,8 @@ import org.symphonyoss.webdesk.models.users.Member;
 import org.symphonyoss.webdesk.models.users.WebClient;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -42,6 +44,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class CallCache {
     public static final ArrayList<MultiChatCall> ACTIVECALLS = new ArrayList<>();
+    public static final Set<Double> ALL_CALL_TIMES = new HashSet<Double>();
+
     private static final Logger logger = LoggerFactory.getLogger(CallCache.class);
 
     public static MultiChatCall newCall(Member member, HelpClient helpClient, HelpBotSession helpBotSession) {
@@ -89,12 +93,17 @@ public class CallCache {
         if (call == null)
             return;
 
-        ACTIVECALLS.remove(call);
+        removeCall(call);
         call.endCall();
 
     }
 
     public static void removeCall(MultiChatCall call) {
+        if(call == null)
+            return;
+
+        if(call.getCallType() == MultiChatCall.CallTypes.HELP_CALL)
+            ALL_CALL_TIMES.add(((MultiChatHelpCall) call).getCallTimer().getTime());
 
         ACTIVECALLS.remove(call);
 
@@ -118,4 +127,26 @@ public class CallCache {
     public static int getCallID(MultiChatHelpCall multiChatHelpCall) {
         return ACTIVECALLS.indexOf(multiChatHelpCall);
     }
+
+    public static double getMeanCallTime() {
+        double meanCallTime = 0;
+
+        for(Double time : ALL_CALL_TIMES)
+            meanCallTime += time;
+
+        return meanCallTime / ALL_CALL_TIMES.size();
+    }
+
+    public static double maxCallTime(){
+        double max = 0;
+
+        for(Double time : ALL_CALL_TIMES)
+            if(time > max)
+                max = time;
+
+        return max;
+    }
+
+
+
 }
