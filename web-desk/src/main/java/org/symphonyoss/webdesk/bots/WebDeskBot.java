@@ -58,7 +58,7 @@ import java.util.Set;
 import static org.symphonyoss.webdesk.config.WebBotConfig.Config;
 
 /**
- * The main help desk bot class
+ * The main help desk bot class.
  */
 public class WebDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(WebDeskBot.class);
