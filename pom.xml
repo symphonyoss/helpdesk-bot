@@ -34,6 +34,13 @@
     <artifactId>helpdesk-bots</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>Helpdesk Bot</name>
+    <description>A Symphony Helpdesk BOT supporting multiple call routing scenarios</description>
+    <url>https://github.com/symphonyoss/helpdesk-bot</url>
+    <parent>
+        <groupId>org.symphonyoss</groupId>
+        <artifactId>symphonyoss</artifactId>
+        <version>2</version>
+    </parent>
 
 
     <modules>
@@ -48,6 +55,36 @@
         <slfj4-version>1.7.5</slfj4-version>
         <jaxrs-version>2.0.1</jaxrs-version>
     </properties>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/symphonyoss/helpdesk-bot.git</connection>
+        <developerConnection>scm:git:git@github.com:symphonyoss/helpdesk-bot.git</developerConnection>
+        <url>https://github.com/symphonyoss/helpdesk-bot</url>
+        <tag>HEAD</tag>
+    </scm>
+    <developers>
+    <developer>
+        <id>ftarsillo</id>
+        <name>Frank Tarsillo</name>
+        <email />
+        <url>http://github.com/ftarsillo</url>
+        <organization>Symphony Software Foundation</organization>
+        <organizationUrl>http://symphony.foundation</organizationUrl>
+        <timezone />
+        <roles>
+            <role>Architect</role>
+            <role>Developer</role>
+        </roles>
+    </developer>
+    </developers>
+
 
     <repositories>
         <repository>
@@ -67,7 +104,7 @@
             <dependency>
                 <groupId>org.symphonyoss.symphony</groupId>
                 <artifactId>symphony-client</artifactId>
-                <version>0.9.0-SNAPSHOT</version>
+                <version>0.9.0</version>
             </dependency>
 
             <dependency>
