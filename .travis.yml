@@ -25,7 +25,9 @@
 
 language: java
 script:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then export MVN_PROFILES="sonar,versioneye"; else export MVN_PROFILES="sonar"; fi
+# TODO - enable it when sonar profile is working
+#  - if [ "$TRAVIS_BRANCH" = "master" ]; then export MVN_PROFILES="sonar,versioneye"; else export MVN_PROFILES="sonar"; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then export MVN_PROFILES="versioneye"; else export MVN_PROFILES="none"; fi
   - mvn clean package -P$MVN_PROFILES
 jdk:
   - oraclejdk8
