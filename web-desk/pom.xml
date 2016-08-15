@@ -28,67 +28,31 @@
     <parent>
         <artifactId>helpdesk-bots</artifactId>
         <groupId>org.symphonyoss.helpdeskbot</groupId>
-        <version>1.0.0-SNAPSHOT</version>
-
+        <version>0.9.0-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
     <artifactId>web-desk</artifactId>
 
-
-
     <properties>
-        <swagger.source>web-desk/src/main/swagger/api.yaml</swagger.source>
-        <!-- Swagger Generated Package Names -->
-        <api.package>org.symphonyoss.api.api</api.package>
-        <client.package>org.symphonyoss.api.client</client.package>
-        <model.package>org.symphonyoss.api.model</model.package>
-        <swagger-annotations-version>1.5.0</swagger-annotations-version>
-        <jersey-version>2.12</jersey-version>
-        <jackson-version>2.4.2</jackson-version>
-        <jodatime-version>2.3</jodatime-version>
-        <maven-plugin-version>1.0.0</maven-plugin-version>
-        <junit-version>4.8.1</junit-version>
+        <appassembler.mainClass>org.symphonyoss.webdesk.bots.WebDeskBot</appassembler.mainClass>
+        <appassembler.id>WebDeskBot</appassembler.id>
     </properties>
+
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
             </plugin>
-            <!--<plugin>-->
-            <!--<groupId>io.swagger</groupId>-->
-            <!--<artifactId>swagger-codegen-maven-plugin</artifactId>-->
-            <!--<version>2.1.5</version>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>java</id>-->
-            <!--<goals>-->
-            <!--<goal>generate</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-            <!--<inputSpec>${swagger.source}</inputSpec>-->
-            <!--<language>java</language>-->
-            <!--<configOptions>-->
-            <!--<sourceFolder>src/gen/java/main</sourceFolder>-->
-            <!--<apiPackage>${api.package}</apiPackage>-->
-            <!--<invokerPackage>${client.package}</invokerPackage>-->
-            <!--<modelPackage>${model.package}</modelPackage>-->
-            <!--<library>jersey2</library>-->
-            <!--</configOptions>-->
-            <!--</configuration>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+            
+            <!-- mao: not sure what is this used for -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -105,81 +69,10 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>org.symphonyoss.webdesk.bots.WebDeskBot</mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
-                <configuration>
-                    <repositoryName>lib</repositoryName>
-                    <repositoryLayout>flat</repositoryLayout>
-                    <useWildcardClassPath>true</useWildcardClassPath>
-                    <!-- Set the target configuration directory to be used in the bin scripts -->
-                    <configurationDirectory>conf</configurationDirectory>
-                    <logsDirectory>logs</logsDirectory>
-                    <!-- Copy the contents from "/src/main/config" to the target
-                         configuration directory in the assembled application -->
-                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
-                    <!-- Include the target configuration directory in the beginning of
-                         the classpath declaration in the bin scripts -->
-                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-                    <!-- set alternative assemble directory -->
-                    <assembleDirectory>${project.build.directory}/web-desk-${version.minor}</assembleDirectory>
-                    <!-- Extra JVM arguments that will be included in the bin scripts -->
-                    <extraJvmArguments>-Xms128m -Xmx4096m -Dbot.config.dir=../conf
-                    </extraJvmArguments>
-
-                    <!-- Generate bin scripts for windows and unix pr default -->
-                    <platforms>
-                        <platform>unix</platform>
-                    </platforms>
-                    <programs>
-                        <program>
-                            <mainClass>org.symphonyoss.webdesk.bots.WebDeskBot</mainClass>
-                            <id>WebDeskBot</id>
-                            <!-- Only generate windows bat script for this application -->
-                            <platforms>
-                                <platform>unix</platform>
-                            </platforms>
-                        </program>
-
-                    </programs>
-
-
-                </configuration>
-            </plugin>
-
         </plugins>
-
-
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>org.symphonyoss.symphony</groupId>
             <artifactId>symphony-client</artifactId>
@@ -188,94 +81,81 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web</artifactId>
-            <version>3.1.0</version>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.2</version>
         </dependency>
 
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>${swagger-annotations-version}</version>
         </dependency>
 
-
-        <!-- Swagger Jersey Deps -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>${jersey-version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-multipart</artifactId>
-            <version>${jersey-version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
-            <version>2.22.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>${jackson-version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${jackson-version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson-version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
-            <version>2.1.5</version>
         </dependency>
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>${jodatime-version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.brsanthu</groupId>
             <artifactId>migbase64</artifactId>
-            <version>2.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.14</version>
         </dependency>
+
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.48</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/commons-configuration/commons-configuration -->
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
-            <version>1.6</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
         </dependency>
-
     </dependencies>
-
-
-
 </project>

@@ -29,7 +29,7 @@
     <parent>
         <artifactId>helpdesk-bots</artifactId>
         <groupId>org.symphonyoss.helpdeskbot</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.9.0-SNAPSHOT</version>
 
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -38,11 +38,11 @@
     <artifactId>proxy-desk</artifactId>
 
     <properties>
-        <version.minor>0.0.1</version.minor>
+        <appassembler.mainClass>org.symphonyoss.proxydesk.bots.ProxyDeskBot</appassembler.mainClass>
+        <appassembler.id>ProxyDeskBot</appassembler.id>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.symphonyoss.symphony</groupId>
             <artifactId>symphony-client</artifactId>
@@ -51,112 +51,43 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.6.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
-            <version>1.7R4</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/commons-configuration/commons-configuration -->
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
-            <version>1.6</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
         </dependency>
-
     </dependencies>
 
-
     <build>
-        <plugins>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>ProxyDeskBot</mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
-                <configuration>
-                    <repositoryName>lib</repositoryName>
-                    <repositoryLayout>flat</repositoryLayout>
-                    <useWildcardClassPath>true</useWildcardClassPath>
-                    <!-- Set the target configuration directory to be used in the bin scripts -->
-                    <configurationDirectory>conf</configurationDirectory>
-                    <logsDirectory>logs</logsDirectory>
-                    <!-- Copy the contents from "/src/main/config" to the target
-                         configuration directory in the assembled application -->
-                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
-                    <!-- Include the target configuration directory in the beginning of
-                         the classpath declaration in the bin scripts -->
-                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-                    <!-- set alternative assemble directory -->
-                    <assembleDirectory>${project.build.directory}/proxy-desk-${version.minor}</assembleDirectory>
-                    <!-- Extra JVM arguments that will be included in the bin scripts -->
-                    <extraJvmArguments>-Xms128m -Xmx4096m -Dbot.config.dir=../conf
-                    </extraJvmArguments>
-
-                    <!-- Generate bin scripts for windows and unix pr default -->
-                    <platforms>
-                        <platform>unix</platform>
-                    </platforms>
-                    <programs>
-                        <program>
-                            <mainClass>org.symphonyoss.proxydesk.bots.ProxyDeskBot</mainClass>
-                            <id>ProxyDeskBot</id>
-                            <!-- Only generate windows bat script for this application -->
-                            <platforms>
-                                <platform>unix</platform>
-                            </platforms>
-                        </program>
-
-                    </programs>
-                </configuration>
-            </plugin>
-        </plugins>
-
+      <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>appassembler-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+        </plugin>
+      </plugins>
     </build>
-
 </project>
