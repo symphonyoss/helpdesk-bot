@@ -25,7 +25,9 @@
 
 language: java
 script:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then export MVN_PROFILES="sonar,versioneye"; else export MVN_PROFILES="sonar"; fi
+# TODO - enable it when sonar profile is working
+#  - if [ "$TRAVIS_BRANCH" = "master" ]; then export MVN_PROFILES="sonar,versioneye"; else export MVN_PROFILES="sonar"; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then export MVN_PROFILES="versioneye"; else export MVN_PROFILES="none"; fi
   - mvn clean package -P$MVN_PROFILES
 jdk:
   - oraclejdk8
@@ -40,12 +42,12 @@ env:
    # Generated using command "travis encrypt VERSIONEYE_API_KEY=blah"
    - secure: "PQa140WousHjTIpK7gkUT0a1ewTkvZ4lj72ypqi5dZ34tib3JVpqpqGgu5IF7B1pgo43hhbOt33k8UdGTsGQdOc++b7MaVWGKQmCTNXozeo8XKJmDybWHewEebbkmQkImEvpQFBTB96VPhSwVin1h+cQr8dk2qVio4ljpPQhLGhtY2iukDjrwndkDNza8q/H4jRCcgqIExJqaM8bqh9hhMoxI7fFURRFasJx3/vuL4wWkC+rl5sWS1JK8msyjLr6CM7lwmMKeA5Di5iViO0k5NifOgAe6Kty0WGQZoTXY0QZUzHDfIxiUmARG5hOEj6/bbnJEo7ylOtkQMP2QRI2CV+4iHClkSmMXv7beQkTkhAu+9/5lILf+na81FFE5lbih3kqokdUM532jfY+Ltt6GofRWNw8A76qprDTjcpnOx22+YFStU0BqTHvCfokjJdDg4AdlzvqHx/YMhvlywVWqwzC8Pi6dqfrtnQdW+PBQN2ytdHAwCT9LwDONAQSg3G+5FJshir9Abz2JhH7QiD1YvU+br+2hJeMaR8M7pxzA1bvHEq08zKxyhKOrnJmznwSLXG/Avih99qNtUBCzgIpDUj3duX/Ml8xnYY42dPQUwtEFrpkxQSRxLunM91BTkMxwb0vX6G18TA93kwbKMvYLh6tIFtRC6niO1sz5j7L5S0="
 
-addons:
-  coverity_scan:
-    project:
-      name: "symphonyoss/roomdesk-bot"
-      description: "Build submitted via Travis CI"
-    notification_email: maoo@symphony.foundation
-    build_command_prepend: "mvn clean"
-    build_command:   "mvn -DskipTests=true compile"
-    branch_pattern: develop
+# addons:
+#   coverity_scan:
+#     project:
+#       name: "symphonyoss/roomdesk-bot"
+#       description: "Build submitted via Travis CI"
+#     notification_email: maoo@symphony.foundation
+#     build_command_prepend: "mvn clean"
+#     build_command:   "mvn -DskipTests=true compile"
+#     branch_pattern: develop

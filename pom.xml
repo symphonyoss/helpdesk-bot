@@ -32,8 +32,15 @@
 
     <groupId>org.symphonyoss.helpdeskbot</groupId>
     <artifactId>helpdesk-bots</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
     <name>Helpdesk Bot</name>
+    <description>A Symphony Helpdesk BOT supporting multiple call routing scenarios</description>
+    <url>https://github.com/symphonyoss/helpdesk-bot</url>
+    <parent>
+        <groupId>org.symphonyoss</groupId>
+        <artifactId>symphonyoss</artifactId>
+        <version>2</version>
+    </parent>
 
 
     <modules>
@@ -44,12 +51,45 @@
 
 
     <properties>
-
         <slfj4-version>1.7.5</slfj4-version>
         <jaxrs-version>2.0.1</jaxrs-version>
+        <jersey-version>2.12</jersey-version>
+        <jersey-media-version>2.22.1</jersey-media-version>
+        <jackson-version>2.4.2</jackson-version>
+        <swagger-annotations-version>1.5.0</swagger-annotations-version>
     </properties>
 
-    <repositories>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/symphonyoss/helpdesk-bot.git</connection>
+        <developerConnection>scm:git:git@github.com:symphonyoss/helpdesk-bot.git</developerConnection>
+        <url>https://github.com/symphonyoss/helpdesk-bot</url>
+        <tag>HEAD</tag>
+    </scm>
+    <developers>
+        <developer>
+            <id>ftarsillo</id>
+            <name>Frank Tarsillo</name>
+            <email />
+            <url>http://github.com/ftarsillo</url>
+            <organization>Symphony Software Foundation</organization>
+            <organizationUrl>http://symphony.foundation</organizationUrl>
+            <timezone />
+            <roles>
+                <role>Architect</role>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!-- Only needed if using SNAPSHOT version of symphony-java-client -->
+    <!-- <repositories>
         <repository>
             <id>oss-sonatype</id>
             <name>oss-sonatype</name>
@@ -58,16 +98,28 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-    </repositories>
+    </repositories> -->
 
     <dependencyManagement>
-
-
         <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.5</version>
+                <scope>test</scope>
+            </dependency>
+
             <dependency>
                 <groupId>org.symphonyoss.symphony</groupId>
                 <artifactId>symphony-client</artifactId>
-                <version>0.9.0-SNAPSHOT</version>
+                <version>0.9.0</version>
             </dependency>
 
             <dependency>
@@ -94,7 +146,186 @@
                 <version>1.1-rev-1</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.6.2</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.mozilla</groupId>
+                <artifactId>rhino</artifactId>
+                <version>1.7R4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>1.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-web</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-client</artifactId>
+                <version>${jersey-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-multipart</artifactId>
+                <version>${jersey-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-json-jackson</artifactId>
+                <version>${jersey-media-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-joda</artifactId>
+                <version>2.1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.brsanthu</groupId>
+                <artifactId>migbase64</artifactId>
+                <version>2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+                <version>1.48</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+
+      <pluginManagement>
+        <plugins>
+          <!-- Inherited by ssf-parent-pom -->
+          <!-- <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.1</version>
+              <configuration>
+                  <source>1.8</source>
+                  <target>1.8</target>
+                  <encoding>UTF-8</encoding>
+              </configuration>
+          </plugin> -->
+
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-antrun-plugin</artifactId>
+              <version>1.7</version>
+          </plugin>
+
+          <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>appassembler-maven-plugin</artifactId>
+              <version>1.10</version>
+              <executions>
+                <execution>
+                  <id>build-assembled-folder</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>assemble</goal>
+                  </goals>
+                </execution>
+              </executions>
+
+              <configuration>
+                  <repositoryName>lib</repositoryName>
+                  <repositoryLayout>flat</repositoryLayout>
+                  <useWildcardClassPath>true</useWildcardClassPath>
+                  <!-- Set the target configuration directory to be used in the bin scripts -->
+                  <configurationDirectory>conf</configurationDirectory>
+                  <logsDirectory>logs</logsDirectory>
+                  <!-- Copy the contents from "/src/main/config" to the target
+                       configuration directory in the assembled application -->
+                  <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                  <!-- Include the target configuration directory in the beginning of
+                       the classpath declaration in the bin scripts -->
+                  <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                  <!-- set alternative assemble directory -->
+                  <assembleDirectory>${project.build.directory}/${project.artifactId}-${project.version}</assembleDirectory>
+                  <!-- Extra JVM arguments that will be included in the bin scripts -->
+                  <extraJvmArguments>-Xms128m -Xmx4096m -Dbot.config.dir=../conf
+                  </extraJvmArguments>
+
+                  <!-- Generate bin scripts for windows and unix pr default -->
+                  <!-- <platforms>
+                      <platform>unix</platform>
+                  </platforms> -->
+                  <programs>
+                      <program>
+                          <mainClass>${appassembler.mainClass}</mainClass>
+                          <id>${appassembler.id}</id>
+                          <platforms>
+                              <platform>unix</platform>
+                          </platforms>
+                      </program>
+                  </programs>
+              </configuration>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.6</version>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/appassembler.xml</descriptor>
+              </descriptors>
+            </configuration>
+            <executions>
+              <execution>
+                <id>build-assembled-zip</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </pluginManagement>
+
+    </build>
+
 </project>
