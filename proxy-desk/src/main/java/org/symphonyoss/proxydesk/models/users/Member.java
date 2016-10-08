@@ -64,7 +64,7 @@ public class Member implements DeskUser {
     }
 
     /**
-     * @return the type of user (Member)
+     * @return the type of SymUser (Member)
      */
     public DeskUserType getUserType() {
         return DeskUserType.MEMBER;
@@ -115,7 +115,7 @@ public class Member implements DeskUser {
     }
 
     /**
-     * @return if the user is in a call
+     * @return if the SymUser is in a call
      */
     public boolean isOnCall() {
         return onCall;
@@ -126,7 +126,7 @@ public class Member implements DeskUser {
     }
 
     /**
-     * @return if the user wants his identity to be hidden
+     * @return if the SymUser wants his identity to be hidden
      */
     public boolean isHideIdentity() {
         return hideIdentity;
@@ -141,14 +141,14 @@ public class Member implements DeskUser {
     }
 
     /**
-     * @param busy if the user is busy
+     * @param busy if the SymUser is busy
      */
     public void setBusy(boolean busy) {
         this.busy = busy;
     }
 
     /**
-     * @return the call the user is currently in
+     * @return the call the SymUser is currently in
      */
     public Call getCall() {
         return call;

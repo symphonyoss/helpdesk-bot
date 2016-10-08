@@ -24,7 +24,7 @@
 
 package org.symphonyoss.webdesk.utils;
 
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.webdesk.models.users.DeskUser;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,7 +51,7 @@ public class DeskUserCache {
         }
     }
 
-    public static boolean hasUser(User user) {
+    public static boolean hasUser(SymUser user) {
         return ALL_USERS.containsKey(user.getId());
     }
 }

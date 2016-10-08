@@ -31,7 +31,7 @@ import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.proxydesk.models.calls.HelpCall;
 import org.symphonyoss.proxydesk.models.users.DeskUser;
 import org.symphonyoss.proxydesk.utils.DeskUserCache;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 /**
  * Created by nicktarsillo on 6/17/16.
@@ -47,7 +47,7 @@ public class HelpSummaryAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
 
         DeskUser deskUser = DeskUserCache.getDeskUser(message.getFromUserId().toString());

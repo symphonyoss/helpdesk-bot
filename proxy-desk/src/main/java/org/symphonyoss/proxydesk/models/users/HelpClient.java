@@ -52,7 +52,7 @@ public class HelpClient implements DeskUser {
     }
 
     /**
-     * @return the type of user (Help Client)
+     * @return the type of SymUser (Help Client)
      */
     public DeskUserType getUserType() {
         return DeskUserType.HELP_CLIENT;

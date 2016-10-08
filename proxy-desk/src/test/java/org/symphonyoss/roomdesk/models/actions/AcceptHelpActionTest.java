@@ -29,7 +29,7 @@ import org.mockito.Mockito;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.proxydesk.models.actions.AcceptHelpAction;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -43,7 +43,7 @@ public class AcceptHelpActionTest {
     public void testRespond() throws Exception {
         AcceptHelpAction action = mock(AcceptHelpAction.class);
         Mockito.doCallRealMethod().when(action).respond(new MlMessageParser(), null, null);
-        Mockito.doCallRealMethod().when(action).respond(new MlMessageParser(), new Message(), new AiCommand("", 0));
+        Mockito.doCallRealMethod().when(action).respond(new MlMessageParser(), new SymMessage(), new AiCommand("", 0));
 
 
         try {
@@ -53,7 +53,7 @@ public class AcceptHelpActionTest {
         }
 
         try {
-            action.respond(new MlMessageParser(), new Message(), new AiCommand("", 0));
+            action.respond(new MlMessageParser(), new SymMessage(), new AiCommand("", 0));
         } catch (Exception e) {
             fail("Action failed.");
         }

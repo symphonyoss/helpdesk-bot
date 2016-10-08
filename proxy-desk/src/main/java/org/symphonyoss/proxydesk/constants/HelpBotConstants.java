@@ -53,7 +53,7 @@ public class HelpBotConstants {
     public static final String PROMOTED_USER = "You have promoted ";
     public static final String TO_MEMBER = " to member!";
     public static final String CLIENT_QUEUE_LABEL = MLTypes.START_BOLD + "Client Queue: " + MLTypes.END_BOLD;
-    public static final String NOT_ON_CALL = "The specified user is not in a call.";
+    public static final String NOT_ON_CALL = "The specified SymUser is not in a call.";
     public static final String MEMBERS_ONLINE = MLTypes.START_BOLD + "Online members: " + MLTypes.END_BOLD;
     public static final String SHOW_IDENTITY = "Your identity will now be shown.";
     public static final String HIDE_IDENTITY = "Your identity will now be hidden.";

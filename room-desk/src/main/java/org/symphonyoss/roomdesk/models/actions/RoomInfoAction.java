@@ -32,8 +32,8 @@ import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.roomdesk.models.calls.MultiChatHelpCall;
 import org.symphonyoss.roomdesk.models.users.DeskUser;
 import org.symphonyoss.roomdesk.utils.DeskUserCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -53,7 +53,7 @@ public class RoomInfoAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
         userIdList.add(message.getFromUserId());
@@ -62,12 +62,12 @@ public class RoomInfoAction implements AiAction {
         if (deskUser != null) {
 
             aiResponseSequence.addResponse(new AiResponse(((MultiChatHelpCall) deskUser.getCall()).getRoomInfo(),
-                    MessageSubmission.FormatEnum.MESSAGEML, userIdList));
+                    SymMessage.Format.MESSAGEML, userIdList));
 
         } else {
 
             aiResponseSequence.addResponse(new AiResponse("ERROR: DESK USER NOT FOUND. PLEASE CONTACT AND ADMIN.",
-                    MessageSubmission.FormatEnum.TEXT, userIdList));
+                    SymMessage.Format.TEXT, userIdList));
 
         }
         return aiResponseSequence;

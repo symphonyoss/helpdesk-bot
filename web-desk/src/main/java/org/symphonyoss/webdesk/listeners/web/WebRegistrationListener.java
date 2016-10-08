@@ -4,8 +4,9 @@ import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.pod.model.User;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webdesk.constants.WebDeskConstants;
 import org.symphonyoss.webdesk.listeners.chat.HelpClientListener;
@@ -44,7 +45,7 @@ public class WebRegistrationListener implements SessionListener {
 
         try {
 
-            User user = symClient.getUsersClient().getUserFromEmail(session.getSessionData().getEmail());
+            SymUser user = symClient.getUsersClient().getUserFromEmail(session.getSessionData().getEmail());
 
             if (user != null
                     && session.getSessionType() == Session.SessionType.WEB
@@ -63,7 +64,7 @@ public class WebRegistrationListener implements SessionListener {
                                 + session.getSessionData().getEmail() + MLTypes.END_BOLD
                                 + WebDeskConstants.OPENED_SESSION + WebDeskConstants.TOPIC
                                 + session.getSessionData().getTopic() + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, chat, symClient);
+                        SymMessage.Format.MESSAGEML, chat, symClient);
 
                 ((WebSession) session).registerListener(webSessionListener);
 
@@ -88,7 +89,7 @@ public class WebRegistrationListener implements SessionListener {
     @Override
     public void onSessionTerminate(Session session) {
         try {
-            User user = symClient.getUsersClient().getUserFromEmail(session.getSessionData().getEmail());
+            SymUser user = symClient.getUsersClient().getUserFromEmail(session.getSessionData().getEmail());
 
             if (ClientCache.hasClient(user.getId())
                     && HoldCache.hasClient(ClientCache.retrieveClient(user)))

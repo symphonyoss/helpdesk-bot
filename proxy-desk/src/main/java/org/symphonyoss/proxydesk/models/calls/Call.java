@@ -113,7 +113,7 @@ public class Call {
     }
 
     /**
-     * @param deskUser the desk user trying to enter the chat
+     * @param deskUser the desk SymUser trying to enter the chat
      */
     public void enter(DeskUser deskUser) {
 
@@ -166,7 +166,7 @@ public class Call {
     }
 
     /**
-     * @param deskUser the desk user trying to exit the chat
+     * @param deskUser the desk SymUser trying to exit the chat
      */
     public void exit(DeskUser deskUser) {
 

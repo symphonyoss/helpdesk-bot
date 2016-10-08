@@ -29,8 +29,8 @@ import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 import java.util.LinkedList;
@@ -55,9 +55,9 @@ public class AiResponder {
      * @param userID    the id of the user
      * @param symClient the org.org.symphonyoss.ai's sym client
      */
-    public void sendMessage(String message, MessageSubmission.FormatEnum type, Long userID, SymphonyClient symClient) {
+    public void sendMessage(String message, SymMessage.Format type, Long userID, SymphonyClient symClient) {
 
-        MessageSubmission userMessage = new MessageSubmission();
+        SymMessage userMessage = new SymMessage();
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 
@@ -99,12 +99,12 @@ public class AiResponder {
      * @param suggestion the suggested command
      * @param message    the message received from the user
      */
-    public void sendSuggestionMessage(AiLastCommand suggestion, Message message) {
+    public void sendSuggestionMessage(AiLastCommand suggestion, SymMessage message) {
 
         sendMessage(MLTypes.START_ML + AiConstants.SUGGEST
                         + MLTypes.START_BOLD + suggestion.getMlMessageParser().getText()
                         + MLTypes.END_BOLD + AiConstants.USE_SUGGESTION + MLTypes.END_ML,
-                MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), symClient);
+                SymMessage.Format.MESSAGEML, message.getFromUserId(), symClient);
 
     }
 
@@ -115,10 +115,10 @@ public class AiResponder {
      * @param mlMessageParser a parser that contains the input in ML
      * @param activeCommands  the active set of commands within the org.org.symphonyoss.ai command listener
      */
-    public void sendUsage(Message message, MlMessageParser mlMessageParser, LinkedList<AiCommand> activeCommands) {
+    public void sendUsage(SymMessage message, MlMessageParser mlMessageParser, LinkedList<AiCommand> activeCommands) {
 
-        MessageSubmission aMessage = new MessageSubmission();
-        aMessage.setFormat(MessageSubmission.FormatEnum.MESSAGEML);
+        SymMessage aMessage = new SymMessage();
+        aMessage.setFormat(SymMessage.Format.MESSAGEML);
 
         String usage = MLTypes.START_ML + mlMessageParser.getText() + AiConstants.NOT_INTERPRETABLE
                 + MLTypes.BREAK + MLTypes.START_BOLD
@@ -134,7 +134,7 @@ public class AiResponder {
 
         usage += MLTypes.END_ML;
 
-        sendMessage(usage, MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), symClient);
+        sendMessage(usage, SymMessage.Format.MESSAGEML, message.getFromUserId(), symClient);
 
     }
 
@@ -144,10 +144,10 @@ public class AiResponder {
      *
      * @param message the message reveived back from the user
      */
-    public void sendNoPermission(Message message) {
+    public void sendNoPermission(SymMessage message) {
 
         Messenger.sendMessage(AiConstants.NO_PERMISSION,
-                MessageSubmission.FormatEnum.TEXT, message, symClient);
+                SymMessage.Format.TEXT, message, symClient);
 
     }
 

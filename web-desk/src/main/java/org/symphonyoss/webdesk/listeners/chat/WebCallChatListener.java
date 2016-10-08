@@ -6,7 +6,7 @@ import org.symphonyoss.ai.listeners.AiCommandListener;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.webdesk.models.users.Member;
 import org.symphonyoss.webdesk.models.users.WebClient;
 import org.symphonyoss.webservice.models.web.WebMessage;
@@ -32,9 +32,9 @@ public class WebCallChatListener implements ChatListener {
      *
      * @param message
      */
-    public void onChatMessage(Message message) {
+    public void onChatMessage(SymMessage message) {
         if(logger != null)
-            logger.info("New Message {}", message.getMessage());
+            logger.info("New SymMessage {}", message.getMessage());
 
         if (message == null
                 || message.getMessage() == null

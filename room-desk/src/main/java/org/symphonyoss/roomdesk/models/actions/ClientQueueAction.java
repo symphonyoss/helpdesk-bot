@@ -32,8 +32,8 @@ import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.roomdesk.constants.HelpBotConstants;
 import org.symphonyoss.roomdesk.utils.HoldCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -50,13 +50,13 @@ public class ClientQueueAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
 
         userIdList.add(message.getFromUserId());
         aiResponseSequence.addResponse(new AiResponse(MLTypes.START_ML.toString() + HelpBotConstants.CLIENT_QUEUE_LABEL
-                + HoldCache.listQueue() + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML,
+                + HoldCache.listQueue() + MLTypes.END_ML, SymMessage.Format.MESSAGEML,
                 userIdList));
 
         return aiResponseSequence;

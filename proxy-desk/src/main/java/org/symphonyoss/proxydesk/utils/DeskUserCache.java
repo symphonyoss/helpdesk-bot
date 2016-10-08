@@ -35,12 +35,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DeskUserCache {
     public static final ConcurrentHashMap<String, DeskUser> ALL_USERS = new ConcurrentHashMap<String, DeskUser>();
 
-    public static void addUser(DeskUser user) {
-        ALL_USERS.put(user.getUserID().toString(), user);
+    public static void addUser(DeskUser SymUser) {
+        ALL_USERS.put(SymUser.getUserID().toString(), SymUser);
     }
 
-    public static void removeUser(DeskUser user) {
-        ALL_USERS.remove(user.getUserID().toString());
+    public static void removeUser(DeskUser SymUser) {
+        ALL_USERS.remove(SymUser.getUserID().toString());
     }
 
     public static DeskUser getDeskUser(String userID) {

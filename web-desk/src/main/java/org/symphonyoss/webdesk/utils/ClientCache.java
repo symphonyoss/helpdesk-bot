@@ -24,8 +24,8 @@
 
 package org.symphonyoss.webdesk.utils;
 
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.webdesk.models.users.HelpClient;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ClientCache {
     public static final ConcurrentHashMap<String, HelpClient> ALL_CLIENTS = new ConcurrentHashMap<String, HelpClient>();
 
-    public static HelpClient addClient(User user) {
+    public static HelpClient addClient(SymUser user) {
         if (user == null)
             return null;
 
@@ -60,11 +60,11 @@ public class ClientCache {
         return client;
     }
 
-    public static HelpClient retrieveClient(Message message) {
+    public static HelpClient retrieveClient(SymMessage message) {
         return ALL_CLIENTS.get(message.getFromUserId().toString());
     }
 
-    public static HelpClient removeClient(User user) {
+    public static HelpClient removeClient(SymUser user) {
         HelpClient client = retrieveClient(user);
         ALL_CLIENTS.remove(user.getId().toString());
         DeskUserCache.removeUser(client);
@@ -72,7 +72,7 @@ public class ClientCache {
         return client;
     }
 
-    public static HelpClient retrieveClient(User user) {
+    public static HelpClient retrieveClient(SymUser user) {
         return ALL_CLIENTS.get(user.getId().toString());
     }
 

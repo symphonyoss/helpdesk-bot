@@ -29,8 +29,7 @@ import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 import java.util.LinkedList;
@@ -38,7 +37,7 @@ import java.util.Set;
 
 /**
  * Created by nicktarsillo on 6/20/16.
- * A part of the ai with the main purpose of responding back to a user
+ * A part of the ai with the main purpose of responding back to a SymUser
  */
 public class AiResponder {
     private SymphonyClient symClient;
@@ -48,16 +47,16 @@ public class AiResponder {
     }
 
     /**
-     * Sends a message to a user
+     * Sends a message to a SymUser
      *
-     * @param message   the message received from the user
+     * @param message   the message received from the SymUser
      * @param type      the type of message to send
-     * @param userID    the id of the user
+     * @param userID    the id of the SymUser
      * @param symClient the org.org.symphonyoss.ai's sym client
      */
-    public void sendMessage(String message, MessageSubmission.FormatEnum type, Long userID, SymphonyClient symClient) {
+    public void sendMessage(String message, SymMessage.Format type, Long userID, SymphonyClient symClient) {
 
-        MessageSubmission userMessage = new MessageSubmission();
+        SymMessage userMessage = new SymMessage();
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 
@@ -75,7 +74,7 @@ public class AiResponder {
     }
 
     /**
-     * Respond to the user, based on the values and ids given in the set of responses
+     * Respond to the SymUser, based on the values and ids given in the set of responses
      *
      * @param responseLists the set of responses
      */
@@ -94,31 +93,31 @@ public class AiResponder {
     }
 
     /**
-     * Send a message back to the user, suggesting a command
+     * Send a message back to the SymUser, suggesting a command
      *
      * @param suggestion the suggested command
-     * @param message    the message received from the user
+     * @param message    the message received from the SymUser
      */
-    public void sendSuggestionMessage(AiLastCommand suggestion, Message message) {
+    public void sendSuggestionMessage(AiLastCommand suggestion, SymMessage message) {
 
         sendMessage(MLTypes.START_ML + AiConstants.SUGGEST
                         + MLTypes.START_BOLD + suggestion.getMlMessageParser().getText()
                         + MLTypes.END_BOLD + AiConstants.USE_SUGGESTION + MLTypes.END_ML,
-                MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), symClient);
+                SymMessage.Format.MESSAGEML, message.getFromUserId(), symClient);
 
     }
 
     /**
-     * Sends the command usage menu back to the user
+     * Sends the command usage menu back to the SymUser
      *
-     * @param message         the message received from the user
+     * @param message         the message received from the SymUser
      * @param mlMessageParser a parser that contains the input in ML
      * @param activeCommands  the active set of commands within the org.org.symphonyoss.ai command listener
      */
-    public void sendUsage(Message message, MlMessageParser mlMessageParser, LinkedList<AiCommand> activeCommands) {
+    public void sendUsage(SymMessage message, MlMessageParser mlMessageParser, LinkedList<AiCommand> activeCommands) {
 
-        MessageSubmission aMessage = new MessageSubmission();
-        aMessage.setFormat(MessageSubmission.FormatEnum.MESSAGEML);
+        SymMessage aMessage = new SymMessage();
+        aMessage.setFormat(SymMessage.Format.MESSAGEML);
 
         String usage = MLTypes.START_ML + mlMessageParser.getText() + AiConstants.NOT_INTERPRETABLE
                 + MLTypes.BREAK + MLTypes.START_BOLD
@@ -134,20 +133,20 @@ public class AiResponder {
 
         usage += MLTypes.END_ML;
 
-        sendMessage(usage, MessageSubmission.FormatEnum.MESSAGEML, message.getFromUserId(), symClient);
+        sendMessage(usage, SymMessage.Format.MESSAGEML, message.getFromUserId(), symClient);
 
     }
 
     /**
-     * Send a message back to the user, informing them that they do not have the
+     * Send a message back to the SymUser, informing them that they do not have the
      * required permission
      *
-     * @param message the message reveived back from the user
+     * @param message the message reveived back from the SymUser
      */
-    public void sendNoPermission(Message message) {
+    public void sendNoPermission(SymMessage message) {
 
         Messenger.sendMessage(AiConstants.NO_PERMISSION,
-                MessageSubmission.FormatEnum.TEXT, message, symClient);
+                SymMessage.Format.TEXT, message, symClient);
 
     }
 

@@ -6,8 +6,9 @@ import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.pod.model.User;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webdesk.models.users.HelpClient;
 import org.symphonyoss.webdesk.utils.ClientCache;
@@ -40,11 +41,11 @@ public class WebHelpSessionListener implements WebSessionListener {
             Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                             + webMessage.getEmail() + ": " + MLTypes.END_BOLD
                             + webMessage.getMessage() + MLTypes.END_ML,
-                    MessageSubmission.FormatEnum.MESSAGEML,
+                    SymMessage.Format.MESSAGEML,
                     chat, symClient);
             ;
 
-            User user = symClient.getUsersClient().getUserFromEmail(webMessage.getEmail());
+            SymUser user = symClient.getUsersClient().getUserFromEmail(webMessage.getEmail());
             HelpClient client = ClientCache.retrieveClient(user);
             client.getHelpRequests().add(webMessage.getMessage());
             if (!HoldCache.hasClient(client))

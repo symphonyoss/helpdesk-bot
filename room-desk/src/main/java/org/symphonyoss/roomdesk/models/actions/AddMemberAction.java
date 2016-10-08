@@ -40,9 +40,9 @@ import org.symphonyoss.roomdesk.models.HelpBotSession;
 import org.symphonyoss.roomdesk.models.users.Member;
 import org.symphonyoss.roomdesk.utils.ClientCache;
 import org.symphonyoss.roomdesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -74,7 +74,7 @@ public class AddMemberAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence responseList = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
 
@@ -83,7 +83,7 @@ public class AddMemberAction implements AiAction {
         email = email.substring(email.indexOf(command.getPrefixRequirement(0)) + 1);
 
         try {
-            User user = symClient.getUsersClient().getUserFromEmail(email);
+            SymUser user = symClient.getUsersClient().getUserFromEmail(email);
 
             if (user != null
                     && user.getId() != null
@@ -98,12 +98,12 @@ public class AddMemberAction implements AiAction {
 
                 userIdList.add(message.getFromUserId());
                 responseList.addResponse(new AiResponse(HelpBotConstants.PROMOTED_USER + email
-                        + HelpBotConstants.TO_MEMBER, MessageSubmission.FormatEnum.TEXT, userIdList));
+                        + HelpBotConstants.TO_MEMBER, SymMessage.Format.TEXT, userIdList));
 
                 userIdList = new UserIdList();
                 userIdList.add(user.getId());
                 responseList.addResponse(new AiResponse(HelpBotConstants.PROMOTED,
-                        MessageSubmission.FormatEnum.TEXT, userIdList));
+                        SymMessage.Format.TEXT, userIdList));
 
                 Chat chat = symClient.getChatService().getChatByStream(
                         symClient.getStreamsClient().getStream(userIdList).getId());
@@ -115,7 +115,7 @@ public class AddMemberAction implements AiAction {
             } else {
 
                 userIdList.add(message.getFromUserId());
-                responseList.addResponse(new AiResponse(HelpBotConstants.PROMOTION_FAILED, MessageSubmission.FormatEnum.TEXT,
+                responseList.addResponse(new AiResponse(HelpBotConstants.PROMOTION_FAILED, SymMessage.Format.TEXT,
                         userIdList));
 
             }

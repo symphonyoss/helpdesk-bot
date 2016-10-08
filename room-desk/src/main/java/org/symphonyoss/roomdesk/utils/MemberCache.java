@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.symphonyoss.roomdesk.config.RoomBotConfig;
 import org.symphonyoss.roomdesk.models.users.Member;
 import org.symphonyoss.roomdesk.models.users.SerializableMember;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
 
 import java.io.*;
 import java.util.HashMap;
@@ -169,11 +169,11 @@ public class MemberCache {
         }
     }
 
-    public static Member getMember(User user) {
+    public static Member getMember(SymUser user) {
         return MEMBERS.get(user.getId().toString());
     }
 
-    public static Member getMember(Message message) {
+    public static Member getMember(SymMessage message) {
         return MEMBERS.get(message.getFromUserId().toString());
     }
 

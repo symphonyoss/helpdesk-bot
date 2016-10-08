@@ -36,8 +36,8 @@ import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.proxydesk.models.calls.Call;
 import org.symphonyoss.proxydesk.models.users.DeskUser;
 import org.symphonyoss.proxydesk.utils.DeskUserCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 import java.util.HashMap;
 
@@ -68,7 +68,7 @@ public class CallChatListener implements ChatListener {
      *
      * @param message the received message
      */
-    public void onChatMessage(Message message) {
+    public void onChatMessage(SymMessage message) {
         if (message == null
                 || message.getStreamId() == null
                 ||  AiCommandListener.isCommand(message, symClient)
@@ -109,7 +109,7 @@ public class CallChatListener implements ChatListener {
         } else {
 
             if (logger != null)
-                logger.warn("Ignored message. Desk user {} could not be found.",
+                logger.warn("Ignored message. Desk SymUser {} could not be found.",
                         message.getFromUserId());
 
         }
@@ -176,7 +176,7 @@ public class CallChatListener implements ChatListener {
      * @param message the received message
      * @return if the message is a push message
      */
-    private boolean isPushMessage(Message message) {
+    private boolean isPushMessage(SymMessage message) {
         return (entered.get(message.getStreamId()) == null
                 || !entered.get(message.getStreamId()));
     }
@@ -185,7 +185,7 @@ public class CallChatListener implements ChatListener {
      * Send the message sent from a member to both parties.
      * Retain the identity preference of the member.
      *
-     * @param deskUser the desk user
+     * @param deskUser the desk SymUser
      * @param text     the message sent from the member
      */
     private void relayMessage(DeskUser deskUser, String text) {
@@ -194,7 +194,7 @@ public class CallChatListener implements ChatListener {
 
             if (d != deskUser) {
                 Messenger.sendMessage(MLTypes.START_ML.toString() + constructRelayMessage(deskUser, text) + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, d.getUserID(), symClient);
+                        SymMessage.Format.MESSAGEML, d.getUserID(), symClient);
             }
 
         }

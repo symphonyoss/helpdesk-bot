@@ -35,7 +35,8 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+//import org.symphonyoss.symphony.clients.model.SymMessage;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -51,7 +52,7 @@ public class AiCommandListener implements ChatListener {
     private static final Logger logger = LoggerFactory.getLogger(AiCommandListener.class);
 
     private static LinkedHashMap<String, HashSet<AiCommandListener>> listeners = new LinkedHashMap<String, HashSet<AiCommandListener>>();
-    private static Message lastAnsweredMessage;
+    private static SymMessage lastAnsweredMessage;
 
     protected SymphonyClient symClient;
 
@@ -71,7 +72,7 @@ public class AiCommandListener implements ChatListener {
      * @param message the message
      * @return if the message is a command
      */
-    public static boolean isCommand(Message message, SymphonyClient symClient) {
+    public static boolean isCommand(SymMessage message, SymphonyClient symClient) {
 
         logger.debug("Received message for response.");
 
@@ -103,7 +104,7 @@ public class AiCommandListener implements ChatListener {
      *                </p>
      */
 
-    public void onChatMessage(Message message) {
+    public void onChatMessage(SymMessage message) {
 
         if(wasAnswered(message))
             return;
@@ -146,7 +147,7 @@ public class AiCommandListener implements ChatListener {
 
     }
 
-    private boolean wasAnswered(Message message){
+    private boolean wasAnswered(SymMessage message){
 
         if(lastAnsweredMessage != null && lastAnsweredMessage.getId().equals(message.getId()))
             return true;
@@ -155,7 +156,7 @@ public class AiCommandListener implements ChatListener {
 
     }
 
-    private boolean isBestResponse(MlMessageParser mlMessageParser, String[] chunks, Message message) {
+    private boolean isBestResponse(MlMessageParser mlMessageParser, String[] chunks, SymMessage message) {
         if(hasResponse(mlMessageParser, chunks, message))
             return true;
 
@@ -178,7 +179,7 @@ public class AiCommandListener implements ChatListener {
      * @param chunks          the received input in text chunks
      * @param message         the received message
      */
-    private void processMessage(MlMessageParser mlMessageParser, String[] chunks, Message message) {
+    private void processMessage(MlMessageParser mlMessageParser, String[] chunks, SymMessage message) {
 
         if (activeCommands == null || activeCommands.size() == 0) {
 
@@ -233,7 +234,7 @@ public class AiCommandListener implements ChatListener {
      * @param message  the message
      * @return  if ai command listener has response
      */
-    private boolean hasResponse(MlMessageParser mlMessageParser, String[] chunks, Message message){
+    private boolean hasResponse(MlMessageParser mlMessageParser, String[] chunks, SymMessage message){
 
         for (AiCommand command : activeCommands) {
 
@@ -272,7 +273,7 @@ public class AiCommandListener implements ChatListener {
      * @param message         the received message
      * @return if the input matches the run last command
      */
-    private boolean equalsRunLastCommand(MlMessageParser mlMessageParser, Message message) {
+    private boolean equalsRunLastCommand(MlMessageParser mlMessageParser, SymMessage message) {
 
         return (mlMessageParser.getText().trim().equalsIgnoreCase(AiConstants.RUN_LAST_COMMAND))
                 && lastResponse.get(message.getFromUserId().toString()) != null;

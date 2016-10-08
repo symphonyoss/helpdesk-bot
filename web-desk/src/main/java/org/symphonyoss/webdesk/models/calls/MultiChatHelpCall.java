@@ -6,9 +6,10 @@ import org.symphonyoss.ai.constants.MLTypes;
 import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.Stream;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 import org.symphonyoss.webdesk.constants.WebDeskConstants;
 import org.symphonyoss.webdesk.listeners.chat.HelpClientListener;
@@ -84,7 +85,7 @@ public class MultiChatHelpCall extends MultiChatCall {
         member.setCall(this);
         member.setOnCall(true);
 
-        Set<User> users = new HashSet<User>();
+        Set<SymUser> users = new HashSet<SymUser>();
 
         try {
 
@@ -105,13 +106,13 @@ public class MultiChatHelpCall extends MultiChatCall {
 
             helpChat.registerListener(transcriptListener);
 
-            Messenger.sendMessage(WebDeskConstants.CONNECTED_TO_CALL, MessageSubmission.FormatEnum.TEXT,
+            Messenger.sendMessage(WebDeskConstants.CONNECTED_TO_CALL, SymMessage.Format.TEXT,
                     helpChat, symClient);
 
-            Messenger.sendMessage(getRoomInfo(), MessageSubmission.FormatEnum.MESSAGEML,
+            Messenger.sendMessage(getRoomInfo(), SymMessage.Format.MESSAGEML,
                     helpChat, symClient);
 
-            Messenger.sendMessage(getHelpSummary(), MessageSubmission.FormatEnum.MESSAGEML,
+            Messenger.sendMessage(getHelpSummary(), SymMessage.Format.MESSAGEML,
                     helpChat, symClient);
 
         } catch (Exception e) {
@@ -149,7 +150,7 @@ public class MultiChatHelpCall extends MultiChatCall {
 
         helpChat.removeListener(transcriptListener);
 
-        Messenger.sendMessage(WebDeskConstants.EXIT_CALL, MessageSubmission.FormatEnum.TEXT,
+        Messenger.sendMessage(WebDeskConstants.EXIT_CALL, SymMessage.Format.TEXT,
                 helpChat, symClient);
 
         client.setCall(null);

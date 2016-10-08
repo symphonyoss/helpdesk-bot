@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.proxydesk.listeners.chat.CallChatListener;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.Stream;
 
 import static org.junit.Assert.fail;
@@ -42,9 +42,9 @@ public class CallChatListenerTest {
 
     @Test
     public void testOnChatMessage() throws Exception {
-        Mockito.doCallRealMethod().when(listener).onChatMessage(new Message());
+        Mockito.doCallRealMethod().when(listener).onChatMessage(new SymMessage());
         Mockito.doCallRealMethod().when(listener).onChatMessage(null);
-        Message message = new Message();
+        SymMessage message = new SymMessage();
 
         try {
             listener.onChatMessage(null);

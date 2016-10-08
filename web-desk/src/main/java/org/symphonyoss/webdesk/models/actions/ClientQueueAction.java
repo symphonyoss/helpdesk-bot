@@ -30,8 +30,8 @@ import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponse;
 import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 import org.symphonyoss.webdesk.constants.WebDeskConstants;
 import org.symphonyoss.webdesk.utils.HoldCache;
@@ -50,13 +50,13 @@ public class ClientQueueAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
 
         userIdList.add(message.getFromUserId());
         aiResponseSequence.addResponse(new AiResponse(MLTypes.START_ML.toString() + WebDeskConstants.CLIENT_QUEUE_LABEL
-                + HoldCache.listQueue() + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML,
+                + HoldCache.listQueue() + MLTypes.END_ML, SymMessage.Format.MESSAGEML,
                 userIdList));
 
         return aiResponseSequence;

@@ -31,8 +31,8 @@ import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.proxydesk.models.users.Member;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+//import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -50,7 +50,7 @@ public class AddTagsAction implements AiAction {
      * @param command         the command that called this action
      * @return success message
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
         userIdList.add(message.getFromUserId());
@@ -67,7 +67,7 @@ public class AddTagsAction implements AiAction {
         MemberCache.writeMember(member);
 
         aiResponseSequence.addResponse(new AiResponse("Tags have been successfully added.",
-                MessageSubmission.FormatEnum.TEXT, userIdList));
+                SymMessage.Format.TEXT, userIdList));
 
         return aiResponseSequence;
     }

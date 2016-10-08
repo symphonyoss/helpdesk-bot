@@ -3,7 +3,7 @@ package org.symphonyoss.webdesk.listeners.web;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.webdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.webservice.models.web.WebMessage;
 

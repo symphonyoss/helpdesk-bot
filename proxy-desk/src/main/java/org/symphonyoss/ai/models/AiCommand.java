@@ -27,7 +27,7 @@ package org.symphonyoss.ai.models;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -55,12 +55,12 @@ public class AiCommand {
     }
 
     /**
-     * Checks to see if the user's input fulfills the ai command requirements
+     * Checks to see if the SymUser's input fulfills the ai command requirements
      * <p>
      * <p>
      *
-     * @param chunks the user's input in text chunks
-     * @return if the user input fulfills the command requirements
+     * @param chunks the SymUser's input in text chunks
+     * @return if the SymUser input fulfills the command requirements
      * </p>
      */
     public boolean isCommand(String[] chunks) {
@@ -106,10 +106,10 @@ public class AiCommand {
     }
 
     /**
-     * Determines if a user is allowed to use this command
+     * Determines if a SymUser is allowed to use this command
      *
-     * @param userID the user's id
-     * @return if the user is permited to use this command
+     * @param userID the SymUser's id
+     * @return if the SymUser is permited to use this command
      */
     public boolean userIsPermitted(Long userID) {
         for (AiPermission permission : permissions) {
@@ -131,7 +131,7 @@ public class AiCommand {
      * @param message         the received message
      * @return a set of responses, given by completing all the commands actions
      */
-    public Set<AiResponseSequence> getResponses(MlMessageParser mlMessageParser, Message message) {
+    public Set<AiResponseSequence> getResponses(MlMessageParser mlMessageParser, SymMessage message) {
         Set<AiResponseSequence> responses = new LinkedHashSet<AiResponseSequence>();
 
         for (AiAction action : getActions()) {
