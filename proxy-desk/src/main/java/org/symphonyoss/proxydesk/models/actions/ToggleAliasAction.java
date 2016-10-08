@@ -34,8 +34,8 @@ import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.proxydesk.constants.HelpBotConstants;
 import org.symphonyoss.proxydesk.models.users.Member;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -47,7 +47,7 @@ public class ToggleAliasAction implements AiAction {
 
     /**
      * Find member by message from id.
-     * Set identity to the opposite of the user's current identity preference.
+     * Set identity to the opposite of the SymUser's current identity preference.
      * Write member.
      *
      * @param mlMessageParser the parser contains the input in ML
@@ -55,7 +55,7 @@ public class ToggleAliasAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
 
@@ -67,13 +67,13 @@ public class ToggleAliasAction implements AiAction {
 
                 userIdList.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.HIDE_IDENTITY,
-                        MessageSubmission.FormatEnum.TEXT, userIdList));
+                        SymMessage.Format.TEXT, userIdList));
 
             } else {
 
                 userIdList.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.SHOW_IDENTITY,
-                        MessageSubmission.FormatEnum.TEXT, userIdList));
+                        SymMessage.Format.TEXT, userIdList));
 
             }
 

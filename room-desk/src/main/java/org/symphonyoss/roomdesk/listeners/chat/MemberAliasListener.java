@@ -11,9 +11,9 @@ import org.symphonyoss.roomdesk.config.RoomBotConfig;
 import org.symphonyoss.roomdesk.models.users.DeskUser;
 import org.symphonyoss.roomdesk.models.users.Member;
 import org.symphonyoss.roomdesk.utils.DeskUserCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
+import org.symphonyoss.symphony.clients.model.SymUser;
 
 /**
  * Created by nicktarsillo on 7/7/16.
@@ -31,7 +31,7 @@ public class MemberAliasListener implements ChatListener {
      *
      * @param message
      */
-    public void onChatMessage(Message message) {
+    public void onChatMessage(SymMessage message) {
         if (message == null
                 || message.getStreamId() == null
                 || AiCommandListener.isCommand(message, symClient))
@@ -42,7 +42,7 @@ public class MemberAliasListener implements ChatListener {
 
 
 
-            User user = symClient.getUsersClient().getUserFromId(message.getFromUserId());
+            SymUser user = symClient.getUsersClient().getUserFromId(message.getFromUserId());
             if (DeskUserCache.getDeskUser(message.getFromUserId().toString()).getUserType() != DeskUser.DeskUserType.MEMBER)
                 return;
 
@@ -56,7 +56,7 @@ public class MemberAliasListener implements ChatListener {
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + member.getAlias() + ": " + MLTypes.END_BOLD
                                     + message.getMessage().substring(MLTypes.START_ML.toString().length()),
-                            MessageSubmission.FormatEnum.MESSAGEML,
+                            SymMessage.Format.MESSAGEML,
                             member.getCall().getCallChat(),
                             symClient);
 
@@ -68,7 +68,7 @@ public class MemberAliasListener implements ChatListener {
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + member.getAlias() + ": " + MLTypes.END_BOLD
                                     + message.getMessage().substring(MLTypes.START_ML.toString().length()),
-                            MessageSubmission.FormatEnum.MESSAGEML, chat, symClient);
+                            SymMessage.Format.MESSAGEML, chat, symClient);
 
                 }
 

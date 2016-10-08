@@ -32,8 +32,8 @@ import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.ai.utils.Messenger;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webdesk.constants.WebDeskConstants;
@@ -65,7 +65,7 @@ public class AcceptHelpAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList sendTo = new UserIdList();
 
@@ -105,13 +105,13 @@ public class AcceptHelpAction implements AiAction {
                                 + useName + MLTypes.END_BOLD
                                 + WebDeskConstants.CALL_NOTIFY + MLTypes.START_BOLD
                                 + helpClient.getEmail() + MLTypes.END_BOLD + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, chat, helpBotSession.getSymphonyClient());
+                        SymMessage.Format.MESSAGEML, chat, helpBotSession.getSymphonyClient());
 
             } else {
 
                 sendTo.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(email + WebDeskConstants.NOT_FOUND,
-                        MessageSubmission.FormatEnum.TEXT, sendTo));
+                        SymMessage.Format.TEXT, sendTo));
 
             }
 
@@ -143,12 +143,12 @@ public class AcceptHelpAction implements AiAction {
                                 + useName + MLTypes.END_BOLD
                                 + WebDeskConstants.CALL_NOTIFY + MLTypes.START_BOLD
                                 + client.getEmail() + MLTypes.END_BOLD + MLTypes.END_ML,
-                        MessageSubmission.FormatEnum.MESSAGEML, chat, helpBotSession.getSymphonyClient());
+                        SymMessage.Format.MESSAGEML, chat, helpBotSession.getSymphonyClient());
             } else {
 
                 sendTo.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(WebDeskConstants.NO_USERS,
-                        MessageSubmission.FormatEnum.TEXT, sendTo));
+                        SymMessage.Format.TEXT, sendTo));
 
             }
 

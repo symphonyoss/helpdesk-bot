@@ -44,9 +44,11 @@ import org.symphonyoss.proxydesk.utils.CallCache;
 import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.HoldCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
 import org.symphonyoss.symphony.clients.AuthorizationClient;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +66,7 @@ import java.util.Set;
  * -Dkeystore.password=(Pass)
  * -Dtruststore.file=/dev/certs/server.truststore
  * -Dtruststore.password=(Pass)
- * -Dbot.user=hashtag.bot
+ * -Dbot.SymUser=hashtag.bot
  * -Dbot.domain=@markit.com
  */
 public class ProxyDeskBot implements ChatServiceListener {
@@ -76,7 +78,7 @@ public class ProxyDeskBot implements ChatServiceListener {
 
     public ProxyDeskBot() {
 
-        logger.info("Init for help desk user {}", System.getProperty(ProxyBotConfig.BOT_USER));
+        logger.info("Init for help desk SymUser {}", System.getProperty(ProxyBotConfig.BOT_USER));
         initConnection();
         setupBot();
     }
@@ -136,15 +138,15 @@ public class ProxyDeskBot implements ChatServiceListener {
      */
     private void addAdmin() {
 
-        User user = null;
+        SymUser SymUser = null;
 
         try {
 
-            user = symClient.getUsersClient().getUserFromEmail(System.getProperty(ProxyBotConfig.ADMIN_USER));
+            SymUser = symClient.getUsersClient().getUserFromEmail(System.getProperty(ProxyBotConfig.ADMIN_USER));
 
-            if (MemberCache.getMember(user) == null) {
+            if (MemberCache.getMember(SymUser) == null) {
 
-                Member member = new Member(user.getEmailAddress(), user.getId());
+                Member member = new Member(SymUser.getEmailAddress(), SymUser.getId());
 
                 MemberCache.addMember(member);
                 MemberCache.writeMember(member);
@@ -183,7 +185,8 @@ public class ProxyDeskBot implements ChatServiceListener {
 
             symClient.init(
                     symAuth,
-                    System.getProperty(ProxyBotConfig.BOT_USER) + "@markit.com",
+                    //System.getProperty(ProxyBotConfig.BOT_USER + "@symphony.foundation"),
+                    "helpdesk-proxy@symphony.foundation",
                     System.getProperty(ProxyBotConfig.SYMPHONY_AGENT),
                     System.getProperty(ProxyBotConfig.SYMPHONY_POD)
             );
@@ -201,7 +204,7 @@ public class ProxyDeskBot implements ChatServiceListener {
 
     /**
      * A method that is called by the listener when a new chat is created.
-     * On a chat, determine if the remote user is a member or client.
+     * On a chat, determine if the remote SymUser is a member or client.
      * Register the chat to the appropriate listener. (Member chat or HelpClient Chat)
      *
      * @param chat the new chat
@@ -211,23 +214,23 @@ public class ProxyDeskBot implements ChatServiceListener {
         if (chat != null) {
             logger.debug("New web connection: " + chat.getStream());
 
-            Set<User> users = chat.getRemoteUsers();
+            Set<SymUser> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
-                User user = users.iterator().next();
+                SymUser symUser = users.iterator().next();
 
-                if (user != null && MemberCache.hasMember(user.getId().toString())) {
+                if (symUser != null && MemberCache.hasMember(symUser.getId().toString())) {
 
-                    MemberCache.getMember(user).setOnline(true);
+                    MemberCache.getMember(symUser).setOnline(true);
                     memberCommandListener.listenOn(chat);
                     Messenger.sendMessage("Joined help desk as member.",
-                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                            SymMessage.Format.TEXT, chat, symClient);
 
-                } else if (user != null) {
+                } else if (symUser != null) {
 
-                    HoldCache.putClientOnHold(ClientCache.addClient(user));
+                    HoldCache.putClientOnHold(ClientCache.addClient(symUser));
                     helpClientListener.listenOn(chat);
                     Messenger.sendMessage("Joined help desk as help client.",
-                            MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                            SymMessage.Format.TEXT, chat, symClient);
 
                 }
 
@@ -240,7 +243,7 @@ public class ProxyDeskBot implements ChatServiceListener {
 
     /**
      * A method called by the listener when a chat is removed.
-     * On chat remove, determine if the user is a client or member.
+     * On chat remove, determine if the SymUser is a client or member.
      * Remove the chat from the appropriate listener. (Member chat or HelpClient Chat)
      *
      * @param chat the removed chat
@@ -249,20 +252,20 @@ public class ProxyDeskBot implements ChatServiceListener {
         logger.debug("Removed web connection: " + chat.getStream());
 
         if (chat != null) {
-            Set<User> users = chat.getRemoteUsers();
+            Set<SymUser> users = chat.getRemoteUsers();
             if (users != null && users.size() > 1) {
-                User user = chat.getRemoteUsers().iterator().next();
+                SymUser SymUser = chat.getRemoteUsers().iterator().next();
 
-                if (user != null && MemberCache.MEMBERS.containsKey(user.getEmailAddress())
-                        && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {
+                if (SymUser != null && MemberCache.MEMBERS.containsKey(SymUser.getEmailAddress())
+                        && !MemberCache.MEMBERS.get(SymUser.getEmailAddress()).isOnCall()) {
 
                     memberCommandListener.stopListening(chat);
-                    MemberCache.getMember(user).setOnline(false);
+                    MemberCache.getMember(SymUser).setOnline(false);
 
-                } else if (user != null && ClientCache.retrieveClient(user).isOnCall()) {
+                } else if (SymUser != null && ClientCache.retrieveClient(SymUser).isOnCall()) {
 
                     helpClientListener.stopListening(chat);
-                    ClientCache.removeClient(user);
+                    ClientCache.removeClient(SymUser);
 
                 }
             }

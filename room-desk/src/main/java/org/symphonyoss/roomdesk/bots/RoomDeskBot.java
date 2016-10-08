@@ -42,10 +42,11 @@ import org.symphonyoss.roomdesk.utils.ClientCache;
 import org.symphonyoss.roomdesk.utils.DeskUserCache;
 import org.symphonyoss.roomdesk.utils.HoldCache;
 import org.symphonyoss.roomdesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
 import org.symphonyoss.symphony.clients.AuthorizationClient;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.Stream;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymUser;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -127,10 +128,10 @@ public class RoomDeskBot implements ChatServiceListener {
         stream.setId(System.getProperty(RoomBotConfig.MEMBER_CHAT_STREAM));
         chat.setStream(stream);
 
-        chat.setRemoteUsers(new HashSet<User>());
+        chat.setRemoteUsers(new HashSet<SymUser>());
 
         Messenger.sendMessage("Ready to help!",
-                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                SymMessage.Format.TEXT, chat, symClient);
 
         chat.registerListener(transcriptListener);
         symClient.getChatService().addChat(chat);
@@ -138,7 +139,7 @@ public class RoomDeskBot implements ChatServiceListener {
 
     private void addAdmin() {
 
-        User user = null;
+        SymUser user = null;
 
         try {
 
@@ -222,9 +223,9 @@ public class RoomDeskBot implements ChatServiceListener {
         if (chat != null) {
             logger.debug("New chat connection: " + chat.getStream());
 
-            Set<User> users = chat.getRemoteUsers();
+            Set<SymUser> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
-                User user = users.iterator().next();
+                SymUser user = users.iterator().next();
 
                 try {
                     if(!chat.getStream().getId().equals(symClient.getStreamsClient().getStream(user).getId()))
@@ -242,7 +243,7 @@ public class RoomDeskBot implements ChatServiceListener {
                         chat.registerListener(transcriptListener);
                         MemberCache.getMember(user).setOnline(true);
                         Messenger.sendMessage("Joined help desk as member.",
-                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                                SymMessage.Format.TEXT, chat, symClient);
 
                     } else {
 
@@ -250,7 +251,7 @@ public class RoomDeskBot implements ChatServiceListener {
                         helpClientListener.listenOn(chat);
                         chat.registerListener(transcriptListener);
                         Messenger.sendMessage("Joined help desk as help client.",
-                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                                SymMessage.Format.TEXT, chat, symClient);
 
                     }
                 }
@@ -272,9 +273,9 @@ public class RoomDeskBot implements ChatServiceListener {
         logger.debug("Removed chat connection: " + chat.getStream());
 
         if (chat != null) {
-            Set<User> users = chat.getRemoteUsers();
+            Set<SymUser> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
-                User user = chat.getRemoteUsers().iterator().next();
+                SymUser user = chat.getRemoteUsers().iterator().next();
 
                 if (user != null && MemberCache.MEMBERS.containsKey(user.getEmailAddress())
                         && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {

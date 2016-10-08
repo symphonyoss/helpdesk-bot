@@ -25,12 +25,12 @@
 package org.symphonyoss.ai.models;
 
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 /**
  * Created by nicktarsillo on 6/20/16.
  * An interface that developers can implement to create their own actions
  */
 public interface AiAction {
-    AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command);
+    AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command);
 }

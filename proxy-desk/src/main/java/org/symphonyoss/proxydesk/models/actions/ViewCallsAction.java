@@ -8,8 +8,8 @@ import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.proxydesk.constants.HelpBotConstants;
 import org.symphonyoss.proxydesk.utils.CallCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -17,13 +17,13 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  */
 public class ViewCallsAction implements AiAction{
 
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
         userIdList.add(message.getFromUserId());
 
         aiResponseSequence.addResponse(new AiResponse(MLTypes.START_ML.toString() + HelpBotConstants.CALL_CACHE_LABEL
-                + CallCache.listCache() + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML,
+                + CallCache.listCache() + MLTypes.END_ML, SymMessage.Format.MESSAGEML,
                 userIdList));
 
         return aiResponseSequence;

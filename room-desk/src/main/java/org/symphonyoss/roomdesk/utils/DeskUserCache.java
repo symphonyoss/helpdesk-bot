@@ -25,7 +25,7 @@
 package org.symphonyoss.roomdesk.utils;
 
 import org.symphonyoss.roomdesk.models.users.DeskUser;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymUser;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,7 +51,7 @@ public class DeskUserCache {
         }
     }
 
-    public static boolean hasUser(User user) {
+    public static boolean hasUser(SymUser user) {
         return ALL_USERS.containsKey(user.getId());
     }
 }

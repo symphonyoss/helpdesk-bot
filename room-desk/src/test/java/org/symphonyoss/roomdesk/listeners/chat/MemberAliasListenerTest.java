@@ -2,7 +2,7 @@ package org.symphonyoss.roomdesk.listeners.chat;
 
 import junit.framework.TestCase;
 import org.mockito.Mockito;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 import static org.mockito.Mockito.mock;
 
@@ -14,7 +14,7 @@ public class MemberAliasListenerTest extends TestCase {
 
     public void testOnChatMessage() throws Exception {
         Mockito.doCallRealMethod().when(memberAliasListener).onChatMessage(null);
-        Mockito.doCallRealMethod().when(memberAliasListener).onChatMessage(new Message());
+        Mockito.doCallRealMethod().when(memberAliasListener).onChatMessage(new SymMessage());
 
         try{
             memberAliasListener.onChatMessage(null);
@@ -23,7 +23,7 @@ public class MemberAliasListenerTest extends TestCase {
         }
 
         try{
-            memberAliasListener.onChatMessage(new Message());
+            memberAliasListener.onChatMessage(new SymMessage());
         }catch(Exception e){
             fail("Member listener test failed.");
         }

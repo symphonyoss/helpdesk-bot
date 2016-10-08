@@ -29,7 +29,7 @@ import org.symphonyoss.proxydesk.models.calls.Call;
 
 /**
  * Created by nicktarsillo on 6/16/16.
- * A interface for a general user of the bot
+ * A interface for a general SymUser of the bot
  */
 public interface DeskUser {
 

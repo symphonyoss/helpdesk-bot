@@ -33,7 +33,7 @@ import org.symphonyoss.proxydesk.models.users.DeskUser;
 import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.DeskUserCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymUser;
 
 import java.util.Set;
 
@@ -54,7 +54,7 @@ public class CallServiceListener implements ChatServiceListener {
     }
 
     /**
-     * On remove chat, exit remote user from call
+     * On remove chat, exit remote SymUser from call
      *
      * @param chat the removed chat
      */
@@ -62,14 +62,14 @@ public class CallServiceListener implements ChatServiceListener {
 
 
         if (chat != null) {
-            Set<User> users = chat.getRemoteUsers();
+            Set<SymUser> users = chat.getRemoteUsers();
 
             if (users != null && users.size() > 0) {
-                User user = users.iterator().next();
+                SymUser SymUser = users.iterator().next();
 
                 DeskUser deskUser = null;
-                if (user.getId() != null)
-                    deskUser = DeskUserCache.getDeskUser(user.getId().toString());
+                if (SymUser.getId() != null)
+                    deskUser = DeskUserCache.getDeskUser(SymUser.getId().toString());
 
                 if (deskUser != null) {
 
@@ -80,8 +80,8 @@ public class CallServiceListener implements ChatServiceListener {
                     }
 
                 } else {
-                    logger.warn("Could not find desk user {}." +
-                            " Ignoring chat removal.", user.getId());
+                    logger.warn("Could not find desk SymUser {}." +
+                            " Ignoring chat removal.", SymUser.getId());
                 }
 
             }

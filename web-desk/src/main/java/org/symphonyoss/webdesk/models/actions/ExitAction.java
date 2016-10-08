@@ -28,7 +28,7 @@ import org.symphonyoss.ai.models.AiAction;
 import org.symphonyoss.ai.models.AiCommand;
 import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.webdesk.models.calls.MultiChatCall;
 
 /**
@@ -51,7 +51,7 @@ public class ExitAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
 
         call.endCall();

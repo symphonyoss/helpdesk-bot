@@ -39,8 +39,8 @@ import org.symphonyoss.proxydesk.models.users.Member;
 import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.HoldCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 
 import java.util.HashMap;
 
@@ -68,7 +68,7 @@ public class HelpClientListener implements ChatListener {
      *
      * @param message the received message
      */
-    public void onChatMessage(Message message) {
+    public void onChatMessage(SymMessage message) {
         if (message == null
                 || message.getStreamId() == null
                 || isPushMessage(message)
@@ -107,7 +107,7 @@ public class HelpClientListener implements ChatListener {
         }
     }
 
-    private boolean isPushMessage(Message message){
+    private boolean isPushMessage(SymMessage message){
         return entered.containsKey(message.getStreamId()) && !entered.get(message.getStreamId()) && !pushMessages;
     }
 
@@ -156,7 +156,7 @@ public class HelpClientListener implements ChatListener {
      * @param message the message
      * @param chunks the message in text chunks
      */
-    private void relayToMembers(HelpClient helpClient, Message message, String[] chunks) {
+    private void relayToMembers(HelpClient helpClient, SymMessage message, String[] chunks) {
 
         for (Member member : MemberCache.getBestMembers(String.join(" ", chunks))) {
             if (!member.isOnCall() && member.isSeeHelpRequests()) {
@@ -167,14 +167,14 @@ public class HelpClientListener implements ChatListener {
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + ClientCache.retrieveClient(message).getEmail() +
                                     ": " + MLTypes.END_BOLD + String.join(" ", chunks) + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
+                            SymMessage.Format.MESSAGEML, member.getUserID(), symClient);
 
                 } else {
 
                     Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD
                                     + message.getFromUserId() + ": " + MLTypes.END_BOLD
                                     + String.join(" ", chunks) + MLTypes.END_ML,
-                            MessageSubmission.FormatEnum.MESSAGEML, member.getUserID(), symClient);
+                            SymMessage.Format.MESSAGEML, member.getUserID(), symClient);
 
                 }
 

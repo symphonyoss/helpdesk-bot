@@ -26,8 +26,8 @@ package org.symphonyoss.ai.utils;
 
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.Stream;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
@@ -35,8 +35,8 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  * Created by nicktarsillo on 6/14/16.
  */
 public class Messenger {
-    public static void sendMessage(String message, MessageSubmission.FormatEnum type, Long userID, SymphonyClient symClient) {
-        MessageSubmission userMessage = new MessageSubmission();
+    public static void sendMessage(String message, SymMessage.Format type, Long userID, SymphonyClient symClient) {
+        SymMessage userMessage = new SymMessage();
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 
@@ -49,8 +49,8 @@ public class Messenger {
         }
     }
 
-    public static void sendMessage(String message, MessageSubmission.FormatEnum type, String email, SymphonyClient symClient) {
-        MessageSubmission userMessage = new MessageSubmission();
+    public static void sendMessage(String message, SymMessage.Format type, String email, SymphonyClient symClient) {
+        SymMessage userMessage = new SymMessage();
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 
@@ -61,8 +61,8 @@ public class Messenger {
         }
     }
 
-    public static void sendMessage(String message, MessageSubmission.FormatEnum type, Message refMes, SymphonyClient symClient) {
-        MessageSubmission userMessage = new MessageSubmission();
+    public static void sendMessage(String message, SymMessage.Format type, SymMessage refMes, SymphonyClient symClient) {
+        SymMessage userMessage = new SymMessage();
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 
@@ -75,8 +75,8 @@ public class Messenger {
         }
     }
 
-    public static void sendMessage(String message, MessageSubmission.FormatEnum type, Chat chat, SymphonyClient symClient) {
-        MessageSubmission userMessage = new MessageSubmission();
+    public static void sendMessage(String message, SymMessage.Format type, Chat chat, SymphonyClient symClient) {
+        SymMessage userMessage = new SymMessage();
         userMessage.setFormat(type);
         userMessage.setMessage(message);
 

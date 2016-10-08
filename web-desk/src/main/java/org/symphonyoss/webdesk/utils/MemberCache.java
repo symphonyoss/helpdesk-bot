@@ -28,8 +28,8 @@ import com.google.gson.Gson;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.webdesk.bots.WebDeskBot;
 import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webdesk.models.users.Member;
@@ -170,11 +170,11 @@ public class MemberCache {
         }
     }
 
-    public static Member getMember(User user) {
+    public static Member getMember(SymUser user) {
         return MEMBERS.get(user.getId().toString());
     }
 
-    public static Member getMember(Message message) {
+    public static Member getMember(SymMessage message) {
         return MEMBERS.get(message.getFromUserId().toString());
     }
 

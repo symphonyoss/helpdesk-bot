@@ -27,7 +27,7 @@ package org.symphonyoss.ai.models;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -131,7 +131,7 @@ public class AiCommand {
      * @param message         the received message
      * @return a set of responses, given by completing all the commands actions
      */
-    public Set<AiResponseSequence> getResponses(MlMessageParser mlMessageParser, Message message) {
+    public Set<AiResponseSequence> getResponses(MlMessageParser mlMessageParser, SymMessage message) {
         Set<AiResponseSequence> responses = new LinkedHashSet<AiResponseSequence>();
 
         for (AiAction action : getActions()) {

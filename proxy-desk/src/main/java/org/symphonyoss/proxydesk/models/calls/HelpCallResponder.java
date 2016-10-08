@@ -33,7 +33,8 @@ import org.symphonyoss.proxydesk.constants.HelpBotConstants;
 import org.symphonyoss.proxydesk.models.users.DeskUser;
 import org.symphonyoss.proxydesk.models.users.HelpClient;
 import org.symphonyoss.proxydesk.models.users.Member;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 /**
  * Created by nicktarsillo on 6/27/16.
@@ -48,96 +49,96 @@ public class HelpCallResponder extends CallResponder {
     }
 
     /**
-     * Notify the user that a member has left the room
+     * Notify the SymUser that a member has left the room
      * Retain member identity preference
      *
-     * @param user   the desk user to send to
+     * @param SymUser   the desk SymUser to send to
      * @param member the member that exited the room
      */
-    public void sendExitMessage(DeskUser user, Member member) {
+    public void sendExitMessage(DeskUser SymUser, Member member) {
 
         if (!member.isHideIdentity()) {
 
             Messenger.sendMessage(member.getEmail() + HelpBotConstants.LEFT_CALL,
-                    MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+                    SymMessage.Format.TEXT, SymUser.getUserID(), symClient);
 
         } else {
 
             Messenger.sendMessage(member.getAlias()
-                    + HelpBotConstants.LEFT_CALL, MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+                    + HelpBotConstants.LEFT_CALL, SymMessage.Format.TEXT, SymUser.getUserID(), symClient);
 
         }
 
     }
 
     /**
-     * Notify the user that a client has left the room
+     * Notify the SymUser that a client has left the room
      * If client email does not exits, use id
      *
-     * @param user   the desk user to send to
+     * @param SymUser   the desk SymUser to send to
      * @param client the client that exited the room
      */
-    public void sendExitMessage(DeskUser user, HelpClient client) {
+    public void sendExitMessage(DeskUser SymUser, HelpClient client) {
 
         if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase("")) {
 
             Messenger.sendMessage(client.getEmail() + HelpBotConstants.LEFT_CALL,
-                    MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+                    SymMessage.Format.TEXT, SymUser.getUserID(), symClient);
 
         } else {
 
             Messenger.sendMessage(HelpBotConstants.HELP_CLIENT_LABEL + client.getUserID().toString()
-                    + HelpBotConstants.LEFT_CALL, MessageSubmission.FormatEnum.TEXT, user.getUserID(), symClient);
+                    + HelpBotConstants.LEFT_CALL, SymMessage.Format.TEXT, SymUser.getUserID(), symClient);
 
         }
 
     }
 
     /**
-     * Notify a user that a client has joined the room.
-     * If client email does not exist, use user id.
+     * Notify a SymUser that a client has joined the room.
+     * If client email does not exist, use SymUser id.
      *
-     * @param user   the desk user to send to
+     * @param SymUser   the desk SymUser to send to
      * @param client the client who entered the room
      */
-    public void sendEnteredChatMessage(DeskUser user, HelpClient client) {
+    public void sendEnteredChatMessage(DeskUser SymUser, HelpClient client) {
 
         if (client.getEmail() != null && !client.getEmail().equalsIgnoreCase("")) {
 
             Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.HELP_CLIENT_LABEL + MLTypes.START_BOLD +
                     client.getEmail() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
-                    , MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+                    , SymMessage.Format.MESSAGEML, SymUser.getUserID(), symClient);
 
         } else {
 
             Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.HELP_CLIENT_LABEL + MLTypes.START_BOLD +
                             client.getUserID() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT,
-                    MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+                    SymMessage.Format.MESSAGEML, SymUser.getUserID(), symClient);
 
         }
 
     }
 
     /**
-     * Notify a user that a member has joined the room.
+     * Notify a SymUser that a member has joined the room.
      * Retain member identity preference
      *
-     * @param user   the desk user to send to
+     * @param SymUser   the desk SymUser to send to
      * @param member the member who entered the room
      */
-    public void sendEnteredChatMessage(DeskUser user, Member member) {
+    public void sendEnteredChatMessage(DeskUser SymUser, Member member) {
 
         if (!member.isHideIdentity()) {
 
             Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.MEMBER_LABEL + MLTypes.START_BOLD +
                             member.getEmail() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT + MLTypes.END_ML,
-                    MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+                    SymMessage.Format.MESSAGEML, SymUser.getUserID(), symClient);
 
         } else {
 
             Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD +
                    member.getAlias() + MLTypes.END_BOLD + HelpBotConstants.ENTERED_CHAT
-                    + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+                    + MLTypes.END_ML, SymMessage.Format.MESSAGEML, SymUser.getUserID(), symClient);
 
         }
 
@@ -146,7 +147,7 @@ public class HelpCallResponder extends CallResponder {
     /**
      * Sends the room info back to the message from id.
      *
-     * @param userID the user id
+     * @param userID the SymUser id
      */
     public void sendRoomInfo(Long userID) {
         if (userID == null
@@ -161,14 +162,14 @@ public class HelpCallResponder extends CallResponder {
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK
                 + HelpBotConstants.CLIENTS_LABEL + getClientList()
                 + HelpBotConstants.MEMBERS_LABEL + getMemberList()
-                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, userID, symClient);
+                + MLTypes.END_ML, SymMessage.Format.MESSAGEML, userID, symClient);
 
     }
 
     /**
-     * Sends the call help summary back to the user id.
+     * Sends the call help summary back to the SymUser id.
      *
-     * @param userID the user id
+     * @param userID the SymUser id
      */
     public void sendHelpSummary(Long userID) {
         if (userID == null) {
@@ -181,7 +182,7 @@ public class HelpCallResponder extends CallResponder {
 
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.BREAK + MLTypes.BREAK + MLTypes.START_BOLD
                 + HelpBotConstants.HELP_SUMMARY_LABEL + MLTypes.END_BOLD + MLTypes.BREAK + getHelpList()
-                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, userID, symClient);
+                + MLTypes.END_ML, SymMessage.Format.MESSAGEML, userID, symClient);
 
     }
 

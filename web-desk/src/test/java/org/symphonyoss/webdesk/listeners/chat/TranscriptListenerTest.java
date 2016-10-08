@@ -2,7 +2,7 @@ package org.symphonyoss.webdesk.listeners.chat;
 
 import junit.framework.TestCase;
 import org.mockito.Mockito;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.webdesk.listeners.chat.TranscriptListener;
 
 import static org.mockito.Mockito.mock;
@@ -15,7 +15,7 @@ public class TranscriptListenerTest extends TestCase {
 
     public void testOnChatMessage() throws Exception {
         Mockito.doCallRealMethod().when(transcriptListener).onChatMessage(null);
-        Mockito.doCallRealMethod().when(transcriptListener).onChatMessage(new Message());
+        Mockito.doCallRealMethod().when(transcriptListener).onChatMessage(new SymMessage());
 
         try{
             transcriptListener.onChatMessage(null);
@@ -24,7 +24,7 @@ public class TranscriptListenerTest extends TestCase {
         }
 
         try{
-            transcriptListener.onChatMessage(new Message());
+            transcriptListener.onChatMessage(new SymMessage());
         }catch(Exception e){
             fail("Transcript test failed.");
         }

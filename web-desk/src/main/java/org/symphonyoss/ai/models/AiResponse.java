@@ -24,7 +24,8 @@
 
 package org.symphonyoss.ai.models;
 
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -33,10 +34,10 @@ import org.symphonyoss.symphony.pod.model.UserIdList;
  */
 public class AiResponse {
     private String message;
-    private MessageSubmission.FormatEnum type;
+    private SymMessage.Format type;
     private UserIdList toIDs = new UserIdList();
 
-    public AiResponse(String message, MessageSubmission.FormatEnum type, UserIdList userIdList) {
+    public AiResponse(String message, SymMessage.Format type, UserIdList userIdList) {
         this.type = type;
         this.message = message;
         this.toIDs = userIdList;
@@ -56,11 +57,11 @@ public class AiResponse {
     /**
      * @return the format of the message
      */
-    public MessageSubmission.FormatEnum getType() {
+    public SymMessage.Format getType() {
         return type;
     }
 
-    public void setType(MessageSubmission.FormatEnum type) {
+    public void setType(SymMessage.Format type) {
         this.type = type;
     }
 

@@ -47,7 +47,7 @@ public class HelpCallChatListener extends CallChatListener {
     @Override
     /**
      * Override the construct relay method.
-     * Construct the message based upon the membership of the user.
+     * Construct the message based upon the membership of the SymUser.
      */
     protected String constructRelayMessage(DeskUser deskUser, String text) {
         if (deskUser.getUserType() == DeskUser.DeskUserType.MEMBER) {

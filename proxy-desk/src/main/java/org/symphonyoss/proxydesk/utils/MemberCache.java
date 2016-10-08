@@ -31,8 +31,9 @@ import org.slf4j.LoggerFactory;
 import org.symphonyoss.proxydesk.config.ProxyBotConfig;
 import org.symphonyoss.proxydesk.models.users.Member;
 import org.symphonyoss.proxydesk.models.users.SerializableMember;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
+
 
 import java.io.*;
 import java.util.*;
@@ -224,11 +225,11 @@ public class MemberCache {
         }
     }
 
-    public static Member getMember(User user) {
-        return MEMBERS.get(user.getId().toString());
+    public static Member getMember(SymUser SymUser) {
+        return MEMBERS.get(SymUser.getId().toString());
     }
 
-    public static Member getMember(Message message) {
+    public static Member getMember(SymMessage message) {
         return MEMBERS.get(message.getFromUserId().toString());
     }
 

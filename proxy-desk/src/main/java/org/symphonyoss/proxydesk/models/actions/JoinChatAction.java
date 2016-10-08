@@ -37,9 +37,10 @@ import org.symphonyoss.proxydesk.models.users.DeskUser;
 import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.DeskUserCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
+//import org.symphonyoss.symphony.clients.model.SymUser;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -56,7 +57,7 @@ public class JoinChatAction implements AiAction {
 
     /**
      * Parse the message for email.
-     * Find join desk user by email.
+     * Find join desk SymUser by email.
      * Join call.
      *
      * @param mlMessageParser the parser contains the input in ML
@@ -64,7 +65,7 @@ public class JoinChatAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
 
@@ -78,9 +79,9 @@ public class JoinChatAction implements AiAction {
 
         try {
 
-            User user = symClient.getUsersClient().getUserFromEmail(email);
-            if (user != null)
-                join = DeskUserCache.getDeskUser(user.getId().toString());
+            SymUser SymUser = symClient.getUsersClient().getUserFromEmail(email);
+            if (SymUser != null)
+                join = DeskUserCache.getDeskUser(SymUser.getId().toString());
 
         } catch (Exception e) {
             logger.error("An error occurred when finding an email.", e);
@@ -101,14 +102,14 @@ public class JoinChatAction implements AiAction {
 
             userIdList.add(message.getFromUserId());
             aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.NOT_ON_CALL,
-                    MessageSubmission.FormatEnum.TEXT,
+                    SymMessage.Format.TEXT,
                     userIdList));
 
         } else {
 
             userIdList.add(message.getFromUserId());
             aiResponseSequence.addResponse(new AiResponse(email + HelpBotConstants.NOT_FOUND,
-                    MessageSubmission.FormatEnum.TEXT,
+                    SymMessage.Format.TEXT,
                     userIdList));
 
         }

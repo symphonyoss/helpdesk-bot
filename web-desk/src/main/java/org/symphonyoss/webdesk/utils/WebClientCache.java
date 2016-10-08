@@ -1,7 +1,7 @@
 package org.symphonyoss.webdesk.utils;
 
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.webdesk.models.users.WebClient;
 import org.symphonyoss.webservice.models.session.WebSession;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebClientCache {
     public static final ConcurrentHashMap<String, WebClient> ALL_WEB_CLIENTS = new ConcurrentHashMap<String, WebClient>();
 
-    public static WebClient addClient(User user, WebSession webSession) {
+    public static WebClient addClient(SymUser user, WebSession webSession) {
         if (user == null)
             return null;
 
@@ -26,11 +26,11 @@ public class WebClientCache {
         return webClient;
     }
 
-    public static WebClient retrieveClient(Message message) {
+    public static WebClient retrieveClient(SymMessage message) {
         return ALL_WEB_CLIENTS.get(message.getFromUserId().toString());
     }
 
-    public static WebClient removeClient(User user) {
+    public static WebClient removeClient(SymUser user) {
         WebClient client = retrieveClient(user);
         ALL_WEB_CLIENTS.remove(user.getId().toString());
         DeskUserCache.removeUser(client);
@@ -39,7 +39,7 @@ public class WebClientCache {
         return client;
     }
 
-    public static WebClient retrieveClient(User user) {
+    public static WebClient retrieveClient(SymUser user) {
         return ALL_WEB_CLIENTS.get(user.getId().toString());
     }
 

@@ -31,10 +31,11 @@ import org.symphonyoss.client.impl.SymphonyBasicClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.ChatServiceListener;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
 import org.symphonyoss.symphony.clients.AuthorizationClient;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.Stream;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webdesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.webdesk.listeners.chat.MemberAliasListener;
@@ -151,10 +152,10 @@ public class WebDeskBot implements ChatServiceListener {
         stream.setId(System.getProperty(WebBotConfig.MEMBER_CHAT_STREAM));
         chat.setStream(stream);
 
-        chat.setRemoteUsers(new HashSet<User>());
+        chat.setRemoteUsers(new HashSet<SymUser>());
 
         Messenger.sendMessage("Ready to help!",
-                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                SymMessage.Format.TEXT, chat, symClient);
 
         chat.registerListener(transcriptListener);
         symClient.getChatService().addChat(chat);
@@ -165,7 +166,7 @@ public class WebDeskBot implements ChatServiceListener {
      */
     private void addAdmin() {
 
-        User user = null;
+        SymUser user = null;
 
         try {
 
@@ -250,9 +251,9 @@ public class WebDeskBot implements ChatServiceListener {
             logger.info("New chat: " + chat.getStream().getId());
             logger.info("Users in chat: " + Arrays.toString(chat.getRemoteUsers().toArray()));
 
-            Set<User> users = chat.getRemoteUsers();
+            Set<SymUser> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
-                User user = users.iterator().next();
+                SymUser user = users.iterator().next();
 
                 try {
                     if(!chat.getStream().getId().equals(symClient.getStreamsClient().getStream(user).getId()))
@@ -270,7 +271,7 @@ public class WebDeskBot implements ChatServiceListener {
                         chat.registerListener(transcriptListener);
                         MemberCache.getMember(user).setOnline(true);
                         Messenger.sendMessage("Joined help desk as member.",
-                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                                SymMessage.Format.TEXT, chat, symClient);
 
                     } else {
 
@@ -278,7 +279,7 @@ public class WebDeskBot implements ChatServiceListener {
                         helpClientListener.listenOn(chat);
                         chat.registerListener(transcriptListener);
                         Messenger.sendMessage("Joined help desk as help client.",
-                                MessageSubmission.FormatEnum.TEXT, chat, symClient);
+                                SymMessage.Format.TEXT, chat, symClient);
 
                     }
                 }
@@ -300,9 +301,9 @@ public class WebDeskBot implements ChatServiceListener {
         logger.debug("Removed web connection: " + chat.getStream());
 
         if (chat != null) {
-            Set<User> users = chat.getRemoteUsers();
+            Set<SymUser> users = chat.getRemoteUsers();
             if (users != null && users.size() == 1) {
-                User user = chat.getRemoteUsers().iterator().next();
+                SymUser user = chat.getRemoteUsers().iterator().next();
 
                 if (user != null && MemberCache.MEMBERS.containsKey(user.getEmailAddress())
                         && !MemberCache.MEMBERS.get(user.getEmailAddress()).isOnCall()) {

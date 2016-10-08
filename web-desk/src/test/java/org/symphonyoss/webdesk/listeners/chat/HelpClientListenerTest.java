@@ -27,7 +27,7 @@ package org.symphonyoss.webdesk.listeners.chat;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.symphonyoss.client.model.Chat;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.Stream;
 import org.symphonyoss.webdesk.listeners.chat.HelpClientListener;
 
@@ -42,7 +42,7 @@ public class HelpClientListenerTest {
 
     @Test
     public void testOnChatMessage() throws Exception {
-        Mockito.doCallRealMethod().when(helpClientListenerTest).onChatMessage(new Message());
+        Mockito.doCallRealMethod().when(helpClientListenerTest).onChatMessage(new SymMessage());
         Mockito.doCallRealMethod().when(helpClientListenerTest).onChatMessage(null);
 
         try {
@@ -51,7 +51,7 @@ public class HelpClientListenerTest {
             fail("On web message null test failed.");
         }
 
-        Message message = new Message();
+        SymMessage message = new SymMessage();
         try {
             helpClientListenerTest.onChatMessage(message);
         } catch (Exception e) {

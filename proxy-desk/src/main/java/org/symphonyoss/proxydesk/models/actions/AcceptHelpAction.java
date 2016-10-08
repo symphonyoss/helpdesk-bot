@@ -36,8 +36,9 @@ import org.symphonyoss.proxydesk.models.users.Member;
 import org.symphonyoss.proxydesk.utils.CallCache;
 import org.symphonyoss.proxydesk.utils.HoldCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+//import org.symphonyoss.symphony.clients.model.SymMessage;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
@@ -59,7 +60,7 @@ public class AcceptHelpAction implements AiAction {
      * @param command         the command that triggered this action
      * @return the sequence of responses generated from this action
      */
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList sendTo = new UserIdList();
 
@@ -81,7 +82,7 @@ public class AcceptHelpAction implements AiAction {
 
                 sendTo.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(email + HelpBotConstants.NOT_FOUND,
-                        MessageSubmission.FormatEnum.TEXT, sendTo));
+                        SymMessage.Format.TEXT, sendTo));
 
             }
 
@@ -94,7 +95,7 @@ public class AcceptHelpAction implements AiAction {
 
                 sendTo.add(message.getFromUserId());
                 aiResponseSequence.addResponse(new AiResponse(HelpBotConstants.NO_USERS,
-                        MessageSubmission.FormatEnum.TEXT, sendTo));
+                        SymMessage.Format.TEXT, sendTo));
 
             }
 

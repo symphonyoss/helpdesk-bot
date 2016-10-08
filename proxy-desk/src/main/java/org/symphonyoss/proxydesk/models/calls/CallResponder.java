@@ -32,7 +32,8 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.proxydesk.constants.HelpBotConstants;
 import org.symphonyoss.proxydesk.listeners.command.CallCommandListener;
 import org.symphonyoss.proxydesk.models.users.DeskUser;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+
+import org.symphonyoss.symphony.clients.model.SymMessage;
 
 /**
  * Created by nicktarsillo on 6/21/16.
@@ -50,21 +51,21 @@ public class CallResponder {
     }
 
     /**
-     * Notify a user that they have successfully connected to the room
+     * Notify a SymUser that they have successfully connected to the room
      *
-     * @param user the desk user to send to
+     * @param SymUser the desk SymUser to send to
      */
-    public void sendConnectedMessage(DeskUser user) {
-        if (user == null) {
+    public void sendConnectedMessage(DeskUser SymUser) {
+        if (SymUser == null) {
 
             if (logger != null)
-                logger.error("Cannot send null user connected message {}.", user);
+                logger.error("Cannot send null SymUser connected message {}.", SymUser);
 
             return;
         }
 
         Messenger.sendMessage(MLTypes.START_ML + HelpBotConstants.CONNECTED_TO_CALL
-                + MLTypes.END_ML, MessageSubmission.FormatEnum.MESSAGEML, user.getUserID(), symClient);
+                + MLTypes.END_ML, SymMessage.Format.MESSAGEML, SymUser.getUserID(), symClient);
 
     }
 
@@ -72,12 +73,12 @@ public class CallResponder {
         if (userID == null) {
 
             if (logger != null)
-                logger.error("Cannot send null user left message {}.", userID);
+                logger.error("Cannot send null SymUser left message {}.", userID);
 
             return;
         }
 
         Messenger.sendMessage(HelpBotConstants.EXIT_CALL,
-                MessageSubmission.FormatEnum.TEXT, userID, symClient);
+                SymMessage.Format.TEXT, userID, symClient);
     }
 }

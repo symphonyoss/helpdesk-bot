@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.symphony.pod.model.Stream;
-import org.symphonyoss.symphony.pod.model.User;
+import org.symphonyoss.symphony.clients.model.SymUser;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -70,8 +70,8 @@ public class HelpDeskBotTest {
 
         Chat chat = new Chat();
         chat.setStream(new Stream());
-        Set<User> users = new HashSet<User>();
-        users.add(new User());
+        Set<SymUser> users = new HashSet<SymUser>();
+        users.add(new SymUser());
         chat.setRemoteUsers(users);
         try {
             bot.onNewChat(chat);

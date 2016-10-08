@@ -33,8 +33,8 @@ import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.webdesk.config.WebBotConfig;
 import org.symphonyoss.webdesk.listeners.command.HelpClientCommandListener;
 import org.symphonyoss.webdesk.models.users.HelpClient;
@@ -62,7 +62,7 @@ public class HelpClientListener implements ChatListener {
      *
      * @param message the received message
      */
-    public void onChatMessage(Message message) {
+    public void onChatMessage(SymMessage message) {
         if (message == null
                 || message.getStreamId() == null
                 || AiCommandListener.isCommand(message, symClient)) {
@@ -132,11 +132,11 @@ public class HelpClientListener implements ChatListener {
         }
     }
 
-    private void relayToMembers(HelpClient helpClient, Message message) {
+    private void relayToMembers(HelpClient helpClient, SymMessage message) {
         Chat chat = symClient.getChatService().getChatByStream(System.getProperty(WebBotConfig.MEMBER_CHAT_STREAM));
 
         Messenger.sendMessage(MLTypes.START_ML.toString() + MLTypes.START_BOLD + helpClient.getEmail() + MLTypes.END_BOLD + ": " + message.getMessage().substring(MLTypes.START_ML.toString().length()),
-                MessageSubmission.FormatEnum.MESSAGEML, chat, symClient);
+                SymMessage.Format.MESSAGEML, chat, symClient);
 
     }
 

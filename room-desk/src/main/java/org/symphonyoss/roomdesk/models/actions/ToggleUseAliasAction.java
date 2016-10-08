@@ -7,15 +7,15 @@ import org.symphonyoss.ai.models.AiResponseSequence;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.roomdesk.models.users.Member;
 import org.symphonyoss.roomdesk.utils.MemberCache;
-import org.symphonyoss.symphony.agent.model.Message;
-import org.symphonyoss.symphony.agent.model.MessageSubmission;
+import org.symphonyoss.symphony.clients.model.SymMessage;
+
 import org.symphonyoss.symphony.pod.model.UserIdList;
 
 /**
  * Created by nicktarsillo on 7/7/16.
  */
 public class ToggleUseAliasAction implements AiAction {
-    public AiResponseSequence respond(MlMessageParser mlMessageParser, Message message, AiCommand command) {
+    public AiResponseSequence respond(MlMessageParser mlMessageParser, SymMessage message, AiCommand command) {
         AiResponseSequence aiResponseSequence = new AiResponseSequence();
         UserIdList userIdList = new UserIdList();
         userIdList.add(message.getFromUserId());
@@ -29,13 +29,13 @@ public class ToggleUseAliasAction implements AiAction {
         if (member.isUseAlias()) {
 
             aiResponseSequence.addResponse(new AiResponse("Alias use enabled.",
-                    MessageSubmission.FormatEnum.TEXT, userIdList));
+                    SymMessage.Format.TEXT, userIdList));
 
 
         } else {
 
             aiResponseSequence.addResponse(new AiResponse("Alias use disabled.",
-                    MessageSubmission.FormatEnum.TEXT, userIdList));
+                    SymMessage.Format.TEXT, userIdList));
 
         }
 

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.symphonyoss.client.SymphonyClient;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
-import org.symphonyoss.symphony.agent.model.Message;
+import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.webdesk.config.WebBotConfig;
 
 import java.io.BufferedWriter;
@@ -26,7 +26,7 @@ public class TranscriptListener implements ChatListener {
         this.symClient = symClient;
     }
 
-    public void onChatMessage(Message message) {
+    public void onChatMessage(SymMessage message) {
         if(message == null
                 || message.getFromUserId() == null)
             return;
