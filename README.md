@@ -26,6 +26,7 @@ Help Desk BOT(s) are Java based applications that implement a call routing workf
 
 ###Proxy Desk
 See video [DEMO](https://www.youtube.com/watch?v=aXv35MU3szQ)
+
 All communications flows through (ingress/egress) the BOT application, which handles all call routing.  Command line interface is provided to members to manage all calls. 
     
     U(SymUser) < - - > O(Operator)< - - > R(Rota of Users/members)
@@ -33,6 +34,7 @@ All communications flows through (ingress/egress) the BOT application, which han
 
 ###Room Desk
 See video [DEMO](https://www.youtube.com/watch?v=Uq_eS-L6Ud8)
+
 All inbound user communications flows through the BOT into a chat room of members.  Command line interface is provided to all members, but calls are established through an external multi-party conversation outside the chat room.
     
     U(SymUser) < - - > O(Operator)< - > R(Rota of Users/members)
@@ -40,6 +42,7 @@ All inbound user communications flows through the BOT into a chat room of member
 
 ###Web Desk
 See video [DEMO](https://www.youtube.com/watch?v=CAhl18L7kXo)
+
 All inbound users leverage an external web client, which communicates with a backend BOT service that implements the Room Desk construct.
       
       U(SymUser) < - -> Web Module < - - > O (Operator) <- > R(Rota of users/members)
