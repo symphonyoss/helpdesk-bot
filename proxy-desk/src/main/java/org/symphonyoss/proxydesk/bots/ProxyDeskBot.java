@@ -67,8 +67,9 @@ import java.util.Set;
  * -Dtruststore.file=/dev/certs/server.truststore
  * -Dtruststore.password=(Pass)
  * -Dbot.SymUser=hashtag.bot
- * -Dbot.domain=@markit.com
+ * -Dbot.domain=markit.com
  */
+
 public class ProxyDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(ProxyDeskBot.class);
     private MemberCommandListener memberCommandListener;
@@ -185,8 +186,7 @@ public class ProxyDeskBot implements ChatServiceListener {
 
             symClient.init(
                     symAuth,
-                    //System.getProperty(ProxyBotConfig.BOT_USER + "@symphony.foundation"),
-                    "helpdesk-proxy@symphony.foundation",
+                    System.getProperty(ProxyBotConfig.BOT_USER) + "@" + System.getProperty(ProxyBotConfig.BOT_DOMAIN),
                     System.getProperty(ProxyBotConfig.SYMPHONY_AGENT),
                     System.getProperty(ProxyBotConfig.SYMPHONY_POD)
             );

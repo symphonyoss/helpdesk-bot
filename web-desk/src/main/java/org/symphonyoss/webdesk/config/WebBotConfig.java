@@ -61,6 +61,7 @@ public final class WebBotConfig {
     public final static String CERTS_DIR = "certs.dir";
     public final static String TRUSTSTORE_FILE = "truststore.file";
     public final static String BOT_USER = "bot.user";
+    public final static String BOT_DOMAIN = "bot.domain";
     public final static String FILES_TRANSCRIPT = "files.transcript";
     public final static String ADMIN_USER = "admin.user";
     public final static String FILES_JSON = "webbot.files.json";
@@ -86,6 +87,7 @@ public final class WebBotConfig {
     public final static String TRUST_ALL_SLL_ENV = "TRUST_ALL_SSL";
     public final static String WEB_DESK_PORT_ENV = "WEB_DESK_PORT";
     public final static String FILES_WEBDESK_ENV = "FILES_WEBDESK";
+    public final static String BOT_DOMAIN_ENV = "BOT_DOMAIN";
 
     private final static Logger logger = LoggerFactory.getLogger(WebBotConfig.class);
 
@@ -304,6 +306,15 @@ public final class WebBotConfig {
 
         }
 
+        if (System.getProperty(BOT_DOMAIN) == null) {
+
+            if (System.getenv(BOT_DOMAIN_ENV) != null) {
+                System.setProperty(BOT_DOMAIN, System.getenv(BOT_DOMAIN_ENV));
+            } else {
+                System.setProperty(BOT_DOMAIN, Config.getString(BOT_DOMAIN));
+            }
+
+        }
     }
 
 }

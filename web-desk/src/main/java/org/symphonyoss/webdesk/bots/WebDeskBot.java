@@ -60,6 +60,22 @@ import static org.symphonyoss.webdesk.config.WebBotConfig.Config;
 
 /**
  * The main help desk bot class.
+ *
+ *
+ * /**
+ * The main help desk bot class
+ * REQUIRED VM Arguments or System Properties:
+ * <p>
+ * -Dsessionauth.url=https://pod_fqdn:port/sessionauth
+ * -Dkeyauth.url=https://pod_fqdn:port/keyauth
+ * -Dsymphony.agent.pod.url=https://agent_fqdn:port/pod
+ * -Dsymphony.agent.agent.url=https://agent_fqdn:port/agent
+ * -Dcerts.dir=/dev/certs/
+ * -Dkeystore.password=(Pass)
+ * -Dtruststore.file=/dev/certs/server.truststore
+ * -Dtruststore.password=(Pass)
+ * -Dbot.SymUser=hashtag.bot
+ * -Dbot.domain=markit.com
  */
 public class WebDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(WebDeskBot.class);
@@ -192,15 +208,6 @@ public class WebDeskBot implements ChatServiceListener {
      */
     public void initConnection() {
 
-//        -Dkeystore.password=SymphonyIsGreat123
-//        -Dtruststore.password=SymphonyIsGreat123
-//        -Dsessionauth.url=https://localhost.symphony.com:844/sessionauth
-//        -Dkeyauth.url=https://localhost.symphony.com:8444/keyauth
-//        -Dsymphony.agent.pod.url=https://symagent.mdevlab.com:8446/pod
-//        -Dsymphony.agent.agent.url=https://symagent.mdevlab.com:8446/agent
-//        -Dcerts.dir=/dev/certs/
-//        -Dtruststore.file=/dev/certs/server.truststore
-//        -Dbot.user=hashtag.bot
 
         try {
 
@@ -222,7 +229,7 @@ public class WebDeskBot implements ChatServiceListener {
 
             symClient.init(
                     symAuth,
-                    System.getProperty(WebBotConfig.BOT_USER) + "@markit.com",
+                    System.getProperty(WebBotConfig.BOT_USER) + "@" +  System.getProperty(WebBotConfig.BOT_DOMAIN),
                     System.getProperty(WebBotConfig.SYMPHONY_AGENT),
                     System.getProperty(WebBotConfig.SYMPHONY_POD)
             );

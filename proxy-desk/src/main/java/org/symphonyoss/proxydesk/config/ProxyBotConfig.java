@@ -65,6 +65,7 @@ public final class ProxyBotConfig {
     public final static String CERTS_DIR = "certs.dir";
     public final static String TRUSTSTORE_FILE = "truststore.file";
     public final static String BOT_USER = "bot.user";
+    public final static String BOT_DOMAIN = "bot.domain";
     public final static String ADMIN_USER = "admin.user";
     public final static String FILES_JSON = "proxybot.files.json";
     //Env
@@ -79,7 +80,11 @@ public final class ProxyBotConfig {
     public final static String BOT_USER_ENV = "BOT_USER";
     public final static String FILES_JSON_ENV = "FILES_JSON";
     public final static String ADMIN_USER_ENV = "ADMIN_USER";
+    public static final String BOT_DOMAIN_ENV = "BOT_DOMAIN";
+
+
     private final static Logger logger = LoggerFactory.getLogger(ProxyBotConfig.class);
+
 
     static {
 
@@ -241,6 +246,16 @@ public final class ProxyBotConfig {
                 System.setProperty(ADMIN_USER, System.getenv(ADMIN_USER_ENV));
             } else {
                 System.setProperty(ADMIN_USER, Config.getString(ADMIN_USER));
+            }
+
+        }
+
+        if (System.getProperty(BOT_DOMAIN) == null) {
+
+            if (System.getenv(BOT_DOMAIN_ENV) != null) {
+                System.setProperty(BOT_DOMAIN, System.getenv(BOT_DOMAIN_ENV));
+            } else {
+                System.setProperty(BOT_DOMAIN, Config.getString(BOT_DOMAIN));
             }
 
         }

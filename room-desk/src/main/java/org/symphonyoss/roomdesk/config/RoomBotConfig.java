@@ -58,10 +58,12 @@ public final class RoomBotConfig {
     public final static String CERTS_DIR = "certs.dir";
     public final static String TRUSTSTORE_FILE = "truststore.file";
     public final static String BOT_USER = "bot.user";
+    public final static String BOT_DOMAIN = "bot.domain";
     public final static String FILES_TRANSCRIPT = "files.transcript";
     public final static String ADMIN_USER = "admin.user";
     public final static String FILES_JSON = "roombot.files.json";
     public final static String MEMBER_CHAT_STREAM = "roombot.member.chat.stream";
+
     //Env
     public final static String KEYSTORE_PASSWORD_ENV = "KEYSTORE_PASSWORD";
     public final static String TRUSTSTORE_PASSWORD_ENV = "TRUSTSTORE_PASSWORD";
@@ -76,6 +78,7 @@ public final class RoomBotConfig {
     public final static String FILES_TRANSCRIPT_ENV = "FILES_TRANSCRIPT";
     public final static String ADMIN_USER_ENV = "ADMIN_USER";
     public final static String MEMBER_CHAT_STREAM_ENV = "MEMBER_CHAT";
+    public final static String BOT_DOMAIN_ENV = "BOT_DOMAIN";
     private final static Logger logger = LoggerFactory.getLogger(RoomBotConfig.class);
 
     static {
@@ -259,6 +262,16 @@ public final class RoomBotConfig {
                 System.setProperty(MEMBER_CHAT_STREAM, System.getenv(MEMBER_CHAT_STREAM_ENV));
             } else {
                 System.setProperty(MEMBER_CHAT_STREAM, Config.getString(MEMBER_CHAT_STREAM));
+            }
+
+        }
+
+        if (System.getProperty(BOT_DOMAIN) == null) {
+
+            if (System.getenv(BOT_DOMAIN_ENV) != null) {
+                System.setProperty(BOT_DOMAIN, System.getenv(BOT_DOMAIN_ENV));
+            } else {
+                System.setProperty(BOT_DOMAIN, Config.getString(BOT_DOMAIN));
             }
 
         }

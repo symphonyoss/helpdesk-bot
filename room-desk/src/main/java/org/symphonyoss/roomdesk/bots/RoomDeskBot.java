@@ -55,6 +55,22 @@ import static org.symphonyoss.roomdesk.config.RoomBotConfig.Config;
 
 /**
  * The main help desk bot class
+ *
+ *
+ * /**
+ * The main help desk bot class
+ * REQUIRED VM Arguments or System Properties:
+ * <p>
+ * -Dsessionauth.url=https://pod_fqdn:port/sessionauth
+ * -Dkeyauth.url=https://pod_fqdn:port/keyauth
+ * -Dsymphony.agent.pod.url=https://agent_fqdn:port/pod
+ * -Dsymphony.agent.agent.url=https://agent_fqdn:port/agent
+ * -Dcerts.dir=/dev/certs/
+ * -Dkeystore.password=(Pass)
+ * -Dtruststore.file=/dev/certs/server.truststore
+ * -Dtruststore.password=(Pass)
+ * -Dbot.SymUser=hashtag.bot
+ * -Dbot.domain=markit.com
  */
 public class RoomDeskBot implements ChatServiceListener {
     private final Logger logger = LoggerFactory.getLogger(RoomDeskBot.class);
@@ -195,7 +211,7 @@ public class RoomDeskBot implements ChatServiceListener {
 
             symClient.init(
                     symAuth,
-                    System.getProperty(RoomBotConfig.BOT_USER) + "@markit.com",
+                    System.getProperty(RoomBotConfig.BOT_USER) + "@" + System.getProperty(RoomBotConfig.BOT_DOMAIN),
                     System.getProperty(RoomBotConfig.SYMPHONY_AGENT),
                     System.getProperty(RoomBotConfig.SYMPHONY_POD)
             );
