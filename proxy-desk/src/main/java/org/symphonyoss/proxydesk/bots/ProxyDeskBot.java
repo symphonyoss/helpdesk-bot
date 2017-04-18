@@ -68,6 +68,7 @@ import java.util.Set;
  * -Dtruststore.password=(Pass)
  * -Dbot.SymUser=hashtag.bot
  * -Dbot.domain=markit.com
+ * -Dfiles.json=/dev/json
  */
 
 public class ProxyDeskBot implements ChatServiceListener {
