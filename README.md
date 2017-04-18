@@ -68,7 +68,7 @@ Please contact your Symphony local administrator to obtain the necessary certifi
         -Dcerts.dir=/dev/certs/
         -Dtruststore.file=/dev/certs/server.truststore
         -Dbot.user=(user name)
-        -json.files=/dev/json
+        -Djson.files=/dev/json
 
 
 ## Contribute
