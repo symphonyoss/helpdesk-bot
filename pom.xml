@@ -119,7 +119,7 @@
             <dependency>
                 <groupId>org.symphonyoss.symphony</groupId>
                 <artifactId>symphony-client</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>1.0.0</version>
             </dependency>
 
             <dependency>
