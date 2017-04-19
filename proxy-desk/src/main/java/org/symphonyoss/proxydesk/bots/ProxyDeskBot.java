@@ -36,22 +36,14 @@ import org.symphonyoss.proxydesk.listeners.chat.HelpClientListener;
 import org.symphonyoss.proxydesk.listeners.command.MemberCommandListener;
 import org.symphonyoss.proxydesk.listeners.presence.MemberPresenceListener;
 import org.symphonyoss.proxydesk.models.HelpBotSession;
-import org.symphonyoss.proxydesk.models.calls.Call;
-import org.symphonyoss.proxydesk.models.calls.HelpCall;
-import org.symphonyoss.proxydesk.models.users.HelpClient;
 import org.symphonyoss.proxydesk.models.users.Member;
-import org.symphonyoss.proxydesk.utils.CallCache;
 import org.symphonyoss.proxydesk.utils.ClientCache;
 import org.symphonyoss.proxydesk.utils.HoldCache;
 import org.symphonyoss.proxydesk.utils.MemberCache;
-
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.clients.model.SymUser;
 
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -95,7 +87,7 @@ public class ProxyDeskBot implements ChatServiceListener {
      * Sets up the bot.
      * Loads all the members from file into the cache.
      * Instantiates chat listeners. (Member chat, Help chat)
-     *
+     * <p>
      * Starts threads (inactivity).
      */
     public void setupBot() {
@@ -215,27 +207,24 @@ public class ProxyDeskBot implements ChatServiceListener {
         if (chat != null) {
             logger.debug("New web connection: " + chat.getStream());
 
-            Set<SymUser> users = chat.getRemoteUsers();
-            if (users != null && users.size() == 1) {
-                SymUser symUser = users.iterator().next();
+            SymUser symUser = chat.getRemoteUsers().stream().filter(symUser1 -> !symUser1.getId().equals(symClient.getLocalUser().getId())).findFirst().orElse(null);
 
-                if (symUser != null && MemberCache.hasMember(symUser.getId().toString())) {
+            if (symUser != null && MemberCache.hasMember(symUser.getId().toString())) {
 
-                    MemberCache.getMember(symUser).setOnline(true);
-                    memberCommandListener.listenOn(chat);
-                    Messenger.sendMessage("Joined help desk as member.",
-                            SymMessage.Format.TEXT, chat, symClient);
+                MemberCache.getMember(symUser).setOnline(true);
+                memberCommandListener.listenOn(chat);
+                Messenger.sendMessage("Joined help desk as member.",
+                        SymMessage.Format.TEXT, chat, symClient);
 
-                } else if (symUser != null) {
+            } else if (symUser != null) {
 
-                    HoldCache.putClientOnHold(ClientCache.addClient(symUser));
-                    helpClientListener.listenOn(chat);
-                    Messenger.sendMessage("Joined help desk as help client.",
-                            SymMessage.Format.TEXT, chat, symClient);
-
-                }
+                HoldCache.putClientOnHold(ClientCache.addClient(symUser));
+                helpClientListener.listenOn(chat);
+                Messenger.sendMessage("Joined help desk as help client.",
+                        SymMessage.Format.TEXT, chat, symClient);
 
             }
+
 
         } else if (logger != null) {
             logger.warn("Incoming new web received a null value.");

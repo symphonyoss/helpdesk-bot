@@ -93,7 +93,7 @@ public class MemberCache {
         try {
 
             Gson gson = new Gson();
-            FileWriter jsonFile = new FileWriter(System.getProperty("files.json") + member.getUserID() + ".json");
+            FileWriter jsonFile = new FileWriter(System.getProperty(ProxyBotConfig.FILES_JSON) + member.getUserID() + ".json");
             String toJson = gson.toJson(member.toSerializable(), SerializableMember.class);
 
             jsonFile.write(toJson);
@@ -149,7 +149,7 @@ public class MemberCache {
     }
 
     public static void removeMember(Member member) {
-        new File(System.getProperty("files.json") + member.getUserID() + ".json").delete();
+        new File(System.getProperty(ProxyBotConfig.FILES_JSON) + member.getUserID() + ".json").delete();
 
         DeskUserCache.removeUser(member);
     }
