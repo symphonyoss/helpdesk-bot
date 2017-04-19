@@ -122,7 +122,13 @@ public class AiCommandListener implements ChatListener {
         try {
 
             mlMessageParser = new MlMessageParser(symClient);
-            mlMessageParser.parseMessage(message.getMessage());
+
+            //Minor cleanup
+            message.setMessage(message.getMessage().replace("\u00a0", " "));
+            //Minor cleanup
+            message.setMessage(message.getMessage().replace("&nbsp;", " "));
+
+            mlMessageParser.parseMessage(message.getMessage().trim());
 
             String[] chunks = mlMessageParser.getTextChunks();
 

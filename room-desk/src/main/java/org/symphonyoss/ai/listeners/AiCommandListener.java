@@ -36,12 +36,13 @@ import org.symphonyoss.client.model.Chat;
 import org.symphonyoss.client.services.ChatListener;
 import org.symphonyoss.client.util.MlMessageParser;
 import org.symphonyoss.symphony.clients.model.SymMessage;
-//import org.symphonyoss.symphony.clients.model.SymMessage;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
+
+//import org.symphonyoss.symphony.clients.model.SymMessage;
 
 /**
  * Created by nicktarsillo on 6/13/16.
@@ -106,7 +107,7 @@ public class AiCommandListener implements ChatListener {
 
     public void onChatMessage(SymMessage message) {
 
-        if(wasAnswered(message))
+        if (wasAnswered(message))
             return;
 
         if (message == null
@@ -125,7 +126,12 @@ public class AiCommandListener implements ChatListener {
         try {
 
             mlMessageParser = new MlMessageParser(symClient);
-            mlMessageParser.parseMessage(message.getMessage());
+            //Minor cleanup
+            message.setMessage(message.getMessage().replace("\u00a0", " "));
+            //Minor cleanup
+            message.setMessage(message.getMessage().replace("&nbsp;", " "));
+
+            mlMessageParser.parseMessage(message.getMessage().trim());
 
             String[] chunks = mlMessageParser.getTextChunks();
 
@@ -134,7 +140,7 @@ public class AiCommandListener implements ChatListener {
                 mlMessageParser.parseMessage(message.getMessage().replaceFirst(">" + AiConstants.COMMAND, ">"));
                 chunks = mlMessageParser.getTextChunks();
 
-                if(!isBestResponse(mlMessageParser, chunks, message))
+                if (!isBestResponse(mlMessageParser, chunks, message))
                     return;
 
                 processMessage(mlMessageParser, chunks, message);
@@ -147,9 +153,9 @@ public class AiCommandListener implements ChatListener {
 
     }
 
-    private boolean wasAnswered(SymMessage message){
+    private boolean wasAnswered(SymMessage message) {
 
-        if(lastAnsweredMessage != null && lastAnsweredMessage.getId().equals(message.getId()))
+        if (lastAnsweredMessage != null && lastAnsweredMessage.getId().equals(message.getId()))
             return true;
 
         return false;
@@ -157,11 +163,11 @@ public class AiCommandListener implements ChatListener {
     }
 
     private boolean isBestResponse(MlMessageParser mlMessageParser, String[] chunks, SymMessage message) {
-        if(hasResponse(mlMessageParser, chunks, message))
+        if (hasResponse(mlMessageParser, chunks, message))
             return true;
 
-        for(AiCommandListener aiCommandListener : listeners.get(message.getStreamId()))
-            if(aiCommandListener != this && aiCommandListener.hasResponse(mlMessageParser, chunks, message))
+        for (AiCommandListener aiCommandListener : listeners.get(message.getStreamId()))
+            if (aiCommandListener != this && aiCommandListener.hasResponse(mlMessageParser, chunks, message))
                 return false;
 
         return true;
@@ -229,12 +235,13 @@ public class AiCommandListener implements ChatListener {
 
     /**
      * Checks to see if this command listener has a real response (One that matches a AiCommand).
+     *
      * @param mlMessageParser the parser
-     * @param chunks  the message in text chunks
-     * @param message  the message
-     * @return  if ai command listener has response
+     * @param chunks          the message in text chunks
+     * @param message         the message
+     * @return if ai command listener has response
      */
-    private boolean hasResponse(MlMessageParser mlMessageParser, String[] chunks, SymMessage message){
+    private boolean hasResponse(MlMessageParser mlMessageParser, String[] chunks, SymMessage message) {
 
         for (AiCommand command : activeCommands) {
 
@@ -299,11 +306,11 @@ public class AiCommandListener implements ChatListener {
 
         if (chat != null) {
 
-            if(listeners.containsKey(chat.getStream().getId())) {
+            if (listeners.containsKey(chat.getStream().getId())) {
 
                 listeners.get(chat.getStream().getId()).add(this);
 
-            }else{
+            } else {
 
                 HashSet<AiCommandListener> newChat = new HashSet<AiCommandListener>();
                 newChat.add(this);
@@ -331,7 +338,7 @@ public class AiCommandListener implements ChatListener {
             if (chat.getStream() != null
                     && chat.getStream().getId() != null) {
 
-                if(listeners.containsKey(chat.getStream().getId())
+                if (listeners.containsKey(chat.getStream().getId())
                         && listeners.get(chat.getStream().getId()).contains(this)) {
 
                     listeners.get(chat.getStream().getId()).remove(this);

@@ -42,11 +42,10 @@ import org.symphonyoss.roomdesk.utils.ClientCache;
 import org.symphonyoss.roomdesk.utils.DeskUserCache;
 import org.symphonyoss.roomdesk.utils.HoldCache;
 import org.symphonyoss.roomdesk.utils.MemberCache;
-
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.model.SymMessage;
-import org.symphonyoss.symphony.pod.model.Stream;
 import org.symphonyoss.symphony.clients.model.SymUser;
+import org.symphonyoss.symphony.pod.model.Stream;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -55,8 +54,8 @@ import static org.symphonyoss.roomdesk.config.RoomBotConfig.Config;
 
 /**
  * The main help desk bot class
- *
- *
+ * <p>
+ * <p>
  * /**
  * The main help desk bot class
  * REQUIRED VM Arguments or System Properties:
@@ -194,7 +193,7 @@ public class RoomDeskBot implements ChatServiceListener {
         try {
 
             symClient = new SymphonyBasicClient();
-            
+
             logger.debug("{} {}", System.getProperty(RoomBotConfig.SESSIONAUTH_URL),
                     System.getProperty(RoomBotConfig.KEYAUTH_URL));
             AuthorizationClient authClient = new AuthorizationClient(
@@ -239,39 +238,39 @@ public class RoomDeskBot implements ChatServiceListener {
         if (chat != null) {
             logger.debug("New chat connection: " + chat.getStream());
 
-            Set<SymUser> users = chat.getRemoteUsers();
-            if (users != null && users.size() == 1) {
-                SymUser user = users.iterator().next();
 
-                try {
-                    if(!chat.getStream().getId().equals(symClient.getStreamsClient().getStream(user).getId()))
-                        return;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            SymUser user = chat.getRemoteUsers().stream().filter(symUser1 -> !symUser1.getId().equals(symClient.getLocalUser().getId())).findFirst().orElse(null);
 
-                logger.debug("Accepted Chat: " + chat.toString());
-                if (user != null && !DeskUserCache.hasUser(user)) {
-                    if (MemberCache.hasMember(user.getId().toString())) {
 
-                        memberCommandListener.listenOn(chat);
-                        memberAliasListener.listenOn(chat);
-                        chat.registerListener(transcriptListener);
-                        MemberCache.getMember(user).setOnline(true);
-                        Messenger.sendMessage("Joined help desk as member.",
-                                SymMessage.Format.TEXT, chat, symClient);
+            try {
+                if (!chat.getStream().getId().equals(symClient.getStreamsClient().getStream(user).getId()))
+                    return;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                    } else {
+            logger.debug("Accepted Chat: " + chat.toString());
+            if (user != null && !DeskUserCache.hasUser(user)) {
+                if (MemberCache.hasMember(user.getId().toString())) {
 
-                        HoldCache.putClientOnHold(ClientCache.addClient(user));
-                        helpClientListener.listenOn(chat);
-                        chat.registerListener(transcriptListener);
-                        Messenger.sendMessage("Joined help desk as help client.",
-                                SymMessage.Format.TEXT, chat, symClient);
+                    memberCommandListener.listenOn(chat);
+                    memberAliasListener.listenOn(chat);
+                    chat.registerListener(transcriptListener);
+                    MemberCache.getMember(user).setOnline(true);
+                    Messenger.sendMessage("Joined help desk as member.",
+                            SymMessage.Format.TEXT, chat, symClient);
 
-                    }
+                } else {
+
+                    HoldCache.putClientOnHold(ClientCache.addClient(user));
+                    helpClientListener.listenOn(chat);
+                    chat.registerListener(transcriptListener);
+                    Messenger.sendMessage("Joined help desk as help client.",
+                            SymMessage.Format.TEXT, chat, symClient);
+
                 }
             }
+
 
         } else if (logger != null) {
             logger.warn("Incoming new chat received a null value.");
