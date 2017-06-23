@@ -8,23 +8,23 @@ Symphony Helpdesk Bot
 
 Help Desk BOT(s) are Java based applications that implement a call routing workflow based framework leveraging the Symphony API.  To implement a common design pattern which supports a call routing workflow from a named end-point (network user) to an application (BOT) end-point named alias (operator/call router), which routes to a rota of other named user end-points who service the call.
      
-##General Concepts
+## General Concepts
 * All communications from initiating user end-points to application end-point are private.
 * All communications from the application end-point to the rota of servicing user end-points are shared. Rules can be applied to prevent communications between servicing users.
 * The application end-point will maintain session state with all end-points.
 * The application end-point will have additional programmatic workflow hooks to support other implementations. These include event listeners and interfaces through the life-cycle of call handling. e.g. Connect, Validation, Session, SymMessage, Rules, Context, Commands, Termination
 
 
-##Change log and notes
+## Change log and notes
 ### V1.0.0 (SNAPSHOT)
 * Upgrade to Symphony-Java-Client 1.0.0
 * General features described below.
 
 
 
-##Help Desk BOT Types
+## Help Desk BOT Types
 
-###Proxy Desk
+### Proxy Desk
 See video [DEMO](https://www.youtube.com/watch?v=aXv35MU3szQ)
 
 All communications flows through (ingress/egress) the BOT application, which handles all call routing.  Command line interface is provided to members to manage all calls. 
@@ -32,7 +32,7 @@ All communications flows through (ingress/egress) the BOT application, which han
     U(SymUser) < - - > O(Operator)< - - > R(Rota of Users/members)
     (~~~~~~~~~~~~~~~~~~~~)< - - >Ru(Rota SymUser callback, proxy through O)
 
-###Room Desk
+### Room Desk
 See video [DEMO](https://www.youtube.com/watch?v=Uq_eS-L6Ud8)
 
 All inbound user communications flows through the BOT into a chat room of members.  Command line interface is provided to all members, but calls are established through an external multi-party conversation outside the chat room.
@@ -40,7 +40,7 @@ All inbound user communications flows through the BOT into a chat room of member
     U(SymUser) < - - > O(Operator)< - > R(Rota of Users/members)
     (~~~~~) <- - - - - - - - - - - - - - - -Ru(Rota SymUser callback, direct)
 
-###Web Desk
+### Web Desk
 See video [DEMO](https://www.youtube.com/watch?v=CAhl18L7kXo)
 
 All inbound users leverage an external web client, which communicates with a backend BOT service that implements the Room Desk construct.
@@ -48,15 +48,15 @@ All inbound users leverage an external web client, which communicates with a bac
       U(SymUser) < - -> Web Module < - - > O (Operator) <- > R(Rota of users/members)
       (~~~~~) <-------------------------------------------Ru(Rota SymUser callback)
 
-##Requirements
+## Requirements
 
-###Certificates:
+### Certificates:
 Please contact your Symphony local administrator to obtain the necessary certificates for the user/service account being used to access the POD.
 
         Server Truststore = Contains server certs
         SymUser Keystore = Symphony user client certificate
 
-###Required System Properties:
+### Required System Properties:
 
         -Dkeystore.password=(Pass)
         -Dtruststore.password=(Pass)
@@ -85,7 +85,7 @@ It will download and install all deplendencies. You don't need to have Java or M
 ### Run docker image
 
 1. In any empty directory create a `certs` subdirectory.
-2. Plase `<helpdesk_bot_user_name>.p12` cert and `server.truststore` keystore into the `certs` subdirectory
+2. Place `<helpdesk_bot_user_name>.p12` cert and `server.truststore` keystore into the `certs` subdirectory
 3. Create a `proxy_bot.env` environment file with your bot configurations. It should contain the following variables:
 
 ```bash
