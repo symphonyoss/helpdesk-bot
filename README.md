@@ -71,6 +71,47 @@ Please contact your Symphony local administrator to obtain the necessary certifi
         -Dbot.domain=(domain of user)
         -Djson.files=/dev/json
 
+## Docker
+
+### Build docker image
+From the project directory run:
+
+```bash
+docker build . --tag helpdesk-bot
+```
+
+It will download and install all deplendencies. You don't need to have Java or Maven installed to build the docker image.
+
+### Run docker image
+
+1. In any empty directory create a `certs` subdirectory.
+2. Plase `<helpdesk_bot_user_name>.p12` cert and `server.truststore` keystore into the `certs` subdirectory
+3. Create a `proxy_bot.env` environment file with your bot configurations. It should contain the following variables:
+
+```bash
+SYMPHONY_POD=https://<your pod host>/pod
+SYMPHONY_AGENT=https://<your pod host>/agent
+SESSION_AUTH=https://<your api host>/sessionauth
+KEY_AUTH=https://<your keyauth host>/keyauth
+BOT_USER=<your helpdesk user name. Should match the .p12 cert name>
+BOT_DOMAIN=<your domain>
+ADMIN_USER=<admin user email>
+TRUSTSTORE_PASSWORD=<password for server.truststore>
+KEYSTORE_PASSWORD=<password for helpdesk_bot_user_name.p12 cert>
+```
+
+4. Run the image with command:
+
+```bash
+docker run -it --rm \
+  -v "$PWD"/certs:/usr/src/app/certs \
+  -v "$PWD"/data:/usr/src/app/data \
+  --env-file proxy_bot.env \
+  helpdesk-bot
+```
+
+The running image will store runtime data into the `data` subdirectory.
+
 
 ## Contribute
 This project was initiated at [IHS Markit](https://www.ihsmarkit.com) and has been developed as open-source from the very beginning.
