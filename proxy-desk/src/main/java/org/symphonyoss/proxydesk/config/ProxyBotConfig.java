@@ -50,7 +50,7 @@ public final class ProxyBotConfig {
     public static final String CALL_QUEUE = "ai.command.callcache";
     public final static String JOIN_CHAT = "proxybot.ai.command.joinchat";
     public final static String TOGGLE_ONLINE = "proxybot.ai.command.toggleonline";
-    public final static String EXIT = "proxybot.command.exit";
+    public final static String EXIT = "ai.command.exit";
     public final static String SET_TAGS = "proxybot.ai.command.settags";
     public final static String ADD_TAGS = "proxybot.ai.command.addtags";
     public final static String REMOVE_TAGS = "proxybot.ai.command.removetags";
